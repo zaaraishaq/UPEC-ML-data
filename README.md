@@ -43,7 +43,7 @@ Assembly Stats: Genome size, GC content, and scaffold counts.
 **2. Genomic Features** (Available in Repository)
 File: final_cleaned_no_dot_suffix_duplicates.rar
 Format: Comprehensive binary matrix (0/1) tailored for machine learning.
-Dimensions: 1,184 isolates × 73,218 features.<img width="466" height="239" alt="Tools" src="https://github.com/user-attachments/assets/6210982e-7e6c-4142-8160-2d902e61ae34" />
+Dimensions: 1,184 isolates × 73,218 features.
 
 **3. Genome Assemblies**
 Genomes were retrieved from NCBI. To access the raw sequence data for any isolate in this study, please refer to the Accession IDs (BioProject/Assembly) provided in the UPEC_Metadata_Complete.csv file.
