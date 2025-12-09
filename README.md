@@ -1,51 +1,107 @@
 **UPEC Genomic Database & Machine Learning Dataset**
 
-**Overview**
+**🧬 Overview**
 
-This repository hosts the genomic data and machine learning feature matrices for 1,184 human-specific UPEC isolates. The dataset was curated to support research into urinary tract pathologies, antibiotic resistance, and virulence factors.
+This repository hosts a curated genomic dataset and machine learning feature matrices for Human-Specific Uropathogenic Escherichia coli (UPEC). The dataset was designed to facilitate advanced research into urinary tract pathologies, antimicrobial resistance (AMR), and virulence evolution.
 
-🌐 Click Here to View the Interactive Database
+It consolidates high-dimensional genomic data from public repositories into a unified, machine-learning-ready format.
 
-**Dataset Contents**
+**🔗 Access the Interactive Database**
 
-**1.** Metadata (UPEC_Metadata_Complete.csv)
+**📉 Data Processing Workflow**
 
-Contains epidemiological and genomic metadata for all isolates, including:
+The following flowchart illustrates the curation process, specifically highlighting the quality control steps taken before feature extraction.
 
-Accession IDs (BioProject, BioSample)
+graph TD
+    A[NCBI Retrieval] -->|1,186 Genomes| B[Quality Control & Filtering]
+    B --> C{Duplicate Check}
+    C -->|Found Duplicates| D[Remove: MG655_ & CFT073_]
+    C -->|Unique| E[Keep Genomes]
+    D --> F[1,184 Unique Isolates]
+    E --> F
+    F --> G[Feature Prediction]
+    G --> H[Final Binary Matrix]
+    style D fill:#f9f,stroke:#333,stroke-width:2px
+    style F fill:#bbf,stroke:#333,stroke-width:2px
 
-Host Disease (UTI, Cystitis, Pyelonephritis)
 
-Collection Date and Location
+**Note on Data Cleaning:**
+Initially, 1,186 publicly available UPEC genomes were retrieved from NCBI. During the quality control phase, two duplicate genomes (identified as MG655_ and CFT073_) were detected and removed prior to genomic feature prediction. The final dataset strictly comprises 1,184 unique, high-quality isolates.
 
-Assembly metrics (Size, GC%, Scaffolds)
+**📂 Dataset Contents**
 
-**2.** Genomic Features (final_cleaned_no_dot_suffix_duplicates.zip)
+1. Metadata (UPEC_Metadata_Complete.csv)
 
-A comprehensive binary matrix (0/1) representing the presence/absence of 73,218 genomic features:
+A detailed epidemiological and genomic metadata file containing:
 
-AMR Genes: ResFinder, CARD, AMRFinderPlus (includes point mutations)
+Identifiers: BioProject, BioSample, and Assembly Accessions.
 
-Virulence Factors: VFDB
+Clinical Data: Host disease pathology (UTI, Cystitis, Pyelonephritis).
 
-Plasmids: PlasmidFinder
+Epidemiology: Collection year and geographical location.
 
-Pangenome: Roary (72,590 gene clusters)
+Assembly Stats: Genome size, GC content, and scaffold counts.
 
-**3.** Genome Assemblies (All_Genomes.zip)
+**2. Genomic Features (final_cleaned_no_dot_suffix_duplicates.zip)**
 
-FASTA files for all 1,184 isolates, quality filtered (>95% completeness, <5% contamination).
+A comprehensive binary matrix (0/1) tailored for machine learning, representing the presence or absence of 73,218 genomic features:
 
-**Methodology**
+Feature Type
 
-Sequencing Data: Retrieved from NCBI (July 25, 2024).
+Tool Used
 
-Annotation: Prokka (v1.14.6)
+Description
 
-Pangenome: Roary (v3.13.0)
+AMR Genes
 
-Typing: MLST (Achtman), Serotyping (ecOH)
+ResFinder, CARD, AMRFinderPlus
 
-**Citation**
+Acquired resistance genes and point mutations.
 
-If you use this dataset, please cite the associated manuscript (citation pending) and this repository.
+Virulence Factors
+
+VFDB
+
+Adhesins, toxins, and siderophores.
+
+Plasmids
+
+PlasmidFinder
+
+Plasmid replicon types.
+
+Pangenome
+
+Roary
+
+72,590 gene clusters (Core + Accessory genome).
+
+**3. Genome Assemblies (All_Genomes.zip)**
+
+Raw FASTA files for all 1,184 isolates. All assemblies have passed quality filtering (>95% completeness, <5% contamination).
+
+**🔬 Methodology**
+
+The dataset was constructed using a standardized bioinformatics pipeline:
+
+Data Retrieval: Public genomes were retrieved from NCBI on July 25, 2024.
+
+Annotation: Genomes were annotated using Prokka (v1.14.6).
+
+Pangenome Analysis: Core and accessory genes were defined using Roary (v3.13.0).
+
+Molecular Typing:
+
+MLST: Sequence Types determined via the Achtman scheme.
+
+Serotyping: Predicted using ecOH.
+
+**📚 Citation**
+
+If you use this dataset in your research, please cite the associated manuscript and this repository:
+
+[Insert Author List]. (2025). Title of the Manuscript. [Journal Name]. DOI: [Insert DOI]
+
+📄 License
+
+This dataset is available under the Creative Commons Attribution 4.0 International license.
