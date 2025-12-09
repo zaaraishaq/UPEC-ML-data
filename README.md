@@ -6,9 +6,9 @@ This repository hosts a curated genomic dataset and machine learning feature mat
 
 It consolidates high-dimensional genomic data from public repositories into a unified, machine-learning-ready format.
 
-**🔗 Access the Interactive Database**
+🔗 Access the Interactive Database
 
-**📉 Data Processing Workflow**
+📉 Data Processing Workflow
 
 The following flowchart illustrates the curation process, specifically highlighting the quality control steps taken before feature extraction.
 
@@ -25,10 +25,12 @@ graph TD
     style F fill:#bbf,stroke:#333,stroke-width:2px
 
 
-**Note on Data Cleaning:**
+Note on Data Cleaning:
 Initially, 1,186 publicly available UPEC genomes were retrieved from NCBI. During the quality control phase, two duplicate genomes (identified as MG655_ and CFT073_) were detected and removed prior to genomic feature prediction. The final dataset strictly comprises 1,184 unique, high-quality isolates.
 
-**📂 Dataset Contents**
+📂 Dataset Contents
+
+⚠️ Note on Large Files: To ensure permanent availability and citation (DOI), the large binary feature matrix is hosted on Zenodo.
 
 1. Metadata (UPEC_Metadata_Complete.csv)
 
@@ -42,9 +44,13 @@ Epidemiology: Collection year and geographical location.
 
 Assembly Stats: Genome size, GC content, and scaffold counts.
 
-**2. Genomic Features (final_cleaned_no_dot_suffix_duplicates.zip)**
+2. Genomic Features (Hosted on Zenodo)
 
-A comprehensive binary matrix (0/1) tailored for machine learning, representing the presence or absence of 73,218 genomic features:
+File: final_cleaned_no_dot_suffix_duplicates.zip
+
+Format: Comprehensive binary matrix (0/1) tailored for machine learning.
+
+Dimensions: 1,184 isolates × 73,218 features.
 
 Feature Type
 
@@ -76,11 +82,11 @@ Roary
 
 72,590 gene clusters (Core + Accessory genome).
 
-**3. Genome Assemblies (All_Genomes.zip)**
+3. Genome Assemblies
 
-Raw FASTA files for all 1,184 isolates. All assemblies have passed quality filtering (>95% completeness, <5% contamination).
+Genomes were retrieved from NCBI. To access the raw sequence data for any isolate in this study, please refer to the Accession IDs (BioProject/Assembly) provided in the UPEC_Metadata_Complete.csv file.
 
-**🔬 Methodology**
+🔬 Methodology
 
 The dataset was constructed using a standardized bioinformatics pipeline:
 
@@ -96,11 +102,11 @@ MLST: Sequence Types determined via the Achtman scheme.
 
 Serotyping: Predicted using ecOH.
 
-**📚 Citation**
+📚 Citation
 
 If you use this dataset in your research, please cite the associated manuscript and this repository:
 
-[Insert Author List]. (2025). Title of the Manuscript. [Journal Name]. DOI: [Insert DOI]
+[Insert Author List]. (2024). Title of the Manuscript. [Journal Name]. DOI: [Insert DOI]
 
 📄 License
 
