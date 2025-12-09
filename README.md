@@ -1,4 +1,4 @@
-UPEC Genomic Database & Machine Learning Dataset
+**UPEC Genomic Database & Machine Learning Dataset**
 
 Overview
 
