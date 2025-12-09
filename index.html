@@ -52,7 +52,7 @@
                         <div class="p-3 rounded-full bg-blue-100 text-blue-600"><i class="fa-solid fa-bacteria"></i></div>
                         <div class="ml-4">
                             <p class="text-sm font-medium text-gray-500">Total Isolates</p>
-                            <p class="text-2xl font-bold text-gray-900" id="stat-total">Loading...</p>
+                            <p class="text-2xl font-bold text-gray-900" id="stat-total">1,184</p>
                         </div>
                     </div>
                 </div>
@@ -70,7 +70,7 @@
                         <div class="p-3 rounded-full bg-purple-100 text-purple-600"><i class="fa-solid fa-barcode"></i></div>
                         <div class="ml-4">
                             <p class="text-sm font-medium text-gray-500">Unique STs</p>
-                            <p class="text-2xl font-bold text-gray-900" id="stat-st">Loading...</p>
+                            <p class="text-2xl font-bold text-gray-900" id="stat-st">176</p>
                         </div>
                     </div>
                 </div>
@@ -88,11 +88,22 @@
             <!-- Description -->
             <div class="bg-white rounded-xl shadow-sm p-8">
                 <h2 class="text-2xl font-bold text-gray-900 mb-4">Study Overview</h2>
-                <p class="text-gray-600 leading-relaxed mb-4">
-                    This database contains genomic profiles of <strong>1,184 publicly available UPEC genomes</strong> derived from human-specific isolates associated with urinary tract pathology. 
-                    The dataset integrates MLST, Serotyping, ARG prediction, Point Mutations, Virulence Factors, and Pangenome analysis into a comprehensive analytical matrix.
-                </p>
-                <div class="flex flex-wrap gap-2">
+                <div class="text-gray-600 leading-relaxed mb-4 space-y-2">
+                    <p>
+                        This database characterizes <strong>1,184 UPEC genomes</strong> (filtered from 1,186 after excluding 2 duplicates) derived from human-specific isolates associated with urinary tract pathology. 
+                    </p>
+                    <p>
+                        The final combined dataset consists of <strong>73,217 binary genomic predictors</strong> across 176 distinct sequence types. Genomic profiling predicted:
+                    </p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li><strong>200</strong> Antibiotic Resistance Genes (ARGs) & point mutations</li>
+                        <li><strong>270</strong> Virulence Factors</li>
+                        <li><strong>60</strong> Plasmid Replicons</li>
+                        <li><strong>226</strong> Serotype Determinants</li>
+                        <li><strong>72,590</strong> Unique Orthologous Gene Clusters (Pangenome)</li>
+                    </ul>
+                </div>
+                <div class="flex flex-wrap gap-2 mt-4">
                     <span class="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-semibold">Prokka</span>
                     <span class="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-semibold">Roary</span>
                     <span class="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-semibold">ResFinder</span>
@@ -129,14 +140,14 @@
                     
                     <!-- Download Section -->
                     <div class="flex space-x-3">
+                        <!-- Local Metadata File -->
                         <a href="UPEC_Metadata_Complete.csv" download class="flex items-center px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition shadow-sm">
                             <i class="fa-solid fa-file-csv mr-2"></i> Download Metadata
                         </a>
-                        <a href="final_cleaned_no_dot_suffix_duplicates.zip" class="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition shadow-sm">
-                            <i class="fa-solid fa-database mr-2"></i> Full Binary Matrix (.zip)
-                        </a>
-                        <a href="All_Genomes.zip" class="flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition shadow-sm">
-                            <i class="fa-solid fa-dna mr-2"></i> All Fastas (.zip)
+                        
+                        <!-- ZENODO LINKS: REPLACE THE '#' WITH YOUR COPIED ZENODO LINKS -->
+                        <a href="PASTE_YOUR_ZENODO_LINK_FOR_MATRIX_ZIP_HERE" target="_blank" class="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition shadow-sm">
+                            <i class="fa-solid fa-database mr-2"></i> Full Matrix (Zenodo)
                         </a>
                     </div>
                 </div>
@@ -236,9 +247,12 @@
             initCharts();
             
             // Update Dashboard Stats
-            document.getElementById('stat-total').innerText = window.dbData.length.toLocaleString();
-            const uniqueSTs = new Set(window.dbData.map(d => d.st)).size;
-            document.getElementById('stat-st').innerText = uniqueSTs.toLocaleString();
+            // Try to calculate if data exists, otherwise keep HTML defaults
+            if (window.dbData.length > 0) {
+                document.getElementById('stat-total').innerText = window.dbData.length.toLocaleString();
+                const uniqueSTs = new Set(window.dbData.map(d => d.st)).size;
+                document.getElementById('stat-st').innerText = uniqueSTs.toLocaleString();
+            }
         }
 
         function switchTab(tabName) {
@@ -418,5 +432,4 @@
         };
     </script>
 </body>
-
 </html>
