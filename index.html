@@ -238,9 +238,48 @@
         const rowsPerPage = 15;
         let filteredData = [];
 
+        // Normalize data keys to standard lowercase names
+        // This fixes issues where CSV headers might be "Sequence Type", "ST", "Serotype (O:H)" etc.
+        function normalizeData() {
+            window.dbData = window.dbData.map(item => {
+                // Determine ST
+                const st = item.st || item.ST || item['Sequence Type'] || item['Sequence_Type'] || item['sequence_type'] || 'N/A';
+                
+                // Determine Serotype
+                const serotype = item.serotype || item.Serotype || item['Serotype (O:H)'] || item['Serotype(O:H)'] || 'N/A';
+                
+                // Determine Pathology/Host Disease
+                const pathology = item.pathology || item.Pathology || item['Host Disease'] || item['Host_Disease'] || 'N/A';
+                
+                // Determine Year
+                const year = item.year || item.Year || item['Collection Year'] || 'N/A';
+                
+                // Determine Location
+                const location = item.location || item.Location || item.Country || 'N/A';
+                
+                // Determine Source
+                const source = item.source || item.Source || item['Isolation Source'] || 'N/A';
+
+                return {
+                    ...item,
+                    st,
+                    serotype,
+                    pathology,
+                    year,
+                    location,
+                    source
+                };
+            });
+        }
+
         function init() {
+            // Normalize header names before doing anything else
+            if (window.dbData.length > 0) {
+                normalizeData();
+            }
+
             // Sort data by ID
-            filteredData = [...window.dbData].sort((a, b) => a.id.localeCompare(b.id));
+            filteredData = [...window.dbData].sort((a, b) => (a.id || '').localeCompare(b.id || ''));
             
             populateFilters();
             renderTable();
