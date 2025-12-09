@@ -2,11 +2,15 @@
 
 **🧬 Overview**
 
-This repository hosts a curated genomic dataset and machine learning feature matrices for Human-Specific Uropathogenic Escherichia coli (UPEC). The dataset was designed to facilitate advanced research into urinary tract pathologies, antimicrobial resistance (AMR), and virulence evolution.
+This repository hosts a curated genomic dataset and machine learning feature matrices for Human-Specific Uropathogenic _Escherichia coli_ (UPEC). The dataset was designed to facilitate advanced research into:
+
+🦠 Urinary Tract Pathologies
+💊 Antimicrobial Resistance (AMR)
+🧬 Virulence Evolution
 
 It consolidates high-dimensional genomic data from public repositories into a unified, machine-learning-ready format.
 
-🔗 Access the Interactive Database
+🔗 **Access the Interactive Database** https://zaaraishaq.github.io/UPEC-ML-data/
 
 📉 Data Processing Workflow
 
@@ -24,90 +28,35 @@ graph TD
     style D fill:#f9f,stroke:#333,stroke-width:2px
     style F fill:#bbf,stroke:#333,stroke-width:2px
 
-
-Note on Data Cleaning:
+**Note on Data Cleaning:**
 Initially, 1,186 publicly available UPEC genomes were retrieved from NCBI. During the quality control phase, two duplicate genomes (identified as MG655_ and CFT073_) were detected and removed prior to genomic feature prediction. The final dataset strictly comprises 1,184 unique, high-quality isolates.
 
-📂 Dataset Contents
-
-⚠️ Note on Large Files: To ensure permanent availability and citation (DOI), the large binary feature matrix is hosted on Zenodo.
-
-1. Metadata (UPEC_Metadata_Complete.csv)
-
+**📂 Dataset Contents**
+**1. Metadata**<img width="466" height="239" alt="Tools" src="https://github.com/user-attachments/assets/6210982e-7e6c-4142-8160-2d902e61ae34" />
+ (UPEC_Metadata_Complete.csv)
 A detailed epidemiological and genomic metadata file containing:
-
 Identifiers: BioProject, BioSample, and Assembly Accessions.
-
 Clinical Data: Host disease pathology (UTI, Cystitis, Pyelonephritis).
-
 Epidemiology: Collection year and geographical location.
-
 Assembly Stats: Genome size, GC content, and scaffold counts.
 
-2. Genomic Features (Hosted on Zenodo)
-
-File: final_cleaned_no_dot_suffix_duplicates.zip
-
+**2. Genomic Features** (Available in Repository)
+File: final_cleaned_no_dot_suffix_duplicates.rar
 Format: Comprehensive binary matrix (0/1) tailored for machine learning.
-
 Dimensions: 1,184 isolates × 73,218 features.
 
-Feature Type
-
-Tool Used
-
-Description
-
-AMR Genes
-
-ResFinder, CARD, AMRFinderPlus
-
-Acquired resistance genes and point mutations.
-
-Virulence Factors
-
-VFDB
-
-Adhesins, toxins, and siderophores.
-
-Plasmids
-
-PlasmidFinder
-
-Plasmid replicon types.
-
-Pangenome
-
-Roary
-
-72,590 gene clusters (Core + Accessory genome).
-
-3. Genome Assemblies
-
+**3. Genome Assemblies**
 Genomes were retrieved from NCBI. To access the raw sequence data for any isolate in this study, please refer to the Accession IDs (BioProject/Assembly) provided in the UPEC_Metadata_Complete.csv file.
 
-🔬 Methodology
+**🔬 Methodology**
 
 The dataset was constructed using a standardized bioinformatics pipeline:
-
 Data Retrieval: Public genomes were retrieved from NCBI on July 25, 2024.
-
 Annotation: Genomes were annotated using Prokka (v1.14.6).
-
 Pangenome Analysis: Core and accessory genes were defined using Roary (v3.13.0).
-
 Molecular Typing:
-
 MLST: Sequence Types determined via the Achtman scheme.
-
 Serotyping: Predicted using ecOH.
 
-📚 Citation
-
-If you use this dataset in your research, please cite the associated manuscript and this repository:
-
-[Insert Author List]. (2024). Title of the Manuscript. [Journal Name]. DOI: [Insert DOI]
-
-📄 License
-
-This dataset is available under the Creative Commons Attribution 4.0 International license.
+**📚 Citation**
+The manuscript regarding this database and dataset is in submission. 
