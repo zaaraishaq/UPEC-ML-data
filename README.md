@@ -13,20 +13,7 @@ It consolidates high-dimensional genomic data from public repositories into a un
 🔗 **Access the Interactive Database** https://zaaraishaq.github.io/UPEC-ML-data/
 
 **📉 Data Processing Workflow**
-
-The following flowchart illustrates the curation process, specifically highlighting the quality control steps taken before feature extraction.
-
-graph TD
-    A[NCBI Retrieval] -->|1,186 Genomes| B[Quality Control & Filtering]
-    B --> C{Duplicate Check}
-    C -->|Found Duplicates| D[Remove: MG655_ & CFT073_]
-    C -->|Unique| E[Keep Genomes]
-    D --> F[1,184 Unique Isolates]
-    E --> F
-    F --> G[Feature Prediction]
-    G --> H[Final Binary Matrix]
-    style D fill:#f9f,stroke:#333,stroke-width:2px
-    style F fill:#bbf,stroke:#333,stroke-width:2px
+The following are data curation process steps, specifically highlighting the quality control steps taken before feature extraction. NCBI Retrieval --> 1,186 Genomes, Quality Control & Filtering, Duplicate Check (removed duplicates), 1,184 Remaining Isolates, Feature Prediction, Final Binary Matrix
 
 **Note on Data Cleaning:**
 Initially, 1,186 publicly available UPEC genomes were retrieved from NCBI. During the quality control phase, two duplicate genomes (identified as MG655_ and CFT073_) were detected and removed prior to genomic feature prediction. The final dataset strictly comprises 1,184 unique, high-quality isolates.
