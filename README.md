@@ -12,7 +12,7 @@ It consolidates high-dimensional genomic data from public repositories into a un
 
 🔗 **Access the Interactive Database** https://zaaraishaq.github.io/UPEC-ML-data/
 
-📉 Data Processing Workflow
+**📉 Data Processing Workflow**
 
 The following flowchart illustrates the curation process, specifically highlighting the quality control steps taken before feature extraction.
 
@@ -32,7 +32,7 @@ graph TD
 Initially, 1,186 publicly available UPEC genomes were retrieved from NCBI. During the quality control phase, two duplicate genomes (identified as MG655_ and CFT073_) were detected and removed prior to genomic feature prediction. The final dataset strictly comprises 1,184 unique, high-quality isolates.
 
 **📂 Dataset Contents**
-**1. Metadata**<img width="466" height="239" alt="Tools" src="https://github.com/user-attachments/assets/6210982e-7e6c-4142-8160-2d902e61ae34" />
+**1. Metadata**
  (UPEC_Metadata_Complete.csv)
 A detailed epidemiological and genomic metadata file containing:
 Identifiers: BioProject, BioSample, and Assembly Accessions.
@@ -43,7 +43,8 @@ Assembly Stats: Genome size, GC content, and scaffold counts.
 **2. Genomic Features** (Available in Repository)
 File: final_cleaned_no_dot_suffix_duplicates.rar
 Format: Comprehensive binary matrix (0/1) tailored for machine learning.
-Dimensions: 1,184 isolates × 73,218 features.
+Dimensions: 1,184 isolates × 73,218 features. 
+<img width="466" height="239" alt="Tools" src="https://github.com/user-attachments/assets/6210982e-7e6c-4142-8160-2d902e61ae34" />
 
 **3. Genome Assemblies**
 Genomes were retrieved from NCBI. To access the raw sequence data for any isolate in this study, please refer to the Accession IDs (BioProject/Assembly) provided in the UPEC_Metadata_Complete.csv file.
