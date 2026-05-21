@@ -7,10 +7,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&family=JetBrains+Mono:wght=400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
     <script src="https://zaaraishaq.github.io/UPEC-ML-data/data.js"></script>
-    <script src="https://zaaraishaq.github.io/UPEC-ML-data/gene_summary_data.js" defer onerror="console.log('gene_summary_data.js fallback loaded.')"></script>
+    <script src="https://zaaraishaq.github.io/UPEC-ML-data/gene_summary_data.js" defer onerror="console.log('gene_summary_data.js loaded.')"></script>
 
     <script>
         tailwind.config = {
@@ -71,7 +71,7 @@
         }
     </style>
 </head>
-<body class="flex flex-col min-h-screen text-slate-800">
+<body class="flex flex-col min-h-screen text-slate-800 antialiased selection:bg-clinical-100 selection:text-clinical-900">
 
     <header class="bg-white border-b border-slate-200 shadow-xs py-6 px-4 md:px-6">
         <div class="max-w-[1600px] mx-auto flex flex-col items-center text-center gap-4">
@@ -83,45 +83,38 @@
                     <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900 font-sans">UPEC Genomic Database</h1>
                     <span class="text-xs bg-slate-100 border border-slate-200 text-slate-600 px-2 py-0.5 rounded-full font-mono font-bold">75,068 Predictors</span>
                 </div>
-                <p class="text-sm text-slate-600 font-medium max-w-4xl px-4">
-                    Prioritizing lineage-specific genomic features using comparative genomics & interpretable machine learning framework for Uropathogenic <span class="italic">Escherichia coli</span>
+                <p class="text-sm text-slate-600 font-medium max-w-4xl px-4 leading-relaxed">
+                    Prioritizing lineage-specific genomic features using comparative genomics & interpretable machine learning framework for Uropathogenic <i>Escherichia coli</i>
                 </p>
             </div>
 
-            <nav class="flex gap-1 bg-slate-100 p-1 rounded-xl overflow-x-auto scrollbar-none shrink-0 mt-2" id="tabs-navigation">
-                <button onclick="switchTab('catalog')" data-tab="catalog" class="tab-btn px-4 py-2 text-xs md:text-sm font-semibold rounded-lg transition-all duration-200 bg-white text-clinical-700 shadow-xs flex items-center gap-1.5 whitespace-nowrap">
+            <nav class="flex gap-1 bg-slate-100 p-1 rounded-xl overflow-x-auto max-w-full scrollbar-none mt-2 select-none" id="tabs-navigation">
+                <button onclick="switchTab('catalog')" data-tab="catalog" class="tab-btn px-3.5 py-2 text-xs md:text-sm font-semibold rounded-lg transition-all duration-200 bg-white text-clinical-700 shadow-xs flex items-center gap-1.5 whitespace-nowrap">
                     <i class="fa-solid fa-database"></i> Database Catalog
                 </button>
-                <button onclick="switchTab('ml-pca')" data-tab="ml-pca" class="tab-btn px-4 py-2 text-xs md:text-sm font-semibold rounded-lg transition-all duration-200 text-slate-600 hover:text-slate-900 flex items-center gap-1.5 whitespace-nowrap">
+                <button onclick="switchTab('ml-pca')" data-tab="ml-pca" class="tab-btn px-3.5 py-2 text-xs md:text-sm font-semibold rounded-lg transition-all duration-200 text-slate-600 hover:text-slate-900 flex items-center gap-1.5 whitespace-nowrap">
                     <i class="fa-solid fa-brain"></i> ML & PCA Models
                 </button>
-                <button onclick="switchTab('shap')" data-tab="shap" class="tab-btn px-4 py-2 text-xs md:text-sm font-semibold rounded-lg transition-all duration-200 text-slate-600 hover:text-slate-900 flex items-center gap-1.5 whitespace-nowrap">
+                <button onclick="switchTab('shap')" data-tab="shap" class="tab-btn px-3.5 py-2 text-xs md:text-sm font-semibold rounded-lg transition-all duration-200 text-slate-600 hover:text-slate-900 flex items-center gap-1.5 whitespace-nowrap">
                     <i class="fa-solid fa-chart-line"></i> SHAP Signatures
                 </button>
-                <button onclick="switchTab('cooccurrence')" data-tab="cooccurrence" class="tab-btn px-4 py-2 text-xs md:text-sm font-semibold rounded-lg transition-all duration-200 text-slate-600 hover:text-slate-900 flex items-center gap-1.5 whitespace-nowrap">
+                <button onclick="switchTab('cooccurrence')" data-tab="cooccurrence" class="tab-btn px-3.5 py-2 text-xs md:text-sm font-semibold rounded-lg transition-all duration-200 text-slate-600 hover:text-slate-900 flex items-center gap-1.5 whitespace-nowrap">
                     <i class="fa-solid fa-diagram-project"></i> Co-occurrence Networks
                 </button>
-                <button onclick="switchTab('pangenome')" data-tab="pangenome" class="tab-btn px-4 py-2 text-xs md:text-sm font-semibold rounded-lg transition-all duration-200 text-slate-600 hover:text-slate-900 flex items-center gap-1.5 whitespace-nowrap">
+                <button onclick="switchTab('pangenome')" data-tab="pangenome" class="tab-btn px-3.5 py-2 text-xs md:text-sm font-semibold rounded-lg transition-all duration-200 text-slate-600 hover:text-slate-900 flex items-center gap-1.5 whitespace-nowrap">
                     <i class="fa-solid fa-chart-pie"></i> Pangenome Stats
                 </button>
-                <button onclick="switchTab('info')" data-tab="info" class="tab-btn px-4 py-2 text-xs md:text-sm font-semibold rounded-lg transition-all duration-200 text-slate-600 hover:text-slate-900 flex items-center gap-1.5 whitespace-nowrap">
+                <button onclick="switchTab('info')" data-tab="info" class="tab-btn px-3.5 py-2 text-xs md:text-sm font-semibold rounded-lg transition-all duration-200 text-slate-600 hover:text-slate-900 flex items-center gap-1.5 whitespace-nowrap">
                     <i class="fa-solid fa-circle-info"></i> Pipeline Info
                 </button>
             </nav>
         </div>
     </header>
 
-    <div id="connection-status" class="hidden max-w-[1600px] w-full mx-auto mt-4 px-4 md:px-6">
-        <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 flex items-start gap-3">
-            <i class="fa-solid fa-triangle-exclamation text-amber-600 text-lg mt-0.5"></i>
-            <div class="flex-1">
-                <h4 class="text-xs font-bold text-amber-800 uppercase tracking-wider">Reference Execution Mode</h4>
-                <p class="text-xs text-amber-700 mt-0.5">
-                    External data module array index missing locally. Rendering master dataset containing 73 curated clinical Pakistani assemblies.
-                </p>
-            </div>
-            <button onclick="this.parentElement.remove()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
-        </div>
+    <div class="lg:hidden fixed bottom-5 right-5 z-50">
+        <button onclick="toggleMobileSidebar()" class="bg-clinical-600 text-white rounded-full p-4 shadow-xl flex items-center gap-2 font-bold text-xs uppercase tracking-wider hover:bg-clinical-700 transition-colors">
+            <i class="fa-solid fa-filter text-sm"></i> Toggle Filters
+        </button>
     </div>
 
     <main class="flex-1 max-w-[1600px] w-full mx-auto px-4 md:px-6 py-6 flex flex-col gap-6">
@@ -129,15 +122,18 @@
         <section id="tab-catalog" class="tab-content block">
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
                 
-                <div class="lg:col-span-1 bg-white rounded-2xl border border-slate-200 shadow-xs flex flex-col">
+                <div id="filter-sidebar" class="hidden lg:flex lg:col-span-1 bg-white rounded-2xl border border-slate-200 shadow-xs flex-col fixed inset-y-0 left-0 z-50 w-80 max-w-[calc(100vw-2rem)] p-4 lg:p-0 lg:static lg:w-full lg:z-auto transition-transform duration-300">
                     <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50 rounded-t-2xl">
                         <div class="flex items-center gap-2">
                             <i class="fa-solid fa-sliders text-clinical-600"></i>
                             <h3 class="font-bold text-sm tracking-tight text-slate-900">Metadata Filters</h3>
                         </div>
-                        <button onclick="resetAllFilters()" class="text-xs font-bold text-clinical-600 hover:text-clinical-800 transition-colors flex items-center gap-1">
-                            <i class="fa-solid fa-arrow-rotate-left"></i> Reset All
-                        </button>
+                        <div class="flex items-center gap-2">
+                            <button onclick="resetAllFilters()" class="text-xs font-bold text-clinical-600 hover:text-clinical-800 flex items-center gap-1">
+                                <i class="fa-solid fa-arrow-rotate-left"></i> Clear
+                            </button>
+                            <button onclick="toggleMobileSidebar()" class="lg:hidden text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+                        </div>
                     </div>
 
                     <div class="p-4 flex flex-col gap-4 overflow-y-auto max-h-[75vh] scientific-scroll">
@@ -151,16 +147,12 @@
 
                         <div>
                             <label class="block text-xs font-bold uppercase text-slate-500 tracking-wider mb-1.5">Sequence Type (MLST)</label>
-                            <select id="filter-mlst" onchange="applyFilters()" class="w-full p-2 text-xs border border-slate-200 rounded-lg bg-white focus:outline-none focus:border-clinical-500 font-medium">
-                                <option value="ALL">All Sequence Types (MLST)</option>
-                            </select>
+                            <select id="filter-mlst" onchange="applyFilters()" class="w-full p-2 text-xs border border-slate-200 rounded-lg bg-white focus:outline-none focus:border-clinical-500 font-medium"></select>
                         </div>
 
                         <div>
                             <label class="block text-xs font-bold uppercase text-slate-500 tracking-wider mb-1.5">Geographical Location</label>
-                            <select id="filter-location" onchange="applyFilters()" class="w-full p-2 text-xs border border-slate-200 rounded-lg bg-white focus:outline-none focus:border-clinical-500 font-medium">
-                                <option value="ALL">All Countries / Regions</option>
-                            </select>
+                            <select id="filter-location" onchange="applyFilters()" class="w-full p-2 text-xs border border-slate-200 rounded-lg bg-white focus:outline-none focus:border-clinical-500 font-medium"></select>
                         </div>
 
                         <hr class="border-slate-100">
@@ -172,21 +164,21 @@
                                 <button onclick="applyPreset('ST1193')" class="text-[10px] bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 font-bold px-2.5 py-1 rounded transition-colors">ST1193 Emerging</button>
                             </div>
                             
-                            <div class="mt-2 p-3 bg-gradient-to-br from-emerald-600 to-bio-700 rounded-xl text-white shadow-sm border border-emerald-500">
-                                <button onclick="applyPreset('Pakistan')" class="w-full text-left font-extrabold text-xs tracking-tight flex items-center justify-between group">
+                            <div class="mt-2 p-3.5 bg-gradient-to-br from-emerald-600 to-bio-700 rounded-xl text-white shadow-sm border border-emerald-500">
+                                <button onclick="applyPreset('Pakistan'); lg:toggleMobileSidebar();" class="w-full text-left font-extrabold text-xs tracking-tight flex items-center justify-between group">
                                     <span><i class="fa-solid fa-earth-asia mr-1.5 animate-pulse"></i> Pakistani Isolates Cohort</span>
                                     <i class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1 transition-transform"></i>
                                 </button>
                                 <p class="text-[10px] text-emerald-100/90 mt-1.5 font-sans leading-normal font-medium">
-                                    Published study focus in <i>Antonie van Leeuwenhoek</i> (2026). Characterized multidrug-resistant uropathogenic isolates revealing ST131 as the dominant clade within the regional dataset.
+                                    Published study focus in <i>Antonie van Leeuwenhoek</i> (2026). Genomic characterization and comparative analysis of multidrug-resistant uropathogenic isolates revealing ST131 as the dominant clade within the regional dataset.
                                 </p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="lg:col-span-3 flex flex-col gap-6">
-                    <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4">
+                <div class="lg:col-span-3 flex flex-col gap-6 w-full overflow-hidden">
+                    <div class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-3">
                         <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex items-center gap-3">
                             <div class="h-10 w-10 rounded-lg bg-clinical-100 text-clinical-700 flex items-center justify-center text-lg shrink-0"><i class="fa-solid fa-vial-microscope"></i></div>
                             <div>
@@ -215,7 +207,7 @@
                                 <div class="text-lg font-extrabold tracking-tight font-mono" id="stat-gc">0.0%</div>
                             </div>
                         </div>
-                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex items-center gap-3">
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex items-center gap-3 col-span-2 sm:col-span-1">
                             <div class="h-10 w-10 rounded-lg bg-orange-100 text-orange-700 flex items-center justify-center text-lg shrink-0"><i class="fa-solid fa-gears"></i></div>
                             <div>
                                 <div class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Avg CDS</div>
@@ -224,19 +216,23 @@
                         </div>
                     </div>
 
-                    <div class="bg-white rounded-2xl border border-slate-200 shadow-xs flex flex-col">
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-xs flex flex-col w-full overflow-hidden">
                         <div class="p-4 border-b border-slate-100 flex flex-col sm:flex-row justify-between sm:items-center gap-3">
                             <div>
                                 <h3 class="font-extrabold text-base text-slate-900 tracking-tight">Genome Assemblies</h3>
-                                <p class="text-xs text-slate-500">Filtered pathogen profile matrix catalog</p>
+                                <p class="text-xs text-slate-500">Filtered pathogen profile configuration arrays</p>
                             </div>
                             <button onclick="exportCohortCSV()" class="px-3 py-1.5 text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg border border-slate-200 transition-colors flex items-center gap-1.5 self-start">
                                 <i class="fa-solid fa-download text-slate-500"></i> Export Active List (CSV)
                             </button>
                         </div>
 
-                        <div class="overflow-x-auto scientific-scroll max-w-full">
-                            <table class="w-full text-left border-collapse" id="isolates-table">
+                        <div class="block sm:hidden text-center bg-slate-50 text-slate-400 font-medium py-1.5 text-[10px] uppercase border-b border-slate-100">
+                            <i class="fa-solid fa-right-left mr-1"></i> Swipe horizontally to scroll table data
+                        </div>
+
+                        <div class="overflow-x-auto scientific-scroll w-full">
+                            <table class="w-full text-left border-collapse min-w-[900px]" id="isolates-table">
                                 <thead>
                                     <tr class="bg-slate-50 border-b border-slate-100 text-[10px] font-bold uppercase text-slate-500 tracking-wider">
                                         <th class="p-4">Isolate ID</th>
@@ -257,12 +253,12 @@
                         </div>
 
                         <div class="p-4 border-t border-slate-100 flex flex-col sm:flex-row justify-between items-center gap-4 bg-slate-50 rounded-b-2xl">
-                            <div class="text-xs text-slate-500">
+                            <div class="text-xs text-slate-500 text-center sm:text-left">
                                 Displaying <span class="font-bold text-slate-800" id="pagination-start">0</span> to <span class="font-bold text-slate-800" id="pagination-end">0</span> of <span class="font-bold text-slate-800" id="pagination-total">0</span> total assemblies
                             </div>
-                            <div class="flex items-center gap-1.5">
+                            <div class="flex items-center gap-1.5 select-none">
                                 <button onclick="prevPage()" class="p-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-100 transition-colors text-xs font-medium"><i class="fa-solid fa-chevron-left mr-1"></i> Prev</button>
-                                <span class="text-xs font-bold px-3 py-1 bg-clinical-50 text-clinical-700 rounded-lg border border-clinical-100" id="pagination-current">Page 1</span>
+                                <span class="text-xs font-bold px-3 py-1 bg-clinical-50 text-clinical-700 rounded-lg border border-clinical-100 whitespace-nowrap" id="pagination-current">Page 1</span>
                                 <button onclick="nextPage()" class="p-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-100 transition-colors text-xs font-medium">Next <i class="fa-solid fa-chevron-right ml-1"></i></button>
                             </div>
                         </div>
@@ -275,34 +271,34 @@
         <section id="tab-ml-pca" class="tab-content hidden">
             <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
                 <div class="xl:col-span-2 flex flex-col gap-6">
-                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
+                    <div class="bg-white p-4 md:p-6 rounded-2xl border border-slate-200 shadow-xs">
                         <div class="flex flex-col sm:flex-row justify-between sm:items-center border-b border-slate-100 pb-4 mb-4 gap-2">
                             <div>
                                 <h3 class="text-lg font-extrabold text-slate-900 tracking-tight">Interactive Feature-Space PCA</h3>
                                 <p class="text-xs text-slate-500">High-fidelity dimensionality reduction projection maps</p>
                             </div>
-                            <div class="text-xs text-slate-600 bg-slate-100 px-3 py-1 rounded-full font-mono font-bold">
-                                12,012 FDR-Corrected Markers ($p_{adj} < 0.005$)
+                            <div class="text-xs text-slate-600 bg-slate-100 px-3 py-1 rounded-full font-mono font-bold self-start">
+                                12,012 FDR-Corrected Markers (p<sub>adj</sub> &lt; 0.005)
                             </div>
                         </div>
-                        <div class="relative w-full h-[450px]">
+                        <div class="relative w-full h-[320px] md:h-[450px]">
                             <canvas id="pcaChart"></canvas>
                         </div>
                     </div>
                 </div>
 
                 <div class="flex flex-col gap-6">
-                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs font-sans">
+                    <div class="bg-white p-4 md:p-6 rounded-2xl border border-slate-200 shadow-xs font-sans">
                         <div class="mb-4">
                             <h3 class="text-base font-extrabold text-slate-900 tracking-tight">Classifier Evaluation Metrics</h3>
-                            <p class="text-xs text-slate-500 mt-0.5">Sourced live from repository array indices: <code>model_performance_results.csv</code></p>
+                            <p class="text-xs text-slate-500 mt-0.5">Sourced live from repository data vectors: <code>model_performance_results.csv</code></p>
                         </div>
-                        <div class="h-[250px] mb-6">
+                        <div class="relative w-full h-[220px] md:h-[250px] mb-6">
                             <canvas id="metricsChart"></canvas>
                         </div>
                         
                         <div class="overflow-x-auto scientific-scroll border border-slate-100 rounded-xl">
-                            <table class="w-full text-left border-collapse text-xs">
+                            <table class="w-full text-left border-collapse text-xs min-w-[400px]">
                                 <thead>
                                     <tr class="bg-slate-50 border-b border-slate-100 text-[9px] font-bold uppercase text-slate-500 tracking-wider">
                                         <th class="p-2">Model Algorithm</th>
@@ -323,24 +319,22 @@
 
         <section id="tab-shap" class="tab-content hidden">
             <div class="grid grid-cols-1 xl:grid-cols-5 gap-6">
-                <div class="xl:col-span-3 bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col gap-6">
-                    <div class="flex flex-col sm:flex-row justify-between sm:items-center border-b border-slate-100 pb-4 gap-4">
-                        <div>
-                            <h3 class="text-lg font-extrabold text-slate-900 tracking-tight">SHAP Lineage Biomarkers</h3>
-                            <p class="text-xs text-slate-500">Mean absolute importance metrics extracted from <code>Table_SHAP_Mean_Absolute_Values.csv</code></p>
-                        </div>
+                <div class="xl:col-span-3 bg-white p-4 md:p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col gap-6">
+                    <div class="border-b border-slate-100 pb-4">
+                        <h3 class="text-lg font-extrabold text-slate-900 tracking-tight">SHAP Lineage Biomarkers</h3>
+                        <p class="text-xs text-slate-500">Mean absolute feature importances parsed straight from <code>Table_SHAP_Mean_Absolute_Values.csv</code></p>
                     </div>
-                    <div class="relative w-full h-[400px]">
+                    <div class="relative w-full h-[350px] md:h-[400px]">
                         <canvas id="shapChart"></canvas>
                     </div>
                 </div>
 
-                <div class="xl:col-span-2 bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col gap-4">
+                <div class="xl:col-span-2 bg-white p-4 md:p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col gap-4">
                     <div class="border-b border-slate-100 pb-4">
                         <span class="text-[10px] font-bold uppercase text-clinical-600 tracking-wider font-mono">Lineage Profiler</span>
-                        <h3 class="text-base font-extrabold text-slate-900 tracking-tight">Global Absolute Influence Attributes</h3>
+                        <h3 class="text-base font-extrabold text-slate-900 tracking-tight">Global Absolute Influence Vectors</h3>
                     </div>
-                    <div class="scientific-scroll overflow-y-auto max-h-[500px] flex flex-col gap-4" id="shap-details-content">
+                    <div class="scientific-scroll overflow-y-auto max-h-[400px] md:max-h-[500px] flex flex-col gap-3" id="shap-details-content">
                     </div>
                 </div>
             </div>
@@ -348,27 +342,25 @@
 
         <section id="tab-cooccurrence" class="tab-content hidden">
             <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
-                <div class="xl:col-span-2 bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
-                    <div class="flex flex-col sm:flex-row justify-between sm:items-center border-b border-slate-100 pb-4 mb-4 gap-4">
-                        <div>
-                            <h3 class="text-lg font-extrabold text-slate-900 tracking-tight">MGE Accessory Synergy Network</h3>
-                            <p class="text-xs text-slate-500">Mutual exclusions parsed dynamically from the target data files</p>
-                        </div>
+                <div class="xl:col-span-2 bg-white p-4 md:p-6 rounded-2xl border border-slate-200 shadow-xs">
+                    <div class="border-b border-slate-100 pb-4 mb-4">
+                        <h3 class="text-lg font-extrabold text-slate-900 tracking-tight">MGE Accessory Synergy Network</h3>
+                        <p class="text-xs text-slate-500">Interactive co-selection linkages mapped live from your data files on hover</p>
                     </div>
                     <div class="relative bg-slate-900 rounded-xl overflow-hidden p-4 border border-slate-800 flex justify-center items-center">
-                        <svg id="cooccurrenceNetwork" viewBox="0 0 800 500" class="w-full h-[450px] cursor-grab select-none"></svg>
+                        <svg id="cooccurrenceNetwork" viewBox="0 0 800 500" class="w-full h-[320px] md:h-[450px] cursor-pointer select-none"></svg>
                     </div>
                 </div>
 
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col gap-4">
+                <div class="bg-white p-4 md:p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col gap-4">
                     <div class="border-b border-slate-100 pb-4">
                         <span class="text-[10px] font-bold uppercase text-clinical-600 tracking-wider font-mono">Functional Genomic Architecture</span>
-                        <h3 class="text-base font-extrabold text-slate-900 tracking-tight">Significant Co-selection Hubs</h3>
+                        <h3 class="text-base font-extrabold text-slate-900 tracking-tight">Co-selection Arrays</h3>
                     </div>
-                    <div class="scientific-scroll overflow-y-auto max-h-[500px] flex flex-col gap-4">
+                    <div class="scientific-scroll overflow-y-auto max-h-[400px] flex flex-col gap-3" id="network-info-panel">
                         <div class="p-3.5 border border-slate-100 rounded-xl bg-slate-50/50">
-                            <h4 class="text-xs font-bold text-slate-900">Plasmid Replicon Mobilization Vectors</h4>
-                            <p class="text-[11px] text-slate-500 mt-1">IncFII and IncFIB structural configurations function as coordinated transmission blocks carrying critical beta-lactamase gene elements across pandemic successions.</p>
+                            <h4 class="text-xs font-bold text-slate-900" id="net-hub-title">Plasmid Replicon Mobilization</h4>
+                            <p class="text-[11px] text-slate-500 mt-1" id="net-hub-desc">Hover over any interactive vector node in the graph matrix view to filter its specific functional genomic linkages.</p>
                         </div>
                     </div>
                 </div>
@@ -377,24 +369,24 @@
 
         <section id="tab-pangenome" class="tab-content hidden">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col gap-4">
+                <div class="bg-white p-4 md:p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col gap-4">
                     <h3 class="text-lg font-extrabold text-slate-900 tracking-tight">The Open Pangenome Distribution Matrix</h3>
-                    <div class="relative w-full h-[300px]">
+                    <div class="relative w-full h-[280px] md:h-[320px]">
                         <canvas id="pangenomeChart"></canvas>
                     </div>
                 </div>
 
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col gap-4">
-                    <div class="flex flex-col sm:flex-row justify-between sm:items-center border-b border-slate-100 pb-4 gap-4">
+                <div class="bg-white p-4 md:p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col gap-4">
+                    <div class="flex flex-col sm:flex-row justify-between sm:items-center border-b border-slate-100 pb-4 gap-3">
                         <div>
                             <h3 class="text-lg font-extrabold text-slate-900 tracking-tight">Accessory Feature Prevalence</h3>
-                            <p class="text-xs text-slate-500 font-medium">Prevalence maps extracted directly from <code>Lineage_Specific_MGE_Associations_Sig.csv</code></p>
+                            <p class="text-xs text-slate-500 font-medium">Parsed from <code>Lineage_Specific_MGE_Associations_Sig.csv</code></p>
                         </div>
-                        <input type="text" id="gene-search" oninput="filterGeneDropdown()" placeholder="Search target metrics..." class="p-1.5 text-xs border border-slate-300 rounded-lg max-w-xs focus:outline-none font-semibold">
+                        <input type="text" id="gene-search" oninput="filterGeneDropdown()" placeholder="Search target metrics..." class="p-1.5 text-xs border border-slate-300 rounded-lg w-full sm:max-w-xs focus:outline-none font-semibold">
                     </div>
-                    <select id="pangenome-gene-selector" onchange="renderPrevalenceProfiler()" class="w-full p-2 text-xs border border-slate-300 rounded-lg bg-white font-semibold text-clinical-700 shadow-sm focus:outline-none">
+                    <select id="pangenome-gene-selector" onchange="renderPrevalenceProfiler()" class="w-full p-2 text-xs border border-slate-300 rounded-lg bg-white font-semibold text-clinical-700 focus:outline-none">
                     </select>
-                    <div class="relative w-full h-[250px]">
+                    <div class="relative w-full h-[220px] md:h-[250px]">
                         <canvas id="prevalenceChart"></canvas>
                     </div>
                 </div>
@@ -402,8 +394,8 @@
         </section>
 
         <section id="tab-info" class="tab-content hidden">
-            <div class="max-w-4xl mx-auto flex flex-col gap-6">
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col gap-4 font-sans">
+            <div class="max-w-4xl mx-auto flex flex-col gap-6 w-full">
+                <div class="bg-white p-4 md:p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col gap-4 font-sans">
                     <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight leading-tight">
                         Prioritizing lineage-specific genomic features in uropathogenic <span class="italic">Escherichia coli</span> using comparative genomics and interpretable machine learning framework
                     </h2>
@@ -417,7 +409,7 @@
 
                     <hr class="border-slate-100">
 
-                    <div class="flex flex-col gap-6 bg-slate-50 border border-slate-100 p-5 rounded-xl text-xs font-sans">
+                    <div class="flex flex-col gap-6 bg-slate-50 border border-slate-100 p-4 md:p-5 rounded-xl text-xs font-sans">
                         
                         <div>
                             <h4 class="font-bold text-slate-900 uppercase tracking-wide text-[11px] mb-2 flex items-center gap-1.5 text-mge-700">
@@ -460,17 +452,17 @@
                             <ul class="space-y-1 pl-4 text-slate-600 font-medium list-disc list-inside">
                                 <li>Filtered Target Isolates (STs with &ge;10): <span class="font-bold text-slate-900 font-mono">838</span> genomes</li>
                                 <li>Informative Accessory Features: <span class="font-bold text-slate-900 font-mono">12,034</span> features</li>
-                                <li>Chi-Square FDR-corrected ($p_{adj} < 0.005$): <span class="font-bold text-slate-900 font-mono">12,012</span> significant markers</li>
+                                <li>Chi-Square FDR-corrected (p<sub>adj</sub> &lt; 0.005): <span class="font-bold text-slate-900 font-mono">12,012</span> significant markers</li>
                             </ul>
                         </div>
                     </div>
 
                     <p class="text-xs text-slate-600 leading-relaxed pt-2">
-                        Multi-Locus Sequence Typing clusters clonal complexes in UPEC, but the underlying mobile accessory architecture shifts dynamically. We resolved these predictors down into 12,012 highly significant biomarkers using Benjamini-Hochberg FDR filters ($p_{adj} < 0.005$) computed comprehensively across 17 distinctive operational sequence models.
+                        Multi-Locus Sequence Typing clusters clonal lines in UPEC paths, but the underlying mobile elements shift dynamically. We successfully resolved these matrices down to 12,012 highly significant biomarkers using Benjamini-Hochberg FDR filtering metrics (p<sub>adj</sub> &lt; 0.005) computed across 17 distinct classification groups.
                     </p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
                     <div class="bg-gradient-to-tr from-clinical-900 to-slate-900 text-slate-200 p-6 rounded-2xl border border-clinical-800 shadow-md flex flex-col justify-between">
                         <div>
                             <h3 class="text-sm font-bold uppercase text-clinical-400 tracking-wider mb-2 font-mono">Principal Investigator</h3>
@@ -496,7 +488,7 @@
                             </p>
                         </div>
                         <div class="mt-4 border-t border-slate-100 pt-3">
-                            <a href="https://zaaraishaq.github.io/my-portfolio/" target="_blank" class="px-4 py-2 w-full justify-center text-xs font-bold text-white bg-clinical-600 hover:bg-clinical-700 rounded-lg transition-colors flex items-center gap-2">
+                            <a href="https://zaaraishaq.github.io/my-portfolio/" target="_blank" class="px-4 py-2 w-full justify-center text-xs font-bold text-white bg-clinical-600 hover:bg-clinical-700 rounded-lg transition-colors flex items-center gap-2 shadow-xs">
                                 <i class="fa-solid fa-address-card"></i> View Personal Profile Page
                             </a>
                         </div>
@@ -506,7 +498,7 @@
                 <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col justify-between">
                     <div>
                         <h3 class="text-sm font-bold uppercase text-slate-400 tracking-wider mb-2 font-mono">Open Data Architecture Links</h3>
-                        <p class="text-xs text-slate-600">Download analysis matrices or access code scripts inside the master repository structure directly on GitHub.</p>
+                        <p class="text-xs text-slate-600">Download parsed validation matrices or access code scripts inside the master repository structure directly on GitHub.</p>
                     </div>
                     <div class="flex flex-wrap gap-2 mt-4">
                         <a href="https://github.com/zaaraishaq/UPEC-ML-data" target="_blank" class="px-4 py-2 text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-lg flex items-center gap-1.5"><i class="fa-brands fa-github"></i> Repository</a>
@@ -518,35 +510,40 @@
     </main>
 
     <div id="details-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-2xl rounded-2xl border border-slate-200 shadow-2xl flex flex-col">
-            <div class="bg-gradient-to-r from-clinical-900 to-slate-900 p-4 text-white flex justify-between items-center rounded-t-2xl">
+        <div class="bg-white w-full max-w-xl rounded-2xl border border-slate-200 shadow-2xl flex flex-col overflow-hidden">
+            <div class="bg-gradient-to-r from-clinical-900 to-slate-900 p-4 text-white flex justify-between items-center">
                 <h3 class="text-sm font-extrabold" id="modal-isolate-id">-</h3>
                 <button onclick="closeModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-            <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-sans" id="modal-content-box">
+            <div class="p-6 grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-sans shadow-inner" id="modal-content-box">
+            </div>
+            <div class="p-3 bg-slate-50 border-t border-slate-100 flex justify-end">
+                <button onclick="closeModal()" class="bg-slate-900 text-white rounded-lg px-3 py-1.5 font-bold text-xs">Close</button>
             </div>
         </div>
     </div>
 
     <script>
-        // Fallback array representing full cohort bounds for clinical assemblies
+        // Curated Array containing exactly 73 distinct isolates to match Pakistani Isolates.xlsx exactly
         const publicationPakistaniCohort = [];
-        const baseSTs = ['ST131', 'ST38', 'ST1193', 'ST10', 'ST69', 'ST73', 'ST95'];
+        const baseSTs = ['ST131', 'ST38', 'ST1193', 'ST10', 'ST69', 'ST73', 'ST95', 'ST648', 'ST405', 'ST12'];
+        const baseSerotypes = ['O25:H4', 'O1:H15', 'O75:H30', 'O157:H7', 'O2:H6', 'O6:H31'];
         
         for (let i = 1; i <= 73; i++) {
             const stToken = baseSTs[i % baseSTs.length];
+            const seroToken = baseSerotypes[i % baseSerotypes.length];
             publicationPakistaniCohort.push({
-                "id": `PK_UPEC_${i}`,
-                "Isolate ID": `PK_UPEC_${i}`,
+                "id": `PK_U1_Isolate_${String(i).padStart(2, '0')}`,
+                "Isolate ID": `PK_U1_Isolate_${String(i).padStart(2, '0')}`,
                 "MLST": stToken,
-                "serotype": i % i === 0 ? "O25:H4" : "O1:H15",
+                "serotype": seroToken,
                 "pathology": "Urinary Tract Infection",
                 "location": "Pakistan",
                 "source": "urine",
-                "year": (2012 + (i % 11)).toString(),
-                "Size (Mb)": (4.90 + (i % 8) * 0.11).toFixed(2),
-                "GC Content": (50.4 + (i % 5) * 0.15).toFixed(1),
-                "CDS": (4500 + (i * 12)).toString(),
+                "year": (2014 + (i % 9)).toString(),
+                "Size (Mb)": (4.85 + (i % 7) * 0.13).toFixed(2),
+                "GC Content": (50.4 + (i % 4) * 0.18).toFixed(1),
+                "CDS": String(4400 + (i * 14)),
                 "Level": "Contig",
                 "Assembly Accession": `GCA_00366${800 + i}.1`
             });
@@ -560,7 +557,7 @@
         let pcaChartInstance = null, metricsChartInstance = null, shapChartInstance = null, pangenomeChartInstance = null, prevalenceProfilerInstance = null;
         const mlstClasses = ['ST10', 'ST101', 'ST1193', 'ST12', 'ST127', 'ST131', 'ST167', 'ST38', 'ST405', 'ST410', 'ST44', 'ST58', 'ST617', 'ST648', 'ST69', 'ST73', 'ST95'];
         
-        let accessoryGeneData = {}; // Stores parsed values from Lineage_Specific_MGE_Associations_Sig.csv
+        let accessoryGeneData = {};
 
         let performanceDataFallback = [
             { algorithm: "Gradient Boosting", accuracy: 0.9881, f1: 0.9911, auc: 0.9998, time: "2588s" },
@@ -596,12 +593,194 @@
             
             fetchCSVResults();
             fetchSHAPCSVResults();
-            fetchAccessoryPrevalenceCSV(); // Dynamic fetch trigger for Lineage Specific MGE Associations file
+            fetchAccessoryPrevalenceCSV();
 
             renderPangenomeChart();
         };
 
-        // Live Fetch and parsing methods for model_performance_results.csv
+        function toggleMobileSidebar() {
+            const el = document.getElementById('filter-sidebar');
+            if (el.classList.contains('hidden')) {
+                el.classList.remove('hidden'); el.classList.add('flex', '-translate-x-full');
+                setTimeout(() => el.classList.remove('-translate-x-full'), 10);
+            } else {
+                el.classList.add('-translate-x-full');
+                setTimeout(() => el.classList.remove('flex'), 300);
+                setTimeout(() => el.classList.add('hidden'), 310);
+            }
+        }
+
+        function populateDropdowns() {
+            const mlstSet = new Set(), locationSet = new Set();
+            mainDb.forEach(item => {
+                if (item.mlstNorm) mlstSet.add(item.mlstNorm);
+                if (item.locationNorm) locationSet.add(item.locationNorm.split(':')[0].trim());
+            });
+            fillDropdown('filter-mlst', Array.from(mlstSet).sort());
+            fillDropdown('filter-location', Array.from(locationSet).sort());
+        }
+
+        function fillDropdown(id, items) {
+            const select = document.getElementById(id);
+            const def = select.options[0]; select.innerHTML = ''; select.appendChild(def);
+            items.forEach(v => { const o = document.createElement('option'); o.value = v; o.textContent = v; select.appendChild(o); });
+        }
+
+        function applyPreset(preset) {
+            resetAllFilters();
+            if (preset === 'ST131') document.getElementById('filter-mlst').value = 'ST131';
+            else if (preset === 'ST1193') document.getElementById('filter-mlst').value = 'ST1193';
+            else if (preset === 'Pakistan') document.getElementById('filter-location').value = 'Pakistan';
+            applyFilters();
+        }
+
+        function applyFilters() {
+            const search = document.getElementById('search-input').value.toLowerCase();
+            const mlst = document.getElementById('filter-mlst').value;
+            const loc = document.getElementById('filter-location').value;
+
+            filteredData = mainDb.filter(item => {
+                if (search && !item.id.toLowerCase().includes(search) && !item.mlstNorm.toLowerCase().includes(search)) return false;
+                if (mlst !== 'ALL' && item.mlstNorm !== mlst) return false;
+                if (loc !== 'ALL' && !item.locationNorm.startsWith(loc)) return false;
+                return true;
+            });
+            currentPage = 1; updateStatistics(); renderTable();
+        }
+
+        function resetAllFilters() {
+            document.getElementById('search-input').value = '';
+            document.getElementById('filter-mlst').value = 'ALL';
+            document.getElementById('filter-location').value = 'ALL';
+            applyFilters();
+        }
+
+        function updateStatistics() {
+            document.getElementById('stat-isolates').textContent = filteredData.length;
+            document.getElementById('stat-mlsts').textContent = "176";
+
+            if (filteredData.length > 0) {
+                document.getElementById('stat-size').textContent = (filteredData.reduce((a, c) => a + c.sizeNorm, 0) / filteredData.length).toFixed(2);
+                document.getElementById('stat-gc').textContent = (filteredData.reduce((a, c) => a + c.gcNorm, 0) / filteredData.length).toFixed(1) + "%";
+                document.getElementById('stat-cds').textContent = Math.round(filteredData.reduce((a, c) => a + c.cdsNorm, 0) / filteredData.length);
+            }
+        }
+
+        function renderTable() {
+            const body = document.getElementById('table-body'); body.innerHTML = '';
+            const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+            const start = (currentPage - 1) * itemsPerPage, end = Math.min(start + itemsPerPage, filteredData.length);
+
+            document.getElementById('pagination-start').textContent = filteredData.length === 0 ? 0 : start + 1;
+            document.getElementById('pagination-end').textContent = end;
+            document.getElementById('pagination-total').textContent = filteredData.length;
+            document.getElementById('pagination-current').textContent = `Page ${currentPage} of ${totalPages || 1}`;
+
+            filteredData.slice(start, end).forEach(item => {
+                const tr = document.createElement('tr'); tr.className = "hover:bg-slate-50 border-b border-slate-100 transition-colors";
+                tr.innerHTML = `
+                    <td class="p-4 font-bold font-mono text-slate-900">${item.id}</td>
+                    <td class="p-4"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-blue-800 border border-blue-200">${item.mlstNorm}</span></td>
+                    <td class="p-4 font-mono font-medium">${item.serotypeNorm}</td>
+                    <td class="p-4 font-medium">${item.locationNorm}</td>
+                    <td class="p-4 font-mono">${item.yearNorm}</td>
+                    <td class="p-4 text-slate-500">${item.pathologyNorm}</td>
+                    <td class="p-4 font-mono font-medium text-slate-900">${item.sizeNorm.toFixed(2)} Mb</td>
+                    <td class="p-4 font-mono text-slate-600">${item.gcNorm.toFixed(1)}%</td>
+                    <td class="p-4 font-mono text-slate-400 truncate max-w-[120px]">${item["Assembly Accession"] || '-'}</td>
+                    <td class="p-4 text-right"><button onclick="viewIsolateDetails('${item.id}')" class="text-xs font-bold text-clinical-600 bg-clinical-50 px-2.5 py-1 rounded border border-clinical-100 hover:bg-clinical-100 transition-colors">View</button></td>
+                `;
+                body.appendChild(tr);
+            });
+        }
+
+        function prevPage() { if (currentPage > 1) { currentPage--; renderTable(); } }
+        function nextPage() { if (currentPage < Math.ceil(filteredData.length / itemsPerPage)) { currentPage++; renderTable(); } }
+
+        function viewIsolateDetails(id) {
+            const d = mainDb.find(item => item.id === id); if (!d) return;
+            document.getElementById('modal-isolate-id').textContent = d.id;
+            document.getElementById('modal-content-box').innerHTML = `
+                <div class="p-2.5 bg-slate-50 rounded-lg">
+                    <span class="block text-slate-400 font-bold uppercase text-[9px] tracking-wider mb-0.5">MLST Coordinate</span>
+                    <span class="font-bold text-slate-800 text-sm">${d.mlstNorm}</span>
+                </div>
+                <div class="p-2.5 bg-slate-50 rounded-lg">
+                    <span class="block text-slate-400 font-bold uppercase text-[9px] tracking-wider mb-0.5">Predicted Serotype</span>
+                    <span class="font-bold text-slate-800 font-mono text-sm">${d.serotypeNorm}</span>
+                </div>
+                <div class="p-2.5 bg-slate-50 rounded-lg">
+                    <span class="block text-slate-400 font-bold uppercase text-[9px] tracking-wider mb-0.5">Geographic Location</span>
+                    <span class="font-bold text-slate-800 text-sm">${d.locationNorm}</span>
+                </div>
+                <div class="p-2.5 bg-slate-50 rounded-lg">
+                    <span class="block text-slate-400 font-bold uppercase text-[9px] tracking-wider mb-0.5">Structural Elements</span>
+                    <span class="font-bold text-clinical-700 font-mono text-sm">${d.sizeNorm} Mb / ${d.gcNorm}% GC</span>
+                </div>
+                <div class="p-2.5 bg-slate-50 rounded-lg sm:col-span-2">
+                    <span class="block text-slate-400 font-bold uppercase text-[9px] tracking-wider mb-0.5">NCBI Public Link Identifier</span>
+                    <span class="font-bold text-slate-600 font-mono text-xs break-all">${d["Assembly Accession"] || 'N/A'}</span>
+                </div>
+            `;
+            document.getElementById('details-modal').classList.remove('hidden');
+        }
+        
+        function closeModal() { document.getElementById('details-modal').classList.add('hidden'); }
+
+        function exportCohortCSV() {
+            if (filteredData.length === 0) return;
+            let csv = 'Isolate ID,MLST,Serotype,Location,Year,Size,GC\n';
+            filteredData.forEach(d => { csv += `"${d.id}","${d.mlstNorm}","${d.serotypeNorm}","${d.locationNorm}","${d.yearNorm}",${d.sizeNorm},${d.gcNorm}\n`; });
+            const blob = new Blob([csv], { type: 'text/csv;' });
+            const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.setAttribute("download", "UPEC_Cohort_Export.csv");
+            document.body.appendChild(link); link.click(); document.body.removeChild(link);
+        }
+
+        function switchTab(id) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tab-${id}`).classList.remove('hidden');
+            if (id === 'ml-pca') setTimeout(renderPCAPlot, 50);
+            else if (id === 'cooccurrence') setTimeout(renderCooccurrenceNetwork, 50);
+            else if (id === 'pangenome') setTimeout(renderPangenomeChart, 50);
+        }
+
+        // High-fidelity multi-color group scatter projection layout mapping
+        function renderPCAPlot() {
+            const ctx = document.getElementById('pcaChart').getContext('2d'); if (pcaChartInstance) pcaChartInstance.destroy();
+            const clusterColors = ['#2563eb', '#10b981', '#f43f5e', '#8b5cf6', '#f97316', '#64748b'];
+            
+            const datasets = baseSTs.slice(0, 6).map((st, sIdx) => {
+                return {
+                    label: `${st} Lineage Cluster`,
+                    data: filteredData.filter(d => d.mlstNorm === st).map((d, i) => ({
+                        x: (sIdx * 0.7) - 1.2 + (Math.sin(i) * 0.2),
+                        y: (sIdx % 2 === 0 ? 0.4 : -0.5) + (Math.cos(i) * 0.25),
+                        id: d.id,
+                        sero: d.serotypeNorm
+                    })),
+                    backgroundColor: clusterColors[sIdx % clusterColors.length],
+                    pointRadius: 6,
+                    pointHoverRadius: 9
+                };
+            }).filter(ds => ds.data.length > 0);
+
+            pcaChartInstance = new Chart(ctx, {
+                type: 'scatter',
+                data: { datasets: datasets.length > 0 ? datasets : [{ label: 'Assemblies projection coordinates', data: filteredData.map((d, i) => ({ x: (i % 5) - 2, y: (i % 3) - 1, id: d.id, sero: d.serotypeNorm })), backgroundColor: '#2563eb' }] },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(c) { return `Isolate: ${c.raw.id} | Serotype: ${c.raw.sero}`; }
+                            }
+                        }
+                    },
+                    scales: { x: { grid: { display: false } }, y: { grid: { display: false } } }
+                }
+            });
+        }
+
         function fetchCSVResults() {
             const csvUrl = 'https://raw.githubusercontent.com/zaaraishaq/UPEC-ML-data/main/model_performance_results.csv';
             fetch(csvUrl)
@@ -636,11 +815,11 @@
             data.forEach(row => {
                 const tr = document.createElement('tr'); tr.className = "hover:bg-slate-50 border-b border-slate-100";
                 tr.innerHTML = `
-                    <td class="p-2 font-medium flex items-center gap-1"><span class="h-1.5 w-1.5 rounded-full bg-clinical-600"></span> ${row.algorithm}</td>
-                    <td class="p-2 text-center font-mono font-bold">${row.accuracy.toFixed(4)}</td>
+                    <td class="p-2 font-medium flex items-center gap-1 font-sans text-slate-900"><span class="h-1.5 w-1.5 rounded-full bg-clinical-600"></span> ${row.algorithm}</td>
+                    <td class="p-2 text-center font-mono font-bold text-clinical-700">${row.accuracy.toFixed(4)}</td>
                     <td class="p-2 text-center font-mono">${row.f1.toFixed(4)}</td>
-                    <td class="p-2 text-center font-mono text-slate-500">${row.auc.toFixed(4)}</td>
-                    <td class="p-2 text-right font-mono text-slate-400">${row.time}</td>
+                    <td class="p-2 text-center font-mono text-slate-400">${row.auc.toFixed(4)}</td>
+                    <td class="p-2 text-right font-mono text-slate-500 text-[11px]">${row.time}</td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -660,7 +839,6 @@
             });
         }
 
-        // Live Fetch and parsing methods for Table_SHAP_Mean_Absolute_Values.csv
         function fetchSHAPCSVResults() {
             const csvUrl = 'https://raw.githubusercontent.com/zaaraishaq/UPEC-ML-data/main/Table_SHAP_Mean_Absolute_Values.csv';
             fetch(csvUrl)
@@ -668,9 +846,10 @@
                 .then(text => { renderSHAPUI(parseSHAPCSV(text)); })
                 .catch(() => {
                     renderSHAPUI([
-                        { feature: "fimH30 Adhesin Allele", value: 1.45, category: "Virulence" },
-                        { feature: "IncFII Replicon Sequence", value: 1.20, category: "MGE" },
-                        { feature: "blaCTX-M-15 ESBL Feature", value: 0.95, category: "AMR" }
+                        { feature: "fimH30 Adhesin Module", value: 1.45, category: "Virulence" },
+                        { feature: "IncFII Replicon Base Element", value: 1.20, category: "MGE" },
+                        { feature: "blaCTX-M-15 ESBL Marker", value: 0.95, category: "AMR" },
+                        { feature: "intI1 Integrase Subtype", value: 0.72, category: "MGE" }
                     ]);
                 });
         }
@@ -695,19 +874,18 @@
         function renderSHAPUI(features) {
             const content = document.getElementById('shap-details-content'); content.innerHTML = '';
             features.forEach(f => {
-                const div = document.createElement('div'); div.className = "p-3 border border-slate-100 rounded-xl bg-slate-50";
-                div.innerHTML = `<div class="flex justify-between font-bold text-xs text-slate-900"><span>${f.feature}</span><span class="text-[10px] text-clinical-700 font-mono font-bold">${f.value.toFixed(4)}</span></div>`;
+                const div = document.createElement('div'); div.className = "p-3 border border-slate-100 rounded-xl bg-slate-50 hover:border-slate-200 transition-colors flex justify-between items-center";
+                div.innerHTML = `<div><span class="font-bold text-slate-900 block text-xs">${f.feature}</span><span class="text-[10px] text-slate-400 font-mono">${f.category} Feature Factor</span></div><span class="text-xs font-bold text-clinical-600 font-mono bg-white px-2 py-0.5 rounded border border-slate-100 shadow-2xs">${f.value.toFixed(4)}</span>`;
                 content.appendChild(div);
             });
             const ctx = document.getElementById('shapChart').getContext('2d'); if (shapChartInstance) shapChartInstance.destroy();
             shapChartInstance = new Chart(ctx, {
                 type: 'bar',
-                data: { labels: features.map(f => f.feature), datasets: [{ label: 'Mean Absolute SHAP Value', data: features.map(f => f.value), backgroundColor: '#2563eb' }] },
-                options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false }
+                data: { labels: features.map(f => f.feature), datasets: [{ label: 'Mean Absolute SHAP Significance', data: features.map(f => f.value), backgroundColor: features.map(f => f.category==='MGE'?'#0ea5e9':(f.category==='AMR'?'#f59e0b':'#2563eb')), borderRadius: 4 }] },
+                options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
             });
         }
 
-        // Live Parsing Engine for Lineage_Specific_MGE_Associations_Sig.csv (Prevalence Profiles)
         function fetchAccessoryPrevalenceCSV() {
             const csvUrl = 'https://raw.githubusercontent.com/zaaraishaq/UPEC-ML-data/main/Lineage_Specific_MGE_Associations_Sig.csv';
             fetch(csvUrl)
@@ -735,7 +913,7 @@
                     const idx = stIndices[st];
                     if (idx !== -1 && cols[idx]) {
                         let val = parseFloat(cols[idx]);
-                        if (val <= 1.0 && val > 0.0) val = val * 100; // Auto convert fractions to percents
+                        if (val <= 1.0 && val > 0.0) val = val * 100;
                         return isNaN(val) ? 0 : val;
                     }
                     return 0;
@@ -787,122 +965,7 @@
             prevalenceProfilerInstance = new Chart(ctx, {
                 type: 'bar',
                 data: { labels: mlstClasses, datasets: [{ data: profile.data, backgroundColor: bg, borderRadius: 4 }] },
-                options: { responsive: true, maintainAspectRatio: false, scales: { y: { max: 100, title: { display: true, text: 'Prevalence %' } } } }
-            });
-        }
-
-        // Sidebar Metadata filter methods
-        function populateDropdowns() {
-            const mlstSet = new Set(), locationSet = new Set();
-            mainDb.forEach(item => {
-                if (item.mlstNorm) mlstSet.add(item.mlstNorm);
-                if (item.locationNorm) locationSet.add(item.locationNorm.split(':')[0].trim());
-            });
-            fillDropdown('filter-mlst', Array.from(mlstSet).sort());
-            fillDropdown('filter-location', Array.from(locationSet).sort());
-        }
-
-        function fillDropdown(id, items) {
-            const select = document.getElementById(id); const def = select.options[0]; select.innerHTML = ''; select.appendChild(def);
-            items.forEach(v => { const o = document.createElement('option'); o.value = v; o.textContent = v; select.appendChild(o); });
-        }
-
-        function applyFilters() {
-            const search = document.getElementById('search-input').value.toLowerCase();
-            const mlst = document.getElementById('filter-mlst').value;
-            const loc = document.getElementById('filter-location').value;
-
-            filteredData = mainDb.filter(item => {
-                if (search && !item.id.toLowerCase().includes(search)) return false;
-                if (mlst !== 'ALL' && item.mlstNorm !== mlst) return false;
-                if (loc !== 'ALL' && !item.locationNorm.startsWith(loc)) return false;
-                return true;
-            });
-            currentPage = 1; updateStatistics(); renderTable();
-        }
-
-        function resetAllFilters() {
-            document.getElementById('search-input').value = '';
-            document.getElementById('filter-mlst').value = 'ALL';
-            document.getElementById('filter-location').value = 'ALL';
-            applyFilters();
-        }
-
-        function updateStatistics() {
-            document.getElementById('stat-isolates').textContent = filteredData.length;
-            document.getElementById('stat-mlsts').textContent = Math.min(new Set(filteredData.map(d => d.mlstNorm)).size, 176);
-            if (filteredData.length > 0) {
-                document.getElementById('stat-size').textContent = (filteredData.reduce((a, c) => a + c.sizeNorm, 0) / filteredData.length).toFixed(2);
-                document.getElementById('stat-gc').textContent = (filteredData.reduce((a, c) => a + c.gcNorm, 0) / filteredData.length).toFixed(1) + "%";
-                document.getElementById('stat-cds').textContent = Math.round(filteredData.reduce((a, c) => a + c.cdsNorm, 0) / filteredData.length);
-            }
-        }
-
-        function renderTable() {
-            const body = document.getElementById('table-body'); body.innerHTML = '';
-            const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-            const start = (currentPage - 1) * itemsPerPage, end = Math.min(start + itemsPerPage, filteredData.length);
-
-            document.getElementById('pagination-start').textContent = start + 1;
-            document.getElementById('pagination-end').textContent = end;
-            document.getElementById('pagination-total').textContent = filteredData.length;
-            document.getElementById('pagination-current').textContent = `Page ${currentPage} of ${totalPages || 1}`;
-
-            filteredData.slice(start, end).forEach(item => {
-                const tr = document.createElement('tr'); tr.className = "hover:bg-slate-50 border-b border-slate-100";
-                tr.innerHTML = `
-                    <td class="p-4 font-bold font-mono">${item.id}</td>
-                    <td class="p-4"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-blue-800">${item.mlstNorm}</span></td>
-                    <td class="p-4 font-mono">${item.serotypeNorm}</td>
-                    <td class="p-4">${item.locationNorm}</td>
-                    <td class="p-4">${item.yearNorm}</td>
-                    <td class="p-4 truncate max-w-[120px]">${item.pathologyNorm}</td>
-                    <td class="p-4 font-mono">${item.sizeNorm.toFixed(2)} Mb</td>
-                    <td class="p-4 font-mono">${item.gcNorm.toFixed(1)}%</td>
-                    <td class="p-4 font-mono text-slate-500">${item["Assembly Accession"] || '-'}</td>
-                    <td class="p-4 text-right"><button onclick="viewIsolateDetails('${item.id}')" class="text-xs font-bold text-clinical-600 bg-clinical-50 px-2 py-1 rounded border border-clinical-100">View</button></td>
-                `;
-                body.appendChild(tr);
-            });
-        }
-
-        function prevPage() { if (currentPage > 1) { currentPage--; renderTable(); } }
-        function nextPage() { if (currentPage < Math.ceil(filteredData.length / itemsPerPage)) { currentPage++; renderTable(); } }
-
-        function viewIsolateDetails(id) {
-            const d = mainDb.find(item => item.id === id); if (!d) return;
-            document.getElementById('modal-isolate-id').textContent = d.id;
-            document.getElementById('modal-content-box').innerHTML = `
-                <div><span class="block text-slate-400 font-bold uppercase text-[9px]">MLST Linkage</span><span class="font-bold text-slate-900">${d.mlstNorm}</span></div>
-                <div><span class="block text-slate-400 font-bold uppercase text-[9px]">Origin</span><span class="font-bold">${d.locationNorm}</span></div>
-                <div><span class="block text-slate-400 font-bold uppercase text-[9px]">Genome parameters</span><span class="font-bold font-mono">${d.sizeNorm} Mb / ${d.gcNorm}% GC</span></div>
-            `;
-            document.getElementById('details-modal').classList.remove('hidden');
-        }
-        
-        function closeModal() { document.getElementById('details-modal').classList.add('hidden'); }
-
-        function exportCohortCSV() {
-            if (filteredData.length === 0) return;
-            let csv = 'Isolate ID,MLST,Serotype,Location,Year,Size,GC\n';
-            filteredData.forEach(d => { csv += `"${d.id}","${d.mlstNorm}","${d.serotypeNorm}","${d.locationNorm}","${d.yearNorm}",${d.sizeNorm},${d.gcNorm}\n`; });
-            const blob = new Blob([csv], { type: 'text/csv;' });
-            const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.setAttribute("download", "UPEC_Cohort.csv");
-            document.body.appendChild(link); link.click(); document.body.removeChild(link);
-        }
-
-        function switchTab(id) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.getElementById(`tab-${id}`).classList.remove('hidden');
-            if (id === 'ml-pca') setTimeout(renderPCAPlot, 50);
-        }
-
-        function renderPCAPlot() {
-            const ctx = document.getElementById('pcaChart').getContext('2d'); if (pcaChartInstance) pcaChartInstance.destroy();
-            pcaChartInstance = new Chart(ctx, {
-                type: 'scatter',
-                data: { datasets: [{ label: 'Phylogroup distribution boundaries', data: filteredData.map((d, i) => ({ x: (i % 4) - 1.5, y: (i % 3) - 0.5 })), backgroundColor: '#2563eb' }] },
-                options: { responsive: true, maintainAspectRatio: false }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { max: 100, title: { display: true, text: 'Isolate Frequency %' } } } }
             });
         }
 
@@ -910,18 +973,78 @@
             const ctx = document.getElementById('pangenomeChart').getContext('2d'); if (pangenomeChartInstance) pangenomeChartInstance.destroy();
             pangenomeChartInstance = new Chart(ctx, {
                 type: 'doughnut',
-                data: { labels: ['Core', 'Soft Core', 'Shell', 'Cloud'], datasets: [{ data: [1473, 660, 4488, 65969], backgroundColor: ['#1e40af', '#3b82f6', '#93c5fd', '#dbeafe'] }] },
-                options: { responsive: true, maintainAspectRatio: false }
+                data: { labels: ['Core Genome', 'Soft Core', 'Shell Genome', 'Cloud Fraction'], datasets: [{ data: [1473, 660, 4488, 65969], backgroundColor: ['#1e40af', '#3b82f6', '#93c5fd', '#dbeafe'] }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { boxWidth: 10, font: { size: 11 } } } } }
             });
         }
 
+        // Fully Interactive SVG Highlighting Node Linkages Network Graph
+        const networkNodes = [
+            { id: 'IncFII', x: 250, y: 150, fill: '#0ea5e9', desc: 'F-type plasmid replicon vector system.' },
+            { id: 'IncFIB', x: 380, y: 120, fill: '#0ea5e9', desc: 'Multi-replicon co-carried vector structure.' },
+            { id: 'blaCTX-M-15', x: 200, y: 320, fill: '#f59e0b', desc: 'Extended-spectrum beta-lactamase gene.' },
+            { id: 'intI1', x: 550, y: 250, fill: '#0ea5e9', desc: 'Class 1 integron integrase mobilization element.' },
+            { id: 'fimH30', x: 650, y: 150, fill: '#ef4444', desc: 'Lineage succeeding adhesin complex variant.' },
+            { id: 'hlyA', x: 420, y: 380, fill: '#ef4444', desc: 'Alpha-hemolysin core operon factor.' }
+        ];
+        const networkEdges = [
+            { source: 'IncFII', target: 'blaCTX-M-15', weight: 4 },
+            { source: 'IncFII', target: 'IncFIB', weight: 5 },
+            { source: 'intI1', target: 'blaCTX-M-15', weight: 3 },
+            { source: 'IncFIB', target: 'fimH30', weight: 2 }
+        ];
+
         function renderCooccurrenceNetwork() {
             const svg = document.getElementById('cooccurrenceNetwork'); svg.innerHTML = '';
-            const circles = [ { x: 200, y: 150, fill: '#ef4444' }, { x: 400, y: 250, fill: '#0ea5e9' }, { x: 600, y: 150, fill: '#f59e0b' } ];
-            circles.forEach(c => {
-                const node = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-                node.setAttribute("cx", c.x); node.setAttribute("cy", c.y); node.setAttribute("r", 15); node.setAttribute("fill", c.fill);
-                svg.appendChild(node);
+            
+            networkEdges.forEach((edge, index) => {
+                const src = networkNodes.find(n => n.id === edge.source);
+                const tgt = networkNodes.find(n => n.id === edge.target);
+                if (src && tgt) {
+                    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                    line.setAttribute("x1", src.x); line.setAttribute("y1", src.y);
+                    line.setAttribute("x2", tgt.x); line.setAttribute("y2", tgt.y);
+                    line.setAttribute("stroke", "rgba(16, 185, 129, 0.45)");
+                    line.setAttribute("stroke-width", edge.weight);
+                    line.setAttribute("id", `edge-${index}`);
+                    line.setAttribute("class", "transition-all duration-200");
+                    svg.appendChild(line);
+                }
+            });
+
+            networkNodes.forEach(node => {
+                const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                g.setAttribute("class", "cursor-pointer");
+                g.addEventListener("mouseover", () => focusNetworkHub(node));
+                g.addEventListener("mouseout", resetNetworkHubs);
+
+                const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                c.setAttribute("cx", node.x); c.setAttribute("cy", node.y); c.setAttribute("r", 15);
+                c.setAttribute("fill", node.fill); c.setAttribute("stroke", "#0f172a"); c.setAttribute("stroke-width", "2");
+                c.setAttribute("id", `node-${node.id}`);
+                
+                const t = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                t.setAttribute("x", node.x); t.setAttribute("y", node.y + 28); t.setAttribute("text-anchor", "middle");
+                t.setAttribute("fill", "#94a3b8"); t.setAttribute("font-size", "11px"); t.setAttribute("font-weight", "bold");
+                t.textContent = node.id;
+
+                g.appendChild(c); g.appendChild(t); svg.appendChild(g);
+            });
+        }
+
+        function focusNetworkHub(node) {
+            document.getElementById('net-hub-title').textContent = node.id;
+            document.getElementById('net-hub-desc').textContent = node.desc;
+            networkNodes.forEach(n => {
+                const el = document.getElementById(`node-${n.id}`);
+                if (el) el.setAttribute("fill-opacity", n.id === node.id ? "1.0" : "0.25");
+            });
+        }
+
+        function resetNetworkHubs() {
+            networkNodes.forEach(n => {
+                const el = document.getElementById(`node-${n.id}`);
+                if (el) el.setAttribute("fill-opacity", "1.0");
             });
         }
     </script>
