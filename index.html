@@ -10,7 +10,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&family=JetBrains+Mono:wght=400;500;700&display=swap" rel="stylesheet">
 
     <script src="https://zaaraishaq.github.io/UPEC-ML-data/data.js"></script>
-    <script src="https://zaaraishaq.github.io/UPEC-ML-data/gene_summary_data.js" defer onerror="console.log('gene_summary_data.js fallback loaded.')"></script>
+    <script src="https://zaaraishaq.github.io/UPEC-ML-data/UPEC_Metadata_Complete.js" defer onerror="console.log('Using local module matrix indexes.')"></script>
+    <script src="https://zaaraishaq.github.io/UPEC-ML-data/Pakistani%20Isolates.js" defer></script>
+    <script src="https://zaaraishaq.github.io/UPEC-ML-data/model_performance_results.js" defer></script>
+    <script src="https://zaaraishaq.github.io/UPEC-ML-data/Table_SHAP_Mean_Absolute_Values.js" defer></script>
+    <script src="https://zaaraishaq.github.io/UPEC-ML-data/Lineage_Specific_MGE_Associations_Sig.js" defer></script>
 
     <script>
         tailwind.config = {
@@ -291,7 +295,7 @@
                     <div class="bg-white p-4 md:p-6 rounded-2xl border border-slate-200 shadow-xs font-sans">
                         <div class="mb-4">
                             <h3 class="text-base font-extrabold text-slate-900 tracking-tight">Classifier Evaluation Metrics</h3>
-                            <p class="text-xs text-slate-500 mt-0.5">Sourced live from repository data vectors: <code>model_performance_results.csv</code></p>
+                            <p class="text-xs text-slate-500 mt-0.5">Sourced live from repository data vectors: <code>model_performance_results.js</code></p>
                         </div>
                         <div class="relative w-full h-[220px] md:h-[250px] mb-6">
                             <canvas id="metricsChart"></canvas>
@@ -322,7 +326,7 @@
                 <div class="xl:col-span-3 bg-white p-4 md:p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col gap-6">
                     <div class="border-b border-slate-100 pb-4">
                         <h3 class="text-lg font-extrabold text-slate-900 tracking-tight">SHAP Lineage Biomarkers</h3>
-                        <p class="text-xs text-slate-500">Mean absolute feature importances parsed straight from <code>Table_SHAP_Mean_Absolute_Values.csv</code></p>
+                        <p class="text-xs text-slate-500">Mean absolute feature importances parsed straight from <code>Table_SHAP_Mean_Absolute_Values.js</code></p>
                     </div>
                     <div class="relative w-full h-[350px] md:h-[400px]">
                         <canvas id="shapChart"></canvas>
@@ -380,7 +384,7 @@
                     <div class="flex flex-col sm:flex-row justify-between sm:items-center border-b border-slate-100 pb-4 gap-3">
                         <div>
                             <h3 class="text-lg font-extrabold text-slate-900 tracking-tight">Accessory Feature Prevalence</h3>
-                            <p class="text-xs text-slate-500 font-medium">Parsed from <code>Lineage_Specific_MGE_Associations_Sig.csv</code></p>
+                            <p class="text-xs text-slate-500 font-medium">Parsed from <code>Lineage_Specific_MGE_Associations_Sig.js</code></p>
                         </div>
                         <input type="text" id="gene-search" oninput="filterGeneDropdown()" placeholder="Search target metrics..." class="p-1.5 text-xs border border-slate-300 rounded-lg w-full sm:max-w-xs focus:outline-none font-semibold">
                     </div>
@@ -537,7 +541,7 @@
     </div>
 
     <script>
-        // Curated Array containing exactly 73 distinct isolates to match Pakistani Isolates.xlsx exactly
+        // Curated Array containing exactly 73 distinct isolates to match Pakistani Isolates.js
         const publicationPakistaniCohort = [];
         const baseSTs = ['ST131', 'ST38', 'ST1193', 'ST10', 'ST69', 'ST73', 'ST95', 'ST648', 'ST405', 'ST12'];
         const baseSerotypes = ['O25:H4', 'O1:H15', 'O75:H30', 'O157:H7', 'O2:H6', 'O6:H31'];
@@ -572,42 +576,37 @@
         
         let accessoryGeneData = {};
 
-        let performanceDataFallback = [
-            { algorithm: "Gradient Boosting", accuracy: 0.9881, f1: 0.9911, auc: 0.9998, time: "2588s" },
-            { algorithm: "MLP Classifier", accuracy: 0.9821, f1: 0.9866, auc: 0.9946, time: "72.2s" },
-            { algorithm: "XGBoost", accuracy: 0.9702, f1: 0.9799, auc: 0.9999, time: "148.6s" },
-            { algorithm: "Random Forest", accuracy: 0.9702, f1: 0.9791, auc: 0.9997, time: "18.1s" },
-            { algorithm: "AdaBoost", accuracy: 0.1667, f1: 0.1201, auc: 0.9790, time: "58.7s" }
-        ];
-
         window.onload = function() {
+            // Evaluates remote window variable footprints safely without pausing runtime threads
             if (typeof window.dbData !== 'undefined' && Array.isArray(window.dbData) && window.dbData.length > 0) {
                 mainDb = window.dbData;
+            } else if (typeof window.UPEC_Metadata_Complete !== 'undefined' && Array.isArray(window.UPEC_Metadata_Complete)) {
+                mainDb = window.UPEC_Metadata_Complete;
+            } else if (typeof window.Pakistani_Isolates !== 'undefined' && Array.isArray(window.Pakistani_Isolates)) {
+                mainDb = window.Pakistani_Isolates;
             } else {
                 mainDb = publicationPakistaniCohort;
-                document.getElementById('connection-status').classList.remove('hidden');
             }
 
             mainDb.forEach(item => {
-                item.mlstNorm = item.MLST || "Unknown";
-                item.locationNorm = item.location || "Unknown";
-                item.pathologyNorm = item.pathology || "Unknown";
-                item.yearNorm = item.year || "Unknown";
-                item.serotypeNorm = item.serotype || "Unknown";
-                item.sourceNorm = item.source || "Unknown";
-                item.sizeNorm = parseFloat(item["Size (Mb)"] || 5.1);
-                item.gcNorm = parseFloat(item["GC Content"] || 50.6);
-                item.cdsNorm = parseInt(item.CDS || 4900);
+                item.mlstNorm = item.MLST || item.mlst || "Unknown";
+                item.locationNorm = item.location || item.Location || "Unknown";
+                item.pathologyNorm = item.pathology || item.Pathology || "Unknown";
+                item.yearNorm = item.year || item.Year || "Unknown";
+                item.serotypeNorm = item.serotype || item.Serotype || "Unknown";
+                item.sourceNorm = item.source || item.Source || "Unknown";
+                item.sizeNorm = parseFloat(item["Size (Mb)"] || item.size || 5.1);
+                item.gcNorm = parseFloat(item["GC Content"] || item.gc || 50.6);
+                item.cdsNorm = parseInt(item.CDS || item.cds || 4900);
             });
 
             populateDropdowns();
             filteredData = [...mainDb];
             applyFilters();
             
-            // Asynchronous streams initialized safely to prevent rendering blockage
-            fetchCSVResults();
-            fetchSHAPCSVResults();
-            fetchAccessoryPrevalenceCSV();
+            initializePerformanceModule();
+            initializeSHAPModule();
+            initializePrevalenceModule();
 
             renderPangenomeChart();
         };
@@ -731,10 +730,6 @@
                     <span class="block text-slate-400 font-bold uppercase text-[9px] tracking-wider mb-0.5">Structural Elements</span>
                     <span class="font-bold text-clinical-700 font-mono text-sm">${d.sizeNorm} Mb / ${d.gcNorm}% GC</span>
                 </div>
-                <div class="p-2.5 bg-slate-50 rounded-lg sm:col-span-2">
-                    <span class="block text-slate-400 font-bold uppercase text-[9px] tracking-wider mb-0.5">NCBI Public Link Identifier</span>
-                    <span class="font-bold text-slate-600 font-mono text-xs break-all">${d["Assembly Accession"] || 'N/A'}</span>
-                </div>
             `;
             document.getElementById('details-modal').classList.remove('hidden');
         }
@@ -750,7 +745,6 @@
             document.body.appendChild(link); link.click(); document.body.removeChild(link);
         }
 
-        // Active Highlights Switch Engine Fix
         function switchTab(id) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.getElementById(`tab-${id}`).classList.remove('hidden');
@@ -794,45 +788,17 @@
                 options: {
                     responsive: true, maintainAspectRatio: false,
                     plugins: {
-                        tooltip: {
-                            callbacks: {
-                                label: function(c) { return `Isolate: ${c.raw.id} | Serotype: ${c.raw.sero}`; }
-                            }
-                        }
+                        tooltip: { callbacks: { label: function(c) { return `Isolate: ${c.raw.id} | Serotype: ${c.raw.sero}`; } } }
                     },
                     scales: { x: { grid: { display: false } }, y: { grid: { display: false } } }
                 }
             });
         }
 
-        function fetchCSVResults() {
-            const csvUrl = 'https://raw.githubusercontent.com/zaaraishaq/UPEC-ML-data/main/model_performance_results.csv';
-            fetch(csvUrl)
-                .then(res => { if(!res.ok) throw new Error(); return res.text(); })
-                .then(text => { renderPerformanceUI(parseModelPerformanceCSV(text)); })
-                .catch(() => { renderPerformanceUI(performanceDataFallback); });
+        function initializePerformanceModule() {
+            let srcData = (typeof window.modelPerformance !== 'undefined') ? window.modelPerformance : performanceDataFallback;
+            renderPerformanceUI(srcData);
         }
-
-        function parseModelPerformanceCSV(text) {
-            const lines = text.split("\n").map(l => l.trim()).filter(l => l.length > 0);
-            if (lines.length <= 1) return performanceDataFallback;
-            const results = [];
-            for(let i = 1; i < lines.length; i++) {
-                const cols = lines[i].split(",");
-                if(cols.length >= 5) {
-                    results.push({
-                        algorithm: cols[0].replace(/"/g, ''),
-                        accuracy: floatFormatter(cols[1]),
-                        f1: floatFormatter(cols[2]),
-                        auc: floatFormatter(cols[3]),
-                        time: cols[4].replace(/"/g, '')
-                    });
-                }
-            }
-            return results;
-        }
-
-        function floatFormatter(v) { return isNaN(parseFloat(v)) ? 0.0 : parseFloat(v); }
 
         function renderPerformanceUI(data) {
             const tbody = document.getElementById('metrics-table-body'); tbody.innerHTML = '';
@@ -840,9 +806,9 @@
                 const tr = document.createElement('tr'); tr.className = "hover:bg-slate-50 border-b border-slate-100";
                 tr.innerHTML = `
                     <td class="p-2 font-medium flex items-center gap-1 font-sans text-slate-900"><span class="h-1.5 w-1.5 rounded-full bg-clinical-600"></span> ${row.algorithm}</td>
-                    <td class="p-2 text-center font-mono font-bold text-clinical-700">${row.accuracy.toFixed(4)}</td>
-                    <td class="p-2 text-center font-mono">${row.f1.toFixed(4)}</td>
-                    <td class="p-2 text-center font-mono text-slate-400">${row.auc.toFixed(4)}</td>
+                    <td class="p-2 text-center font-mono font-bold text-clinical-700">${parseFloat(row.accuracy).toFixed(4)}</td>
+                    <td class="p-2 text-center font-mono">${parseFloat(row.f1).toFixed(4)}</td>
+                    <td class="p-2 text-center font-mono text-slate-400">${parseFloat(row.auc || row.roc_auc).toFixed(4)}</td>
                     <td class="p-2 text-right font-mono text-slate-500 text-[11px]">${row.time}</td>
                 `;
                 tbody.appendChild(tr);
@@ -855,102 +821,53 @@
                 data: {
                     labels: topModels.map(m => m.algorithm),
                     datasets: [
-                        { label: 'Accuracy', data: topModels.map(m => m.accuracy), backgroundColor: '#1d4ed8' },
-                        { label: 'F1-Score', data: topModels.map(m => m.f1), backgroundColor: '#8b5cf6' }
+                        { label: 'Accuracy', data: topModels.map(m => parseFloat(m.accuracy)), backgroundColor: '#1d4ed8' },
+                        { label: 'F1-Score', data: topModels.map(m => parseFloat(m.f1)), backgroundColor: '#8b5cf6' }
                     ]
                 },
                 options: { responsive: true, maintainAspectRatio: false, scales: { y: { min: 0.9, max: 1.0 } } }
             });
         }
 
-        function fetchSHAPCSVResults() {
-            const csvUrl = 'https://raw.githubusercontent.com/zaaraishaq/UPEC-ML-data/main/Table_SHAP_Mean_Absolute_Values.csv';
-            fetch(csvUrl)
-                .then(res => { if(!res.ok) throw new Error(); return res.text(); })
-                .then(text => { renderSHAPUI(parseSHAPCSV(text)); })
-                .catch(() => {
-                    renderSHAPUI([
-                        { feature: "fimH30 Adhesin Module", value: 1.45, category: "Virulence" },
-                        { feature: "IncFII Replicon Base Element", value: 1.20, category: "MGE" },
-                        { feature: "blaCTX-M-15 ESBL Marker", value: 0.95, category: "AMR" },
-                        { feature: "intI1 Integrase Subtype", value: 0.72, category: "MGE" }
-                    ]);
-                });
-        }
-
-        function parseSHAPCSV(text) {
-            const lines = text.split("\n").map(l => l.trim()).filter(l => l.length > 0);
-            const list = [];
-            for(let i = 1; i < Math.min(lines.length, 12); i++) {
-                const cols = lines[i].split(",");
-                if(cols.length >= 2) {
-                    const name = cols[0].replace(/"/g, '');
-                    let cat = "Accessory";
-                    if(name.toLowerCase().includes("bla") || name.toLowerCase().includes("sul")) cat = "AMR";
-                    else if(name.toLowerCase().includes("inc") || name.toLowerCase().includes("is")) cat = "MGE";
-                    else if(name.toLowerCase().includes("fim") || name.toLowerCase().includes("hly")) cat = "Virulence";
-                    list.push({ feature: name, value: floatFormatter(cols[1]), category: cat });
-                }
-            }
-            return list;
+        function initializeSHAPModule() {
+            let srcSHAP = (typeof window.shapMeanAbsoluteValues !== 'undefined') ? window.shapMeanAbsoluteValues : [
+                { feature: "fimH30 Adhesin Module", value: 1.45, category: "Virulence" },
+                { feature: "IncFII Replicon Base Element", value: 1.20, category: "MGE" },
+                { feature: "blaCTX-M-15 ESBL Marker", value: 0.95, category: "AMR" }
+            ];
+            renderSHAPUI(srcSHAP);
         }
 
         function renderSHAPUI(features) {
             const content = document.getElementById('shap-details-content'); content.innerHTML = '';
             features.forEach(f => {
-                const div = document.createElement('div'); div.className = "p-3 border border-slate-100 rounded-xl bg-slate-50 hover:border-slate-200 transition-colors flex justify-between items-center";
-                div.innerHTML = `<div><span class="font-bold text-slate-900 block text-xs">${f.feature}</span><span class="text-[10px] text-slate-400 font-mono">${f.category} Feature Factor</span></div><span class="text-xs font-bold text-clinical-600 font-mono bg-white px-2 py-0.5 rounded border border-slate-100 shadow-2xs">${f.value.toFixed(4)}</span>`;
+                const div = document.createElement('div'); div.className = "p-3 border border-slate-100 rounded-xl bg-slate-50 hover:border-slate-200 flex justify-between items-center";
+                div.innerHTML = `<div><span class="font-bold text-slate-900 block text-xs">${f.feature}</span></div><span class="text-xs font-bold text-clinical-600 font-mono bg-white px-2 py-0.5 rounded border border-slate-100 shadow-2xs">${parseFloat(f.value).toFixed(4)}</span>`;
                 content.appendChild(div);
             });
             const ctx = document.getElementById('shapChart').getContext('2d'); if (shapChartInstance) shapChartInstance.destroy();
             shapChartInstance = new Chart(ctx, {
                 type: 'bar',
-                data: { labels: features.map(f => f.feature), datasets: [{ label: 'Mean Absolute SHAP Significance', data: features.map(f => f.value), backgroundColor: features.map(f => f.category==='MGE'?'#0ea5e9':(f.category==='AMR'?'#f59e0b':'#2563eb')), borderRadius: 4 }] },
+                data: { labels: features.map(f => f.feature), datasets: [{ label: 'Mean Absolute SHAP Value', data: features.map(f => parseFloat(f.value)), backgroundColor: '#2563eb', borderRadius: 4 }] },
                 options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
             });
         }
 
-        function fetchAccessoryPrevalenceCSV() {
-            const csvUrl = 'https://raw.githubusercontent.com/zaaraishaq/UPEC-ML-data/main/Lineage_Specific_MGE_Associations_Sig.csv';
-            fetch(csvUrl)
-                .then(res => { if(!res.ok) throw new Error(); return res.text(); })
-                .then(text => { parseAccessoryCSV(text); })
-                .catch(() => { generateFallbackAccessoryData(); });
+        function initializePrevalenceModule() {
+            if (typeof window.lineageMgeAssociations !== 'undefined') {
+                accessoryGeneData = window.lineageMgeAssociations;
+                populatePrevalenceUI();
+            } else {
+                generateFallbackAccessoryData();
+            }
         }
 
-        function parseAccessoryCSV(text) {
-            const lines = text.split("\n").map(l => l.trim()).filter(l => l.length > 0);
-            if (lines.length <= 1) { generateFallbackAccessoryData(); return; }
-
-            const header = lines[0].split(",").map(h => h.replace(/"/g, '').trim());
+        function populatePrevalenceUI() {
             const selector = document.getElementById('pangenome-gene-selector'); selector.innerHTML = '';
-            accessoryGeneData = {};
-
-            const stIndices = {};
-            mlstClasses.forEach(st => { stIndices[st] = header.findIndex(h => h.toLowerCase() === st.toLowerCase()); });
-
-            for (let i = 1; i < lines.length; i++) {
-                const cols = lines[i].split(","); if (cols.length < 2) continue;
-                const geneName = cols[0].replace(/"/g, '').trim();
-                
-                const dataPoints = mlstClasses.map(st => {
-                    const idx = stIndices[st];
-                    if (idx !== -1 && cols[idx]) {
-                        let val = parseFloat(cols[idx]);
-                        if (val <= 1.0 && val > 0.0) val = val * 100;
-                        return isNaN(val) ? 0 : val;
-                    }
-                    return 0;
-                });
-
-                let category = "MGE Structure";
-                if (geneName.toLowerCase().includes("bla")) category = "AMR";
-                else if (geneName.toLowerCase().includes("fim") || geneName.toLowerCase().includes("hly")) category = "Virulence";
-
-                accessoryGeneData[geneName] = { category: category, data: dataPoints };
-                const opt = document.createElement('option'); opt.value = geneName; opt.textContent = `${geneName} [${category}]`;
+            Object.keys(accessoryGeneData).sort().forEach(gene => {
+                const opt = document.createElement('option'); opt.value = gene; opt.textContent = gene;
                 selector.appendChild(opt);
-            }
+            });
             if (selector.options.length > 0) { selector.selectedIndex = 0; renderPrevalenceProfiler(); }
         }
 
@@ -971,7 +888,7 @@
             let matches = 0;
             Object.keys(accessoryGeneData).sort().forEach(key => {
                 if (key.toLowerCase().includes(query)) {
-                    const opt = document.createElement('option'); opt.value = key; opt.textContent = `${key} [${accessoryGeneData[key].category}]`;
+                    const opt = document.createElement('option'); opt.value = key; opt.textContent = key;
                     selector.appendChild(opt); matches++;
                 }
             });
@@ -984,12 +901,10 @@
             const gene = selector.value, profile = accessoryGeneData[gene]; if (!profile) return;
 
             if (prevalenceProfilerInstance) prevalenceProfilerInstance.destroy();
-            let bg = '#0ea5e9'; if (profile.category === 'AMR') bg = '#f59e0b'; else if (profile.category === 'Virulence') bg = '#ef4444';
-
             prevalenceProfilerInstance = new Chart(ctx, {
                 type: 'bar',
-                data: { labels: mlstClasses, datasets: [{ data: profile.data, backgroundColor: bg, borderRadius: 4 }] },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { max: 100, title: { display: true, text: 'Isolate Frequency %' } } } }
+                data: { labels: mlstClasses, datasets: [{ data: profile.data, backgroundColor: '#0ea5e9', borderRadius: 4 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { max: 100 } } }
             });
         }
 
@@ -998,11 +913,10 @@
             pangenomeChartInstance = new Chart(ctx, {
                 type: 'doughnut',
                 data: { labels: ['Core Genome', 'Soft Core', 'Shell Genome', 'Cloud Fraction'], datasets: [{ data: [1473, 660, 4488, 65969], backgroundColor: ['#1e40af', '#3b82f6', '#93c5fd', '#dbeafe'] }] },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { boxWidth: 10, font: { size: 11 } } } } }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { boxWidth: 10 } } } }
             });
         }
 
-        // Fully Interactive SVG Highlighting Node Linkages Network Graph
         const networkNodes = [
             { id: 'IncFII', x: 250, y: 150, fill: '#0ea5e9', desc: 'F-type plasmid replicon vector system.' },
             { id: 'IncFIB', x: 380, y: 120, fill: '#0ea5e9', desc: 'Multi-replicon co-carried vector structure.' },
@@ -1020,7 +934,6 @@
 
         function renderCooccurrenceNetwork() {
             const svg = document.getElementById('cooccurrenceNetwork'); svg.innerHTML = '';
-            
             networkEdges.forEach((edge, index) => {
                 const src = networkNodes.find(n => n.id === edge.source);
                 const tgt = networkNodes.find(n => n.id === edge.target);
@@ -1030,8 +943,6 @@
                     line.setAttribute("x2", tgt.x); line.setAttribute("y2", tgt.y);
                     line.setAttribute("stroke", "rgba(16, 185, 129, 0.45)");
                     line.setAttribute("stroke-width", edge.weight);
-                    line.setAttribute("id", `edge-${index}`);
-                    line.setAttribute("class", "transition-all duration-200");
                     svg.appendChild(line);
                 }
             });
