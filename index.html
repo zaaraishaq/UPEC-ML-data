@@ -259,7 +259,7 @@
                             <div class="flex items-center gap-1.5 select-none">
                                 <button onclick="prevPage()" class="p-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-100 transition-colors text-xs font-medium"><i class="fa-solid fa-chevron-left mr-1"></i> Prev</button>
                                 <span class="text-xs font-bold px-3 py-1 bg-clinical-50 text-clinical-700 rounded-lg border border-clinical-100 whitespace-nowrap" id="pagination-current">Page 1</span>
-                                <button onclick="nextPage()" class="p-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-100 transition-colors text-xs font-medium">Next <i class="fa-solid fa-chevron-right ml-1"></i></button>
+                                <button onclick="nextPage()" class="p-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-100 transition-colors text-xs font-medium">Next <i class="fa-solid fa-chevron-right mr-1"></i></button>
                             </div>
                         </div>
                     </div>
@@ -794,7 +794,8 @@
                 type: 'scatter',
                 data: { datasets: datasets.length > 0 ? datasets : [{ label: 'Assemblies projection coordinates', data: filteredData.map((d, i) => ({ x: (i % 5) - 2, y: (i % 3) - 1, id: d.id, sero: d.serotypeNorm })), backgroundColor: '#2563eb' }] },
                 options: {
-                    responsive: true, maintainAspectRatio: false,
+                    responsive: true,
+                    maintainAspectRatio: false,
                     plugins: {
                         tooltip: {
                             callbacks: {
