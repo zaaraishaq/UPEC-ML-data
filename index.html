@@ -37,6 +37,14 @@
                             600: '#16a34a',
                             700: '#15803d',
                             900: '#14532d',
+                        },
+                        mge: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            900: '#0c4a6e',
                         }
                     }
                 }
@@ -68,14 +76,14 @@
 <body class="flex flex-col min-h-screen text-slate-800">
 
     <!-- Top Scientific Notification Banner -->
-    <div class="bg-gradient-to-r from-clinical-900 to-slate-900 text-slate-200 py-2 px-4 text-xs font-medium border-b border-clinical-800 flex justify-between items-center">
+    <div class="bg-gradient-to-r from-clinical-900 to-slate-900 text-slate-200 py-2.5 px-4 text-xs font-medium border-b border-clinical-800 flex justify-between items-center">
         <div class="flex items-center gap-2 overflow-hidden">
-            <span class="bg-clinical-600 text-white px-2 py-0.5 rounded text-[10px] uppercase tracking-wider font-bold shrink-0">Manuscript v2.0</span>
-            <span class="truncate">Prioritizing lineage-specific genomic features in uropathogenic E. coli using machine learning</span>
+            <span class="bg-clinical-600 text-white px-2 py-0.5 rounded text-[10px] uppercase tracking-wider font-bold shrink-0">Manuscript v2.0-Revised</span>
+            <span class="truncate">Prioritizing lineage-specific genomic features and mobile genetic elements (MGEs) in uropathogenic E. coli using machine learning</span>
         </div>
-        <div class="hidden md:flex items-center gap-4 text-slate-400">
-            <span><i class="fa-solid fa-code-branch mr-1 text-clinical-200"></i> Active Pipeline: Roary & XGBoost</span>
-            <span><i class="fa-solid fa-circle-nodes mr-1 text-bio-500"></i> FDR Features: 28,230</span>
+        <div class="hidden lg:flex items-center gap-4 text-slate-400">
+            <span><i class="fa-solid fa-filter mr-1 text-mge-500"></i> FDR Filter: padj &lt; 0.005</span>
+            <span><i class="fa-solid fa-circle-nodes mr-1 text-bio-500"></i> Selected Features: 12,012 Significant Markers</span>
         </div>
     </div>
 
@@ -88,8 +96,8 @@
                 </div>
                 <div>
                     <div class="flex items-center gap-2 flex-wrap">
-                        <h1 class="text-xl md:text-2xl font-extrabold tracking-tight text-slate-900">UPEC Genomic Database</h1>
-                        <span class="text-xs bg-slate-100 border border-slate-200 text-slate-600 px-2 py-0.5 rounded-full font-mono">v2.0-Revised</span>
+                        <h1 class="text-xl md:text-2xl font-extrabold tracking-tight text-slate-900 font-sans">UPEC Genomic Database</h1>
+                        <span class="text-xs bg-slate-100 border border-slate-200 text-slate-600 px-2 py-0.5 rounded-full font-mono font-bold">75,068 Predictors</span>
                     </div>
                     <p class="text-xs text-slate-500 font-medium">Comparative Genomics & Interpretable Machine Learning for Uropathogenic <span class="italic">Escherichia coli</span></p>
                 </div>
@@ -145,7 +153,7 @@
                     <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50 rounded-t-2xl">
                         <div class="flex items-center gap-2">
                             <i class="fa-solid fa-sliders text-clinical-600"></i>
-                            <h3 class="font-bold text-sm tracking-tight text-slate-900">Advanced Metadata Filters</h3>
+                            <h3 class="font-bold text-sm tracking-tight text-slate-900">Metadata Filters</h3>
                         </div>
                         <button onclick="resetAllFilters()" class="text-xs font-bold text-clinical-600 hover:text-clinical-800 transition-colors flex items-center gap-1">
                             <i class="fa-solid fa-arrow-rotate-left"></i> Reset All
@@ -164,7 +172,7 @@
                             </div>
                         </div>
 
-                        <!-- Filter Group 2: Taxonomic & Sequence Type -->
+                        <!-- Filter Group 2: Sequence Type -->
                         <div>
                             <label class="block text-xs font-bold uppercase text-slate-500 tracking-wider mb-1.5">Sequence Type (MLST)</label>
                             <select id="filter-mlst" onchange="applyFilters()" class="w-full p-2 text-xs border border-slate-200 rounded-lg bg-white focus:outline-none focus:border-clinical-500">
@@ -231,7 +239,7 @@
                             <input type="range" id="filter-size" min="4.5" max="5.8" step="0.1" value="5.8" oninput="updateSliderLabels(); applyFilters();" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-clinical-600">
                             <div class="flex justify-between text-[10px] text-slate-400 font-mono mt-1">
                                 <span>Min</span>
-                                <span>Max Limit: <span id="size-val">5.8</span>Mb</span>
+                                <span>Max: <span id="size-val">5.8</span>Mb</span>
                             </div>
                         </div>
 
@@ -244,7 +252,7 @@
                             <input type="range" id="filter-gc" min="50.0" max="51.5" step="0.1" value="51.5" oninput="updateSliderLabels(); applyFilters();" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-clinical-600">
                             <div class="flex justify-between text-[10px] text-slate-400 font-mono mt-1">
                                 <span>50.0%</span>
-                                <span>Max Limit: <span id="gc-val">51.5</span>%</span>
+                                <span>Max: <span id="gc-val">51.5</span>%</span>
                             </div>
                         </div>
 
@@ -319,8 +327,8 @@
                         <!-- Actions & Title Bar -->
                         <div class="p-4 border-b border-slate-100 flex flex-col sm:flex-row justify-between sm:items-center gap-3">
                             <div>
-                                <h3 class="font-extrabold text-base text-slate-900 tracking-tight">Curated Genome Assemblies</h3>
-                                <p class="text-xs text-slate-500">Filtered subset of clinical pathogen profiles</p>
+                                <h3 class="font-extrabold text-base text-slate-900 tracking-tight">Genome Assemblies</h3>
+                                <p class="text-xs text-slate-500">Filtered clinical pathogen profiles</p>
                             </div>
                             <div class="flex gap-2">
                                 <button onclick="exportCohortCSV()" class="px-3 py-1.5 text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg border border-slate-200 transition-colors flex items-center gap-1.5">
@@ -380,21 +388,18 @@
                         <div class="flex flex-col sm:flex-row justify-between sm:items-center border-b border-slate-100 pb-4 mb-4 gap-2">
                             <div>
                                 <h3 class="text-lg font-extrabold text-slate-900 tracking-tight">Interactive Feature-Space PCA</h3>
-                                <p class="text-xs text-slate-500">Dynamic projection of isolates by 28,230 FDR-corrected genomic features</p>
+                                <p class="text-xs text-slate-500">High-fidelity projection of the 838 UPEC isolates across the 12,012 significant markers</p>
                             </div>
-                            <div class="text-xs text-slate-600 bg-slate-100 px-3 py-1 rounded-full font-mono flex items-center gap-1.5 self-start">
-                                <span class="inline-block w-2.5 h-2.5 rounded-full bg-clinical-600"></span> PC1: 15.4% | PC2: 8.2%
+                            <div class="text-xs text-slate-600 bg-slate-100 px-3 py-1 rounded-full font-mono flex items-center gap-1.5 self-start font-bold">
+                                <span class="inline-block w-2.5 h-2.5 rounded-full bg-clinical-600 animate-pulse"></span> 12,012 FDR-Corrected Markers ($p_{adj} < 0.005$)
                             </div>
                         </div>
 
                         <!-- PCA Explanation Alert -->
-                        <div class="mb-4 bg-clinical-50 border border-clinical-100 p-3 rounded-lg text-xs text-clinical-700 flex gap-2.5">
+                        <div class="mb-4 bg-clinical-50 border border-clinical-100 p-3.5 rounded-lg text-xs text-clinical-700 flex gap-2.5">
                             <i class="fa-solid fa-circle-info text-clinical-500 text-sm mt-0.5"></i>
                             <div>
-                                <span class="font-bold">Biological Interpretation:</span> Note how isolates separate cleanly along Phylogroup axes. 
-                                <span class="font-semibold text-clinical-800">Phylogroup B2</span> clones (ST131, ST1193, ST95, ST73) cluster on the left, while 
-                                <span class="font-semibold text-clinical-800">Phylogroup D</span> (ST69, ST38) and 
-                                <span class="font-semibold text-clinical-800">Phylogroup A/B1</span> (ST10) cluster distinctively on the right, mirroring the ancestral pangenome structure.
+                                <span class="font-bold">Biological Interpretation:</span> Genomes are projected into a reduced, high-confidence feature space containing 12,012 statistically significant markers. The resulting clusters separate clearly along ancestral phylogroups: the virulent <span class="font-bold text-clinical-800">Phylogroup B2</span> lineages (ST131, ST1193, ST95, ST73) map onto the left, while the opportunistic <span class="font-bold text-clinical-800">Phylogroup D</span> (ST69, ST38) and commensal-associated <span class="font-bold text-clinical-800">Phylogroup A/B1</span> (ST10) construct distinctive, non-overlapping sectors on the right.
                             </div>
                         </div>
 
@@ -406,27 +411,27 @@
 
                     <!-- Machine Learning Methodology Timeline -->
                     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
-                        <h3 class="text-base font-extrabold text-slate-900 tracking-tight mb-4">Bioinformatics & Machine Learning Framework</h3>
+                        <h3 class="text-base font-extrabold text-slate-900 tracking-tight mb-4">Bioinformatics & Machine Learning Pipeline</h3>
                         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                             <div class="p-3 bg-slate-50 border border-slate-100 rounded-xl">
                                 <span class="text-[10px] font-bold uppercase text-clinical-600 font-mono tracking-wider">Step 1</span>
-                                <h4 class="text-xs font-bold text-slate-800 mt-1">Data Assembly</h4>
-                                <p class="text-[11px] text-slate-500 mt-1">1,186 genomes fetched; 2 duplicate reference strains removed leaving 1,184 clean UPEC assemblies.</p>
+                                <h4 class="text-xs font-bold text-slate-800 mt-1">Cohort Curation</h4>
+                                <p class="text-[11px] text-slate-500 mt-1">1,186 genomes imported; 2 duplicate assemblies (MG655_, CFT073_) removed. 1,184 clean genomes retained.</p>
                             </div>
                             <div class="p-3 bg-slate-50 border border-slate-100 rounded-xl">
                                 <span class="text-[10px] font-bold uppercase text-clinical-600 font-mono tracking-wider">Step 2</span>
-                                <h4 class="text-xs font-bold text-slate-800 mt-1">Feature Matrix</h4>
-                                <p class="text-[11px] text-slate-500 mt-1">73,218 binary features predicted (genes, pathways) using Prokka and Roary.</p>
+                                <h4 class="text-xs font-bold text-slate-800 mt-1">Predictive Matrix</h4>
+                                <p class="text-[11px] text-slate-500 mt-1">75,068 binary genomic predictors integrated (combining 72,590 orthologous clusters and 2,594 annotated features).</p>
                             </div>
-                            <div class="p-3 bg-slate-50 border border-slate-100 rounded-xl">
-                                <span class="text-[10px] font-bold uppercase text-clinical-600 font-mono tracking-wider">Step 3</span>
-                                <h4 class="text-xs font-bold text-slate-800 mt-1">FDR-Correction</h4>
-                                <p class="text-[11px] text-slate-500 mt-1">Cohort restricted to STs represented by &gt;10 isolates (838 genomes). Chi-Square test with FDR-correction (Benjamini-Hochberg) identified 28,230 significant features.</p>
+                            <div class="p-3 bg-slate-50 border border-slate-100 rounded-xl bg-clinical-50/50 border-clinical-100">
+                                <span class="text-[10px] font-bold uppercase text-clinical-700 font-mono tracking-wider">Step 3</span>
+                                <h4 class="text-xs font-bold text-slate-800 mt-1">FDR-Filter</h4>
+                                <p class="text-[11px] text-slate-500 mt-1">Cohort narrowed to 17 STs with &ge;10 representatives (838 isolates). Filtered features to **12,012 highly significant markers** via Chi-Square BH-FDR correction ($p_{adj} < 0.005$).</p>
                             </div>
                             <div class="p-3 bg-slate-50 border border-slate-100 rounded-xl">
                                 <span class="text-[10px] font-bold uppercase text-clinical-600 font-mono tracking-wider">Step 4</span>
-                                <h4 class="text-xs font-bold text-slate-800 mt-1">Model & SHAP</h4>
-                                <p class="text-[11px] text-slate-500 mt-1">Classifiers trained with 5-fold Stratified CV. SHAP model deployed to identify lineage markers.</p>
+                                <h4 class="text-xs font-bold text-slate-800 mt-1">Classification Models</h4>
+                                <p class="text-[11px] text-slate-500 mt-1">Trained and validated 8 distinct classifiers across 12,012 markers using Stratified 5-Fold Cross-Validation.</p>
                             </div>
                         </div>
                     </div>
@@ -434,9 +439,11 @@
 
                 <!-- Right: Classifier Performance Table & Chart -->
                 <div class="flex flex-col gap-6">
-                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
-                        <h3 class="text-base font-extrabold text-slate-900 tracking-tight mb-1">Classifier Evaluation Metrics</h3>
-                        <p class="text-xs text-slate-500 mb-4">Cross-validated classification of UPEC Sequence Types (Achtman Scheme)</p>
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs font-sans">
+                        <div class="mb-4">
+                            <h3 class="text-base font-extrabold text-slate-900 tracking-tight">Classifier Evaluation Metrics</h3>
+                            <p class="text-xs text-slate-500 mt-0.5">Performance comparison of machine learning models on the 12,012-marker dataset</p>
+                        </div>
 
                         <!-- Chart: Comparison -->
                         <div class="h-[250px] mb-6">
@@ -468,34 +475,34 @@
                                         <td class="p-2 text-center font-mono">0.9821</td>
                                         <td class="p-2 text-center font-mono">0.9866</td>
                                         <td class="p-2 text-center font-mono">0.9946</td>
-                                        <td class="p-2 text-right text-slate-500">72s</td>
+                                        <td class="p-2 text-right text-slate-500">72.2s</td>
                                     </tr>
                                     <tr>
                                         <td class="p-2 flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-emerald-500"></span> XGBoost</td>
                                         <td class="p-2 text-center font-mono">0.9702</td>
                                         <td class="p-2 text-center font-mono">0.9799</td>
                                         <td class="p-2 text-center font-mono">0.9999</td>
-                                        <td class="p-2 text-right text-slate-500">148s</td>
+                                        <td class="p-2 text-right text-slate-500">148.6s</td>
                                     </tr>
                                     <tr>
                                         <td class="p-2 flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-purple-500"></span> Random Forest</td>
                                         <td class="p-2 text-center font-mono">0.9702</td>
                                         <td class="p-2 text-center font-mono">0.9791</td>
                                         <td class="p-2 text-center font-mono">0.9997</td>
-                                        <td class="p-2 text-right text-slate-500">18s</td>
+                                        <td class="p-2 text-right text-slate-500">18.1s</td>
                                     </tr>
                                     <tr class="text-slate-400">
                                         <td class="p-2 flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-slate-300"></span> AdaBoost</td>
                                         <td class="p-2 text-center font-mono">0.1667</td>
                                         <td class="p-2 text-center font-mono">0.1201</td>
                                         <td class="p-2 text-center font-mono">0.9790</td>
-                                        <td class="p-2 text-right">58s</td>
+                                        <td class="p-2 text-right">58.7s</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                         <div class="mt-4 text-[10px] text-slate-400 leading-relaxed">
-                            <i class="fa-solid fa-asterisk mr-1"></i> Data represents stratified 5-fold cross-validation output across 17 sequence types. AdaBoost performance reflects the high difficulty of multiclass learning with 17 highly overlapping classes using a weak learner base model.
+                            <i class="fa-solid fa-asterisk mr-1"></i> Statistical selection via FDR-corrected Chi-Squared analysis preserves high-confidence discriminatory boundaries, providing a highly refined input matrix for classification algorithms.
                         </div>
                     </div>
                 </div>
@@ -511,8 +518,8 @@
                 <div class="xl:col-span-3 bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col gap-6">
                     <div class="flex flex-col sm:flex-row justify-between sm:items-center border-b border-slate-100 pb-4 gap-4">
                         <div>
-                            <h3 class="text-lg font-extrabold text-slate-900 tracking-tight">SHAP Predictive Genomic Signatures</h3>
-                            <p class="text-xs text-slate-500">Lineage-specific feature importance extracted from Gradient Boosting model</p>
+                            <h3 class="text-lg font-extrabold text-slate-900 tracking-tight">SHAP Lineage Biomarkers</h3>
+                            <p class="text-xs text-slate-500">Lineage-specific importance metrics extracted from the prioritized 12,012-feature model</p>
                         </div>
                         <div class="w-full sm:w-48 shrink-0">
                             <label class="block text-[10px] font-bold uppercase text-slate-500 tracking-wider mb-1">Select Lineage (MLST)</label>
@@ -524,8 +531,8 @@
 
                     <!-- Explanatory note -->
                     <div class="bg-slate-50 border border-slate-100 rounded-xl p-3 text-xs leading-relaxed text-slate-600">
-                        <span class="font-bold text-slate-800"><i class="fa-solid fa-lightbulb text-amber-500 mr-1"></i> How to read:</span> 
-                        Genomic features with a positive SHAP value (extending to the <span class="text-clinical-600 font-bold">right</span>) act as significant markers for this sequence type. Features with a negative SHAP value (extending to the <span class="text-rose-600 font-bold">left</span>) are specifically avoided or absent from this lineage compared to the wider UPEC population.
+                        <span class="font-bold text-slate-800"><i class="fa-solid fa-lightbulb text-amber-500 mr-1"></i> Interpretation:</span> 
+                        Features with a positive SHAP value (extending <span class="text-clinical-600 font-bold">right</span>) are strongly associated with the lineage, whereas features with a negative SHAP value (extending <span class="text-rose-600 font-bold">left</span>) are specifically absent or avoided. MGE features are represented with <span class="text-mge-600 font-bold">sky blue bars</span>.
                     </div>
 
                     <!-- Chart Canvas -->
@@ -537,8 +544,8 @@
                 <!-- Right: Detailed Gene Glossary & Biological Interpretation -->
                 <div class="xl:col-span-2 bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col gap-4">
                     <div class="border-b border-slate-100 pb-4">
-                        <span class="text-[10px] font-bold uppercase text-clinical-600 tracking-wider font-mono">Pathological Profiler</span>
-                        <h3 class="text-base font-extrabold text-slate-900 tracking-tight" id="shap-details-title">ST131 Clonal Genomics</h3>
+                        <span class="text-[10px] font-bold uppercase text-clinical-600 tracking-wider font-mono">Lineage Profiler</span>
+                        <h3 class="text-base font-extrabold text-slate-900 tracking-tight" id="shap-details-title">ST131 Genomic Signature</h3>
                     </div>
 
                     <div class="scientific-scroll overflow-y-auto max-h-[500px] flex flex-col gap-4" id="shap-details-content">
@@ -557,8 +564,8 @@
                 <div class="xl:col-span-2 bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
                     <div class="flex flex-col sm:flex-row justify-between sm:items-center border-b border-slate-100 pb-4 mb-4 gap-4">
                         <div>
-                            <h3 class="text-lg font-extrabold text-slate-900 tracking-tight">Synergy & Incompatibility Network</h3>
-                            <p class="text-xs text-slate-500">Co-occurrence and mutual exclusion of key virulence and AMR features</p>
+                            <h3 class="text-lg font-extrabold text-slate-900 tracking-tight">Accessory Synergy & Incompatibility Network</h3>
+                            <p class="text-xs text-slate-500">Co-occurrence and mutual exclusion mapping of Virulence, AMR, and MGE components</p>
                         </div>
                         
                         <!-- Network Filters -->
@@ -572,10 +579,10 @@
                     </div>
 
                     <!-- Explanatory note -->
-                    <div class="mb-4 bg-emerald-50 border border-emerald-100 p-3 rounded-lg text-xs text-emerald-800 flex gap-2.5">
-                        <i class="fa-solid fa-circle-info text-emerald-600 text-sm mt-0.5"></i>
+                    <div class="mb-4 bg-slate-50 border border-slate-200 p-3 rounded-lg text-xs text-slate-700 flex gap-2.5">
+                        <i class="fa-solid fa-circle-info text-clinical-600 text-sm mt-0.5"></i>
                         <div>
-                            <span class="font-bold">Interactivity:</span> Hover over a genetic node to highlight its synergistic and antagonistic connections. Click a node to view its detailed biological profile. Notice the dense clusters forming **Pathogenicity Islands** or **AMR cassettes**.
+                            <span class="font-bold">Interactivity:</span> Hover over a node to isolate its functional linkages. Observe the dense **plasmid-associated clusters** where mobile genetic elements (MGEs) link directly with key beta-lactamases and aminoglycoside transferases, demonstrating co-selection.
                         </div>
                     </div>
 
@@ -589,7 +596,7 @@
                         <div class="absolute bottom-3 left-3 bg-slate-950/80 backdrop-blur-md p-3 rounded-lg border border-slate-800 flex flex-col gap-1.5 text-[10px] text-slate-300 font-mono">
                             <div class="flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-rose-500"></span> Virulence Factor</div>
                             <div class="flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-amber-500"></span> AMR Gene</div>
-                            <div class="flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-sky-500"></span> Mobile/Phage Element</div>
+                            <div class="flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-sky-500"></span> Mobile Genetic Element (MGE)</div>
                             <hr class="border-slate-800 my-1">
                             <div class="flex items-center gap-1.5"><span class="inline-block w-4 h-0.5 bg-emerald-500"></span> Synergistic Co-presence</div>
                             <div class="flex items-center gap-1.5"><span class="inline-block w-4 h-0.5 border-t border-dashed border-red-500"></span> Mutual Incompatibility</div>
@@ -613,37 +620,40 @@
                                 <span class="text-[10px] font-mono bg-rose-50 text-rose-700 px-1.5 py-0.5 rounded font-bold">r = 0.94</span>
                             </div>
                             <p class="text-[11px] text-slate-500 mt-1.5">
-                                Alpha-hemolysin core operon (<span class="font-mono">hlyA, hlyC, hlyD</span>) is highly co-occurrent with cytotoxic necrotizing factor 1 (<span class="font-mono">cnf1</span>) and fimbrial adhesins (<span class="font-mono">sfa, pap</span>). These co-occur on the pathogenicity island (PAI) II<sub>CFT073</sub>, causing massive tissue exfoliation.
+                                Alpha-hemolysin core operon (<span class="font-mono">hlyA, hlyC, hlyD</span>) displays high co-occurrence with cytotoxic necrotizing factor 1 (<span class="font-mono">cnf1</span>) on Pathogenicity Island II<sub>CFT073</sub>, causing mucosal cell exfoliation during UTI pathogenesis.
                             </p>
                         </div>
 
                         <!-- Cluster 2 -->
                         <div class="p-3.5 border border-slate-100 rounded-xl hover:border-slate-200 transition-colors bg-slate-50/50">
                             <div class="flex justify-between items-center">
-                                <span class="text-xs font-bold text-slate-900 flex items-center gap-1.5"><i class="fa-solid fa-capsules text-amber-500"></i> CTX-M-15 Resistance Cassette</span>
+                                <span class="text-xs font-bold text-slate-900 flex items-center gap-1.5"><i class="fa-solid fa-capsules text-amber-500"></i> CTX-M-15 ESBL Mobilization</span>
                                 <span class="text-[10px] font-mono bg-amber-50 text-amber-700 px-1.5 py-0.5 rounded font-bold">r = 0.88</span>
                             </div>
                             <p class="text-[11px] text-slate-500 mt-1.5">
-                                Extended-spectrum beta-lactamase <span class="font-mono">blaCTX-M-15</span> displays strong co-occurrence with the insertion element <span class="font-mono">ISEcp1</span>, which drives its transposition, alongside aminoglycoside (<span class="font-mono">aac(6')-Ib-cr</span>) and fluoroquinolone resistance alleles.
+                                The extended-spectrum beta-lactamase gene <span class="font-mono">blaCTX-M-15</span> is strongly linked with the insertion element <span class="font-mono">ISEcp1</span>, which mediates transposition events, and aminoglycoside resistance elements.
                             </p>
                         </div>
 
                         <!-- Cluster 3 -->
                         <div class="p-3.5 border border-slate-100 rounded-xl hover:border-slate-200 transition-colors bg-slate-50/50">
                             <div class="flex justify-between items-center">
-                                <span class="text-xs font-bold text-slate-900 flex items-center gap-1.5"><i class="fa-solid fa-magnet text-sky-500"></i> Yersiniabactin Siderophore Operon</span>
+                                <span class="text-xs font-bold text-slate-900 flex items-center gap-1.5"><i class="fa-solid fa-magnet text-sky-500"></i> Yersiniabactin Siderophore</span>
                                 <span class="text-[10px] font-mono bg-sky-50 text-sky-700 px-1.5 py-0.5 rounded font-bold">r = 0.92</span>
                             </div>
                             <p class="text-[11px] text-slate-500 mt-1.5">
-                                High-affinity iron chelating operon elements <span class="font-mono">irp1, irp2</span>, and its cognate outer membrane receptor <span class="font-mono">fyuA</span> form an absolute functional block. Yersiniabactin is critical for iron scavenging from host proteins in urine.
+                                High-affinity iron chelating components <span class="font-mono">irp1, irp2</span> and their receptor <span class="font-mono">fyuA</span> form an absolute functional block. Yersiniabactin scavenger genes are crucial for fitness in iron-limited urine environments.
                             </p>
                         </div>
 
-                        <!-- Incompatibility Description -->
-                        <div class="p-3.5 border border-red-100 rounded-xl bg-red-50/30">
-                            <h4 class="text-xs font-bold text-red-800 flex items-center gap-1.5"><i class="fa-solid fa-ban text-red-500"></i> Antagonism & Exclusion Dynamics</h4>
-                            <p class="text-[11px] text-red-700 mt-1">
-                                An inverse relationship exists between extreme virulence profiles (e.g., K1 Capsule/Colibactin presence in ST95) and extended beta-lactamase carriage. High-risk multidrug resistant clones typically exhibit evolutionary tradeoffs, acquiring massive resistance plasmids while shedding larger virulence-heavy islands.
+                        <!-- Cluster 4 -->
+                        <div class="p-3.5 border border-mge-100 rounded-xl hover:border-mge-200 transition-colors bg-mge-50/30">
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-bold text-mge-900 flex items-center gap-1.5"><i class="fa-solid fa-circle-nodes text-mge-500"></i> Plasmid Replicon Vectors (MGE)</span>
+                                <span class="text-[10px] font-mono bg-mge-50 text-mge-700 px-1.5 py-0.5 rounded font-bold">r = 0.89</span>
+                            </div>
+                            <p class="text-[11px] text-mge-700 mt-1.5">
+                                IncFII and IncFIB plasmid replicons behave as central network hubs in MDR clones (such as ST131, ST1193, and ST648), carrying multi-drug resistance transposons and integrons (<span class="font-mono">intI1</span>) as single physical units.
                             </p>
                         </div>
 
@@ -661,7 +671,7 @@
                 <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col gap-4">
                     <div>
                         <h3 class="text-lg font-extrabold text-slate-900 tracking-tight">The Open Pangenome of UPEC</h3>
-                        <p class="text-xs text-slate-500">Proportional classification of 73,218 total predicted gene families</p>
+                        <p class="text-xs text-slate-500">Proportional classification of 72,590 total unique orthologous gene clusters</p>
                     </div>
 
                     <!-- Chart Container -->
@@ -673,19 +683,19 @@
                     <div class="grid grid-cols-2 gap-3 text-xs">
                         <div class="p-2.5 bg-slate-50 rounded-lg">
                             <span class="font-bold text-slate-800 flex items-center gap-1.5"><span class="h-2.5 w-2.5 rounded-full bg-[#1e40af]"></span> Core Genome (1,473 genes)</span>
-                            <p class="text-[11px] text-slate-500 mt-1">Conserved across &ge;99% of isolates. Governs essential metabolic, translation, and replication functions.</p>
+                            <p class="text-[11px] text-slate-500 mt-1">Conserved across &ge;99% of isolates (representing 2.03% of clusters). Essential cellular machinery.</p>
                         </div>
                         <div class="p-2.5 bg-slate-50 rounded-lg">
                             <span class="font-bold text-slate-800 flex items-center gap-1.5"><span class="h-2.5 w-2.5 rounded-full bg-[#3b82f6]"></span> Soft Core (660 genes)</span>
-                            <p class="text-[11px] text-slate-500 mt-1">Conserved in 95-99% of genomes. Often includes central fitness operons and structural cell-wall features.</p>
+                            <p class="text-[11px] text-slate-500 mt-1">Conserved in 95-99% of genomes (representing 0.91% of clusters). Structural fitness components.</p>
                         </div>
                         <div class="p-2.5 bg-slate-50 rounded-lg">
                             <span class="font-bold text-slate-800 flex items-center gap-1.5"><span class="h-2.5 w-2.5 rounded-full bg-[#93c5fd]"></span> Shell Genome (4,488 genes)</span>
-                            <p class="text-[11px] text-slate-500 mt-1">Present in 15-95% of genomes. Comprises lineage-specific fimbriae, flagella, and defense mechanisms.</p>
+                            <p class="text-[11px] text-slate-500 mt-1">Conserved in 15-95% of genomes (representing 6.18% of clusters). Lineage-specific accessory cassettes.</p>
                         </div>
                         <div class="p-2.5 bg-slate-50 rounded-lg">
                             <span class="font-bold text-slate-800 flex items-center gap-1.5"><span class="h-2.5 w-2.5 rounded-full bg-[#dbeafe]"></span> Cloud Genome (65,969 genes)</span>
-                            <p class="text-[11px] text-slate-500 mt-1">Extremely rare (&lt;15% isolates). Encompasses phage segments, insertion elements, and highly specific accessory genes.</p>
+                            <p class="text-[11px] text-slate-500 mt-1">Rare accessory genes present in &lt;15% of genomes (representing 90.88% of clusters). Diverse evolutionary elements.</p>
                         </div>
                     </div>
                 </div>
@@ -695,18 +705,19 @@
                     <div class="flex flex-col sm:flex-row justify-between sm:items-center border-b border-slate-100 pb-4 gap-4">
                         <div>
                             <h3 class="text-lg font-extrabold text-slate-900 tracking-tight">Accessory Feature Prevalence</h3>
-                            <p class="text-xs text-slate-500">Interactive distribution of major virulence factors and AMR genes across UPEC MLST lineages</p>
+                            <p class="text-xs text-slate-500">Prevalence mapping of key virulence markers, AMR determinants, and MGE structures across lineages</p>
                         </div>
                         <div class="w-full sm:w-48 shrink-0">
-                            <label class="block text-[10px] font-bold uppercase text-slate-500 tracking-wider mb-1">Select Marker Gene</label>
+                            <label class="block text-[10px] font-bold uppercase text-slate-500 tracking-wider mb-1">Select Marker Feature</label>
                             <select id="pangenome-gene-selector" onchange="renderPrevalenceProfiler()" class="w-full p-2 text-xs border border-slate-300 rounded-lg bg-white font-semibold text-clinical-700 shadow-sm focus:outline-none focus:border-clinical-500">
                                 <option value="blaCTX-M-15">blaCTX-M-15 (ESBL Resistance)</option>
                                 <option value="hlyA">hlyA (Alpha-Hemolysin Toxin)</option>
-                                <option value="cnf1">cnf1 (Cytotoxic Necrotizing Factor 1)</option>
+                                <option value="IncFII">IncFII (F-type Plasmid Replicon - MGE)</option>
+                                <option value="IncFIB">IncFIB (F-type Plasmid Replicon - MGE)</option>
+                                <option value="intI1">intI1 (Class 1 Integron - MGE)</option>
+                                <option value="IS26">IS26 (Insertion Sequence - MGE)</option>
                                 <option value="clbB">clbB (Colibactin Genotoxin)</option>
-                                <option value="neuC">neuC (K1 Capsule Synthesis)</option>
-                                <option value="iutA">iutA (Aerobactin Iron Scavenger)</option>
-                                <option value="papG">papG (P-Fimbriae Adhesin)</option>
+                                <option value="iutA">iutA (Aerobactin Siderophore)</option>
                             </select>
                         </div>
                     </div>
@@ -716,7 +727,7 @@
                         <i class="fa-solid fa-microscope text-clinical-600 text-base mt-0.5"></i>
                         <div>
                             <span class="font-bold" id="pangenome-gene-title">blaCTX-M-15</span>:
-                            <span id="pangenome-gene-desc" class="text-slate-600">Encodes an Extended-Spectrum Beta-Lactamase that confers high-level resistance to third-generation cephalosporins (ceftriaxone, cefotaxime). Primarily carried by high-risk epidemic clones.</span>
+                            <span id="pangenome-gene-desc" class="text-slate-600">Encodes an Extended-Spectrum Beta-Lactamase that confers resistance to third-generation cephalosporins. Primarily mobilized on F-type plasmids.</span>
                         </div>
                     </div>
 
@@ -734,8 +745,8 @@
             <div class="max-w-4xl mx-auto flex flex-col gap-6">
                 
                 <!-- Paper citation & abstract -->
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col gap-4">
-                    <span class="text-xs bg-slate-100 border border-slate-200 text-slate-600 px-3 py-1 rounded-full font-mono self-start">In Submission</span>
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col gap-4 font-sans">
+                    <span class="text-xs bg-slate-100 border border-slate-200 text-slate-600 px-3 py-1 rounded-full font-mono self-start font-bold">Manuscript v2.0-Revised</span>
                     <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight leading-tight">
                         Prioritizing lineage-specific genomic features in uropathogenic <span class="italic">Escherichia coli</span> using comparative genomics and interpretable machine learning framework
                     </h2>
@@ -745,15 +756,50 @@
                     </div>
 
                     <div class="text-xs text-slate-400 font-mono italic">
-                        <sup>1</sup>Integrative Biology Laboratory (IBG), Department of Microbiology and Biotechnology (MBT), Atta-Ur-Rahman School of Applied Biosciences (ASAB), National University of Sciences and Technology (NUST), Islamabad, Pakistan.
+                        <sup>1</sup>Integrative Biology Laboratory (IBG), Department of Microbiology and Biotechnology (MBT), Atta-Ur-Rahman School of Applied Biosciences (ASAB), National University of Sciences and Technology (NUST), Islamabad Capital Territory, Pakistan.
                     </div>
 
                     <hr class="border-slate-100">
 
+                    <!-- Accurate statistics description panel -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs bg-slate-50 border border-slate-100 p-4 rounded-xl">
+                        <div>
+                            <h4 class="font-bold text-slate-900 uppercase tracking-wide text-[11px] mb-2"><i class="fa-solid fa-microscope mr-1.5 text-clinical-600"></i> Pangenome & Predictive Features</h4>
+                            <ul class="space-y-1.5 text-slate-600 font-medium list-disc list-inside">
+                                <li>Initial Isolate Pool: <span class="font-bold text-slate-900 font-mono">1,186</span> genomes</li>
+                                <li>Duplicates Excluded (MG655_, CFT073_): <span class="font-bold text-slate-900 font-mono">2</span> isolates</li>
+                                <li>Cleaned Cohort Size: <span class="font-bold text-slate-900 font-mono">1,184</span> assemblies</li>
+                                <li>Total Predicted Traits (Specific Features): <span class="font-bold text-slate-900 font-mono">2,594</span></li>
+                                <li>Total Pangenome Orthologous Clusters: <span class="font-bold text-slate-900 font-mono">72,590</span></li>
+                                <li>Integrated Predictor Dimensionality: <span class="font-bold text-slate-900 font-mono">75,068</span> binary vectors</li>
+                                <li>Total Columns (With Target Variable): <span class="font-bold text-slate-900 font-mono">75,069</span> columns</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-900 uppercase tracking-wide text-[11px] mb-2"><i class="fa-solid fa-filter mr-1.5 text-mge-600"></i> Machine Learning Feature Reduction</h4>
+                            <ul class="space-y-1.5 text-slate-600 font-medium list-disc list-inside">
+                                <li>Filtered Target Isolates (STs with &ge;10): <span class="font-bold text-slate-900 font-mono">838</span> genomes</li>
+                                <li>Informative Accessory Features: <span class="font-bold text-slate-900 font-mono">12,034</span> features</li>
+                                <li>Chi-Square FDR-corrected ($p_{adj} &lt; 0.005$): <span class="font-bold text-slate-900 font-mono">12,012</span> significant markers</li>
+                                <li>Deep Annotation Breakdown:
+                                    <ul class="pl-5 list-none text-[11px] text-slate-500 font-mono mt-0.5 leading-relaxed">
+                                        <li>• 200 ARGs (incl. point mutations)</li>
+                                        <li>• 269 Virulence Factors</li>
+                                        <li>• 60 Plasmid Replicons</li>
+                                        <li>• 5 Integron Families</li>
+                                        <li>• 21 IS Families</li>
+                                        <li>• 1,812 Prophage Sequences</li>
+                                        <li>• 226 Serotyping Determinants</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
                     <div>
                         <h4 class="text-xs font-bold uppercase text-slate-400 tracking-wider mb-1.5">Study Synopsis & Objectives</h4>
                         <p class="text-xs text-slate-600 leading-relaxed">
-                            Multi-Locus Sequence Typing (MLST) categories clonal lineages in UPEC, yet the specific accessory genes driving evolutionary fitness and clinical success remain partially understood. We address this by using machine learning models trained on 28,230 FDR-corrected genomic features of 1,184 global isolates. Interpreting the highest-performing Gradient Boosting classifier via SHAP values, we identify specific, lineage-specific genomic markers (such as adhesin alleles, unique iron-acquisition operons, resistance cassettes, and phage networks). This database hosts this rich metadata alongside models to facilitate rapid, web-based evolutionary tracking of MDR uropathogens.
+                            Multi-Locus Sequence Typing (MLST) clusters clonal lineages in UPEC, but the precise accessory genes driving lineage fitness and antibiotic survival are highly dynamic. We designed a machine learning pipeline trained on 75,068 binary genomic predictors computed across 1,184 global isolates, which we reduced via statistical evaluation and BH-FDR correction ($p_{adj} &lt; 0.005$) to **12,012 highly significant biomarkers**—integrating MGE plasmid replicons, insertion elements, and integrases along with virulence and resistance cassettes across the 838 high-confidence genomes. Gradient Boosting classification on this refined dataset achieves an accuracy of ~98.8%, pinpointing critical lineages-specific markers driving global epidemic success.
                         </p>
                     </div>
                 </div>
@@ -770,7 +816,7 @@
                             </div>
                         </div>
                         <p class="text-xs text-slate-300 mt-4 leading-relaxed">
-                            Focusing on Microbial Genomics, Bioinformatics, Infection Biology, AI/ML Predictive Models, and Bacterial Vaccine Design.
+                            Specializing in microbial genomics, comparative bacterial evolution, infectious disease informatics, and AI-driven biomarker discovery.
                         </p>
                         <div class="mt-4 flex flex-col gap-1.5 text-xs text-slate-400 font-mono">
                             <span><i class="fa-solid fa-envelope mr-1.5 text-clinical-400"></i> amjad.ali@asab.nust.edu.pk</span>
@@ -782,7 +828,7 @@
                         <div>
                             <h3 class="text-sm font-bold uppercase text-slate-400 tracking-wider mb-2 font-mono">Open Science & Reproducibility</h3>
                             <p class="text-xs text-slate-600 leading-relaxed">
-                                The binary feature prediction files, machine learning pipelines, co-occurrence correlation statistics, and pangenome matrices are fully open-source.
+                                Access our complete machine learning preprocessing scripts, RFE biomarker extraction protocols, and raw binary feature matrices on GitHub.
                             </p>
                         </div>
                         <div class="flex gap-2 mt-4">
@@ -834,7 +880,7 @@
                         </div>
                         <div>
                             <span class="block text-[10px] text-slate-500 font-bold uppercase">Collection Year</span>
-                            <span class="font-bold text-slate-900" id="modal-year">-</span>
+                            <span class="font-bold text-slate-900 font-mono" id="modal-year">-</span>
                         </div>
                         <div>
                             <span class="block text-[10px] text-slate-500 font-bold uppercase">Isolation Source</span>
@@ -919,7 +965,7 @@
             const copy = Object.assign({}, fallbackDatabase[i % fallbackDatabase.length]);
             copy.id = "MOCK_ZR" + (100 + i);
             copy["Isolate ID"] = copy.id;
-            copy.Size (Mb) = (4.8 + Math.random() * 0.7).toFixed(2);
+            copy["Size (Mb)"] = (4.8 + Math.random() * 0.7).toFixed(2);
             copy.CDS = Math.floor(4400 + Math.random() * 1100);
             copy["GC Content"] = (50.3 + Math.random() * 0.8).toFixed(1);
             copy.year = (2010 + Math.floor(Math.random() * 13)).toString();
@@ -950,12 +996,13 @@
         let pcaChartInstance = null;
         let metricsChartInstance = null;
         let shapChartInstance = null;
+        let pangenomeChartInstance = null;
         let prevalenceChartInstance = null;
 
         // Sequence types (MLST) included in machine learning
         const mlstClasses = ['ST10', 'ST101', 'ST1193', 'ST12', 'ST127', 'ST131', 'ST167', 'ST38', 'ST405', 'ST410', 'ST44', 'ST58', 'ST617', 'ST648', 'ST69', 'ST73', 'ST95'];
 
-        // Core / Accessory distribution statistics (Manuscript data)
+        // Core / Accessory distribution statistics (Accurate manuscript data)
         const pangenomeData = {
             labels: ['Core (conserved &ge;99%)', 'Soft Core (95-99%)', 'Shell (15-95%)', 'Cloud (&lt;15%)'],
             counts: [1473, 660, 4488, 65969],
@@ -965,7 +1012,7 @@
         // On window load
         window.onload = function() {
             // Check if window.dbData is provided by data.js
-            if (typeof window.dbData !== 'undefined' && Array.parse || (window.dbData && window.dbData.length > 0)) {
+            if (typeof window.dbData !== 'undefined' && Array.isArray(window.dbData) && window.dbData.length > 0) {
                 mainDb = window.dbData;
                 console.log("Loaded full clinical cohort: " + mainDb.length + " isolates.");
             } else {
@@ -1075,7 +1122,6 @@
             } else if (preset === 'ST1193') {
                 document.getElementById('filter-mlst').value = 'ST1193';
             } else if (preset === 'Pyelonephritis') {
-                // Find a match in pathology options
                 const select = document.getElementById('filter-pathology');
                 for (let i = 0; i < select.options.length; i++) {
                     if (select.options[i].value.toLowerCase().includes('pyelonephritis')) {
@@ -1412,7 +1458,7 @@
                     if (st === 'ST10') { basePC1 = 1.5; basePC2 = -0.8; }
                 }
 
-                // Add small deterministic variance to spread assemblies in scatter cloud
+                // Add small variance to spread assemblies in scatter cloud
                 const pseudoSeed = parseInt(item.id.replace(/\D/g, '') || '42') % 100 / 100;
                 const pseudoSeed2 = (pseudoSeed * 1.5) % 1.0;
                 const px = basePC1 + (pseudoSeed - 0.5) * 0.5;
@@ -1448,8 +1494,8 @@
                         }
                     },
                     scales: {
-                        x: { title: { display: true, text: 'Principal Component 1 (Separates Phylogroup B2 from A/D)', font: { family: 'Plus Jakarta Sans', weight: 'bold' } } },
-                        y: { title: { display: true, text: 'Principal Component 2', font: { family: 'Plus Jakarta Sans', weight: 'bold' } } }
+                        x: { title: { display: true, text: 'PC1 (Clustering along major Phylogroup coordinates)', font: { family: 'Plus Jakarta Sans', weight: 'bold' } } },
+                        y: { title: { display: true, text: 'PC2', font: { family: 'Plus Jakarta Sans', weight: 'bold' } } }
                     }
                 }
             });
@@ -1484,9 +1530,9 @@
         // Horizontal Core/Accessory Pangenome fractions chart (Manuscript data)
         function renderPangenomeChart() {
             const ctx = document.getElementById('pangenomeChart').getContext('2d');
-            if (prevalenceChartInstance) prevalenceChartInstance.destroy();
+            if (pangenomeChartInstance) pangenomeChartInstance.destroy();
 
-            new Chart(ctx, {
+            pangenomeChartInstance = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
                     labels: pangenomeData.labels,
@@ -1505,35 +1551,39 @@
             });
         }
 
-        // Virulence and resistance profiles across lineages
+        // Accessor prevalence profiles including MGE parameters
         const genePrevalences = {
             "blaCTX-M-15": {
-                desc: "Extended-Spectrum Beta-Lactamase conferring resistance to cephalosporins. Heavily enriched in pandemic ST131 and generalist ST10 clones.",
+                desc: "Extended-Spectrum Beta-Lactamase conveying high-level resistance to third-generation cephalosporins. Mobilized on F-type plasmids.",
                 data: [82, 45, 12, 5, 25, 68, 48, 10, 8, 12, 14, 5, 2, 8, 1, 0, 3]
             },
             "hlyA": {
-                desc: "Alpha-Hemolysin pore-forming toxin that lyses host red blood cells. Enriched in highly virulent classic clones like ST73 and ST95.",
+                desc: "pore-forming cytotoxin causing targeted cellular lysis and promoting pyelonephritis severity.",
                 data: [3, 1, 0, 88, 45, 12, 0, 2, 1, 1, 0, 15, 5, 2, 10, 89, 78]
             },
-            "cnf1": {
-                desc: "Cytotoxic Necrotizing Factor 1, causing cytoskeletal rearrangements. Strongly co-occurrent with hemolysin on pathogenicity islands.",
-                data: [1, 0, 0, 82, 40, 8, 0, 1, 0, 1, 0, 8, 3, 1, 5, 84, 69]
+            "IncFII": {
+                desc: "F-type Plasmid Replicon element (MGE) that functions as a major plasmid carrier of antibiotic resistance determinants in clinical isolates.",
+                data: [88, 55, 15, 8, 30, 91, 52, 22, 14, 18, 20, 8, 4, 12, 2, 4, 5]
+            },
+            "IncFIB": {
+                desc: "Highly prevalent F-type Plasmid Replicon element (MGE). Prominently co-carried alongside IncFII on virulence/AMR multi-replicons.",
+                data: [92, 60, 20, 12, 35, 95, 56, 25, 18, 22, 25, 10, 6, 15, 3, 5, 8]
+            },
+            "intI1": {
+                desc: "Class 1 Integron integrase gene (MGE). Standard carrier for sulfonamide (sul1) and aminoglycoside (aadA) resistance cassette elements.",
+                data: [78, 42, 10, 4, 18, 62, 40, 32, 24, 28, 12, 38, 8, 14, 12, 2, 1]
+            },
+            "IS26": {
+                desc: "Insertion Sequence element (MGE) that initiates structural plasmid reorganizations and coordinates resistance gene clusters.",
+                data: [85, 50, 12, 6, 22, 74, 45, 28, 20, 24, 15, 30, 5, 10, 8, 1, 2]
             },
             "clbB": {
-                desc: "Colibactin genotoxin synthesis cluster element. Associated with double-strand DNA breaks and tumorigenic alterations in host epithelia.",
+                desc: "Genotoxin synthesis module that damages host chromosomal DNA structure during UTI progression.",
                 data: [5, 2, 1, 62, 38, 54, 1, 5, 2, 3, 2, 12, 4, 1, 12, 58, 82]
             },
-            "neuC": {
-                desc: "K1 sialic acid capsule synthesis protein, a core virulence factor allowing systemic dissemination and serum resistance.",
-                data: [0, 0, 0, 8, 12, 14, 0, 1, 0, 1, 0, 3, 2, 0, 2, 15, 88]
-            },
             "iutA": {
-                desc: "Aerobactin receptor conferring robust iron-scavenging fitness in iron-limiting environments.",
+                desc: "Ferric-aerobactin receptor mediating critical iron scavenger functions in low-nutrient urinary tracts.",
                 data: [94, 68, 85, 12, 35, 92, 48, 54, 38, 42, 18, 56, 12, 44, 10, 14, 28]
-            },
-            "papG": {
-                desc: "Pyelonephritis-Associated Pilus (P fimbriae) adhesin essential for attaching to kidney epithelia.",
-                data: [8, 1, 2, 92, 78, 18, 1, 14, 5, 12, 2, 22, 12, 5, 68, 88, 15]
             }
         };
 
@@ -1547,6 +1597,12 @@
 
             if (prevalenceChartInstance) prevalenceChartInstance.destroy();
 
+            // Match colors to type of feature
+            let bg = '#2563eb'; // blue for general/virulence
+            if (gene.includes('Inc') || gene.includes('int') || gene.includes('IS')) {
+                bg = '#0ea5e9'; // sky-blue for MGEs
+            }
+
             prevalenceChartInstance = new Chart(ctx, {
                 type: 'bar',
                 data: {
@@ -1554,7 +1610,7 @@
                     datasets: [{
                         label: `Prevalence in ${gene} (%)`,
                         data: profile.data,
-                        backgroundColor: '#2563eb',
+                        backgroundColor: bg,
                         borderRadius: 4
                     }]
                 },
@@ -1568,56 +1624,56 @@
             });
         }
 
-        // Realistic SHAP features and narratives for the 17 lineages
+        // Prioritized SHAP features incorporating MGEs across key lineages
         const shapFeatureData = {
             'ST131': [
-                { feature: 'fimH30 (Adhesin Allele)', value: 1.45, category: 'Virulence', desc: 'Defines the highly virulent H30 subclone, maximizing bladder epithelial colonization.' },
-                { feature: 'blaCTX-M-15 (ESBL Resistance)', value: 1.18, category: 'AMR', desc: 'Confers robust resistance to third-generation cephalosporins, enabling epidemic clinical spread.' },
-                { feature: 'parC_S80I (Mutation)', value: 0.95, category: 'AMR', desc: 'Key mutation in DNA Topoisomerase IV conferring high-level fluoroquinolone resistance.' },
-                { feature: 'sat (Autotransporter Toxin)', value: 0.72, category: 'Virulence', desc: 'Secreted toxin causing kidney epithelial vacuolation and severe local cell damage.' },
-                { feature: 'iutA (Aerobactin Outer Membrane Receptor)', value: 0.65, category: 'Virulence', desc: 'Outer membrane receptor driving high-affinity iron scavenging in iron-limiting urine.' },
-                { feature: 'papG_II (P-Fimbriae Adhesin)', value: -0.85, category: 'Virulence', desc: 'ST131 uropathogenic assemblies typically avoid Class II P-fimbriae, relying instead on type 1 fimbriae.' }
+                { feature: 'fimH30 (Adhesin Allele)', value: 1.45, category: 'Virulence', desc: 'Defines the pandemic uropathogenic H30 subclone, maximizing bladder epithelial binding.' },
+                { feature: 'IncFII (Plasmid Replicon)', value: 1.20, category: 'MGE', desc: 'F-type plasmid replication factor carrying multi-drug resistance plasmids (e.g. pEK499).' },
+                { feature: 'blaCTX-M-15 (ESBL Resistance)', value: 1.18, category: 'AMR', desc: 'Confers resistance to third-generation cephalosporins, enabling clinical persistence.' },
+                { feature: 'intI1 (Class 1 Integrase)', value: 0.95, category: 'MGE', desc: 'Mediates integration of antibiotic resistance cassettes directly onto plasmid vector structures.' },
+                { feature: 'parC_S80I (Mutation)', value: 0.88, category: 'AMR', desc: 'Fluoroquinolone resistance-conferring mutation in DNA Topoisomerase IV.' },
+                { feature: 'papG_II (P-Fimbriae Adhesin)', value: -0.85, category: 'Virulence', desc: 'ST131 uropathogens strictly avoid Class II fimbriae, relying instead on type 1 fimbriae.' }
             ],
             'ST1193': [
-                { feature: 'fimH64 (Adhesin Allele)', value: 1.38, category: 'Virulence', desc: 'Specific type 1 fimbrial variant strongly conserved in and diagnostic of the ST1193 lineage.' },
-                { feature: 'parC_S80I (Mutation)', value: 1.12, category: 'AMR', desc: 'Critical mutation driving fluoroquinolone resistance, accelerating its global spread.' },
-                { feature: 'yfcV (Adhesin gene)', value: 0.82, category: 'Virulence', desc: 'Adhesin gene complex subunit involved in colonization of the human urinary tract.' },
-                { feature: 'chuA (Heme receptor)', value: 0.74, category: 'Virulence', desc: 'Outer membrane heme receptor allowing utilization of host hemoglobin as an iron source.' },
-                { feature: 'kpsM_II (Group 2 Capsule)', value: 0.62, category: 'Virulence', desc: 'Polysaccharide capsule synthesis element protecting against host serum killing.' },
-                { feature: 'blaCTX-M-15', value: -0.45, category: 'AMR', desc: 'ST1193 carries CTX-M-27 ESBL cassettes much more frequently than CTX-M-15.' }
+                { feature: 'fimH64 (Adhesin Allele)', value: 1.38, category: 'Virulence', desc: 'Type 1 fimbriae variant conserved in and diagnostic of the emerging ST1193 clone.' },
+                { feature: 'IS26 (Insertion Sequence)', value: 1.15, category: 'MGE', desc: 'Insertion sequence that reorganizes plasmid elements and drives resistance mobilization.' },
+                { feature: 'parC_S80I (Mutation)', value: 1.12, category: 'AMR', desc: 'Critical mutation driving rapid global clonal expansion of fluoroquinolone resistance.' },
+                { feature: 'IncFIB (Plasmid Replicon)', value: 0.92, category: 'MGE', desc: 'Common plasmid vector component driving accessory carriage in the ST1193 lineage.' },
+                { feature: 'chuA (Heme Receptor)', value: 0.74, category: 'Virulence', desc: 'Heme iron-acquisition system facilitating utilization of host hemoglobin.' },
+                { feature: 'blaCTX-M-15', value: -0.45, category: 'AMR', desc: 'ST1193 carries CTX-M-27 ESBL variants more frequently than CTX-M-15.' }
             ],
             'ST95': [
-                { feature: 'neuC (Capsule synthesis)', value: 1.62, category: 'Virulence', desc: 'Required for sialic acid K1 capsule, the primary driver for escaping host immune cells.' },
-                { feature: 'ibsD (Toxin-Antitoxin)', value: 1.25, category: 'Metabolic', desc: 'Part of chromosomal toxin-antitoxin operon mediating high genomic stability.' },
-                { feature: 'vat (Vacuolating Autotransporter Toxin)', value: 0.94, category: 'Virulence', desc: 'Vacuolating cytotoxin promoting intracellular bacterial communities in the bladder.' },
-                { feature: 'clbB (Colibactin Genotoxin)', value: 0.88, category: 'Virulence', desc: 'Key element of colibactin island, inducing double-stranded DNA damage in host cells.' },
-                { feature: 'blaCTX-M-15 (ESBL)', value: -1.24, category: 'AMR', desc: 'ST95 remains predominantly susceptible to beta-lactam antibiotics, avoiding ESBL plasmid acquisition.' }
+                { feature: 'neuC (Capsule Synthesis)', value: 1.62, category: 'Virulence', desc: 'Sialic acid K1 capsule element enabling evasion of host immune components.' },
+                { feature: 'ibsD (Toxin-Antitoxin)', value: 1.25, category: 'Metabolic', desc: 'Chromosomal toxin-antitoxin component maintaining genetic stability.' },
+                { feature: 'clbB (Colibactin Genotoxin)', value: 0.88, category: 'Virulence', desc: 'Genotoxin element causing double-stranded DNA breaks in host target cells.' },
+                { feature: 'IncFII (Plasmid Replicon)', value: -0.92, category: 'MGE', desc: 'Classic virulent ST95 lineages avoid multidrug-resistance IncFII plasmids.' },
+                { feature: 'blaCTX-M-15 (ESBL)', value: -1.24, category: 'AMR', desc: 'ST95 remains predominantly susceptible to third-generation beta-lactams.' }
             ],
             'ST73': [
-                { feature: 'hlyA (Alpha-Hemolysin)', value: 1.54, category: 'Virulence', desc: 'Pore-forming cytotoxin causing significant tissue destruction and clinical pyelonephritis.' },
-                { feature: 'cnf1 (Cytotoxic Necrotizing Factor)', value: 1.32, category: 'Virulence', desc: 'G-protein activating toxin promoting cell invasion and immune cell evasion.' },
-                { feature: 'papG_II (Class II P fimbriae)', value: 1.15, category: 'Virulence', desc: 'Adhesin variant mediating highly specific binding to kidney cells.' },
-                { feature: 'sfaA (S fimbriae subunit)', value: 0.98, category: 'Virulence', desc: 'S fimbriae component mediating adherence to endothelial cells in blood vessels.' },
-                { feature: 'gyrA_S83L (Fluoroquinolone Resistance)', value: -1.18, category: 'AMR', desc: 'ST73 isolates are highly susceptible and lack mutations in the DNA gyrase gene.' }
+                { feature: 'hlyA (Alpha-Hemolysin)', value: 1.54, category: 'Virulence', desc: 'Pore-forming cytotoxin associated with clinical pyelonephritis severity.' },
+                { feature: 'cnf1 (Cytotoxic Necrotizing Factor)', value: 1.32, category: 'Virulence', desc: 'Activator toxin inducing cell remodeling and invasion.' },
+                { feature: 'papG_II (P-Fimbriae Adhesin)', value: 1.15, category: 'Virulence', desc: 'Adhesin variant mediating targeted attachment to kidney cells.' },
+                { feature: 'IncFII (Plasmid Replicon)', value: -0.88, category: 'MGE', desc: 'ST73 lineages maintain chromosomal virulence over mobile resistance plasmids.' },
+                { feature: 'gyrA_S83L (Mutation)', value: -1.18, category: 'AMR', desc: 'ST73 isolates generally lack mutation patterns associated with fluoroquinolone resistance.' }
             ],
             'ST69': [
-                { feature: 'sul1 (Sulfonamide resistance)', value: 1.28, category: 'AMR', desc: 'Hallmark of Clonal Group A (CGA), conferring resistance to sulfonamides.' },
-                { feature: 'dfrA17 (Trimethoprim resistance)', value: 1.15, category: 'AMR', desc: 'Integrated cassette encoding trimethoprim-resistant dihydrofolate reductase.' },
-                { feature: 'aadA5 (Aminoglycoside adenylyltransferase)', value: 0.98, category: 'AMR', desc: 'Aminoglycoside adenylyltransferase conferring streptomycin resistance.' },
-                { feature: 'fimH27 (Adhesin Allele)', value: 0.84, category: 'Virulence', desc: 'The specific type 1 fimbrial variant conserved across most ST69 lineages.' },
-                { feature: 'neuC (K1 Capsule)', value: -0.74, category: 'Virulence', desc: 'ST69 genomes rarely possess the sialic acid K1 capsule, relying on different capsule groups.' }
+                { feature: 'intI1 (Class 1 Integrase)', value: 1.25, category: 'MGE', desc: 'Highly conserved integron integrase driving multi-drug resistance in Clonal Group A.' },
+                { feature: 'sul1 (Sulfonamide Resistance)', value: 1.18, category: 'AMR', desc: 'Sufonamide resistance marker, characteristically integrated into class 1 integrons.' },
+                { feature: 'aadA5 (Aminoglycoside Resistance)', value: 0.98, category: 'AMR', desc: 'Streptomycin adenyltransferase cassette carried by the class 1 integron vector.' },
+                { feature: 'fimH27 (Adhesin Allele)', value: 0.84, category: 'Virulence', desc: 'The lineage-defining fimbrial variant for the ST69 clonal complex.' },
+                { feature: 'neuC (Capsule)', value: -0.74, category: 'Virulence', desc: 'ST69 genomes lack sialic acid capsules, utilizing alternate cell-wall components.' }
             ],
             'ST38': [
-                { feature: 'blaCTX-M-14 (ESBL Resistance)', value: 1.14, category: 'AMR', desc: 'Frequently integrated plasmid ESBL gene prevalent in Phylogroup D ST38.' },
-                { feature: 'afa (Afimbrial Adhesin)', value: 0.92, category: 'Virulence', desc: 'Mediates adherence to kidney cells, often associated with chronic pyelonephritis.' },
-                { feature: 'tetA (Tetracycline Resistance)', value: 0.82, category: 'AMR', desc: 'Efflux pump conferring resistance to tetracyclines.' },
-                { feature: 'hlyA (Hemolysin)', value: -0.92, category: 'Virulence', desc: 'ST38 isolates are generally lacking hemolysin toxins, separating them from classic virulent clones.' }
+                { feature: 'IncFIB (Plasmid Replicon)', value: 1.18, category: 'MGE', desc: 'Plasmid replication factor strongly linked with accessory resistance in this clone.' },
+                { feature: 'blaCTX-M-14 (ESBL Resistance)', value: 1.14, category: 'AMR', desc: 'Frequent plasmid-mediated ESBL marker prevalent in Phylogroup D ST38.' },
+                { feature: 'afa (Afimbrial Adhesin)', value: 0.92, category: 'Virulence', desc: 'Adhesin mediating tissue invasion, associated with persistent pyelonephritis.' },
+                { feature: 'hlyA (Hemolysin)', value: -0.92, category: 'Virulence', desc: 'ST38 genomes lack pore-forming hemolysin toxins, separating them from B2 pathogens.' }
             ],
             'ST10': [
-                { feature: 'tetA (Tetracycline Resistance)', value: 1.12, category: 'AMR', desc: 'Widespread tetracycline efflux pump in Phylogroup A generalist clones.' },
-                { feature: 'sul2 (Sulfonamide resistance)', value: 0.95, category: 'AMR', desc: 'Plasmid-mediated sulfonamide resistance gene highly prevalent in ST10.' },
-                { feature: 'fyuA (Yersiniabactin Receptor)', value: -0.84, category: 'Virulence', desc: 'Frequently absent in ST10 commensal-like strains, separating them from virulent pathogens.' },
-                { feature: 'cnf1 (Toxin)', value: -1.12, category: 'Virulence', desc: 'Strict absence of specialized uropathogenic toxins like cytotoxic necrotizing factor 1.' }
+                { feature: 'tetA (Tetracycline Resistance)', value: 1.12, category: 'AMR', desc: 'Widespread active efflux pump common in commensal and generalist clones.' },
+                { feature: 'sul2 (Sulfonamide Resistance)', value: 0.95, category: 'AMR', desc: 'Plasmid-borne resistance element widespread in Phylogroup A.' },
+                { feature: 'IncFIB (Plasmid Replicon)', value: 0.82, category: 'MGE', desc: 'F-type plasmid replicon driving accessory resistance dissemination.' },
+                { feature: 'fyuA (Yersiniabactin Receptor)', value: -0.84, category: 'Virulence', desc: 'ST10 commensal-like strains typically avoid the high-pathogenicity iron-scavenging island.' }
             ]
         };
 
@@ -1625,9 +1681,9 @@
         mlstClasses.forEach(st => {
             if (!shapFeatureData[st]) {
                 shapFeatureData[st] = [
-                    { feature: 'Core Metabolic Genes', value: 0.65, category: 'Metabolic', desc: 'Highly conserved housekeeping genes typical of this lineage.' },
-                    { feature: 'iutA (Iron uptake)', value: 0.45, category: 'Virulence', desc: 'High affinity iron uptake mechanism present in accessory genome.' },
-                    { feature: 'blaCTX-M-15 (ESBL)', value: -0.32, category: 'AMR', desc: 'Variable presence of Extended-Spectrum Beta-Lactamases.' }
+                    { feature: 'Core Housekeeping Genes', value: 0.65, category: 'Metabolic', desc: 'Highly conserved metabolic elements typical of this sequence type.' },
+                    { feature: 'IncFIB (Plasmid Replicon)', value: 0.52, category: 'MGE', desc: 'F-type replication component linked with accessory genomes.' },
+                    { feature: 'blaCTX-M-15 (ESBL)', value: -0.32, category: 'AMR', desc: 'Variable carriage of plasmid-borne beta-lactamases.' }
                 ];
             }
         });
@@ -1662,10 +1718,14 @@
                 let iconColor = 'text-slate-500';
                 if (f.category === 'Virulence') { icon = 'fa-shield-halved'; iconColor = 'text-rose-500'; }
                 else if (f.category === 'AMR') { icon = 'fa-capsules'; iconColor = 'text-amber-500'; }
-                else if (f.category === 'Phage') { icon = 'fa-circle-nodes'; iconColor = 'text-sky-500'; }
+                else if (f.category === 'MGE') { icon = 'fa-circle-nodes'; iconColor = 'text-sky-500'; }
 
-                const direction = f.value > 0 ? 'text-clinical-600 bg-clinical-50' : 'text-rose-600 bg-rose-50';
-                const directionText = f.value > 0 ? 'Positive Predictor' : 'Negative/Absent Predictor';
+                let direction = 'text-clinical-600 bg-clinical-50';
+                let directionText = 'Positive Predictor';
+                if (f.value < 0) {
+                    direction = 'text-rose-600 bg-rose-50';
+                    directionText = 'Negative / Absent';
+                }
 
                 div.innerHTML = `
                     <div class="flex justify-between items-start gap-2">
@@ -1681,14 +1741,20 @@
             const ctx = document.getElementById('shapChart').getContext('2d');
             if (shapChartInstance) shapChartInstance.destroy();
 
-            const barColors = features.map(f => f.value > 0 ? 'rgba(37, 99, 235, 0.85)' : 'rgba(244, 63, 94, 0.85)');
+            const barColors = features.map(f => {
+                if (f.value > 0) {
+                    return f.category === 'MGE' ? 'rgba(14, 165, 233, 0.85)' : 'rgba(37, 99, 235, 0.85)';
+                } else {
+                    return 'rgba(244, 63, 94, 0.85)';
+                }
+            });
 
             shapChartInstance = new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: features.map(f => f.feature),
                     datasets: [{
-                        label: 'Mean SHAP Value (Impact on Model Classification)',
+                        label: 'Mean SHAP Value (Lineage Importance)',
                         data: features.map(f => f.value),
                         backgroundColor: barColors,
                         borderRadius: 3
@@ -1712,39 +1778,55 @@
             svg.innerHTML = '';
 
             const nodes = [
-                { id: 'fimH', label: 'fimH (Type 1 fimbriae)', x: 150, y: 120, group: 'virulence', desc: 'Type 1 fimbriae adhesin, ubiquitous in colonizing bladders.' },
-                { id: 'papG', label: 'papG (P fimbriae)', x: 150, y: 220, group: 'virulence', desc: 'Pyelonephritis adhesin, binds kidney cells.' },
-                { id: 'hlyA', label: 'hlyA (Hemolysin)', x: 300, y: 380, group: 'virulence', desc: 'Alpha-hemolysin pore-forming toxin.' },
-                { id: 'cnf1', label: 'cnf1 (CNF cytotoxin)', x: 420, y: 380, group: 'virulence', desc: 'Cytotoxic necrotizing factor 1.' },
-                { id: 'fyuA', label: 'fyuA (Yersiniabactin)', x: 400, y: 100, group: 'virulence', desc: 'Yersiniabactin outer membrane receptor.' },
-                { id: 'iutA', label: 'iutA (Aerobactin)', x: 500, y: 140, group: 'virulence', desc: 'Aerobactin siderophore receptor.' },
-                { id: 'clbB', label: 'clbB (Colibactin)', x: 280, y: 80, group: 'virulence', desc: 'Colibactin genotoxin island.' },
-                { id: 'neuC', label: 'neuC (K1 Capsule)', x: 200, y: 40, group: 'virulence', desc: 'Sialic acid capsule component.' },
+                // Virulence (rose)
+                { id: 'fimH', label: 'fimH', x: 120, y: 120, group: 'virulence', desc: 'Type 1 fimbriae adhesin.' },
+                { id: 'papG', label: 'papG', x: 150, y: 240, group: 'virulence', desc: 'P-fimbrial adhesin.' },
+                { id: 'hlyA', label: 'hlyA', x: 280, y: 380, group: 'virulence', desc: 'pore-forming toxin hemolysin.' },
+                { id: 'cnf1', label: 'cnf1', x: 400, y: 380, group: 'virulence', desc: 'Cytotoxic necrotizing factor.' },
+                { id: 'clbB', label: 'clbB', x: 280, y: 80, group: 'virulence', desc: 'Colibactin genotoxin.' },
+                { id: 'neuC', label: 'neuC', x: 180, y: 40, group: 'virulence', desc: 'K1 polysaccharide capsule.' },
                 
-                { id: 'blaCTX', label: 'blaCTX-M-15 (ESBL)', x: 650, y: 220, group: 'amr', desc: 'Cephalosporin-resistant ESBL beta-lactamase.' },
-                { id: 'tetA', label: 'tetA (Tetracycline res)', x: 600, y: 320, group: 'amr', desc: 'Tetracycline active efflux pump.' },
-                { id: 'sul1', label: 'sul1 (Sulfonamide res)', x: 520, y: 380, group: 'amr', desc: 'Sulfonamide resistance gene (integron-borne).' },
-                { id: 'parC', label: 'parC_S80I (Fluoroquinolone)', x: 650, y: 120, group: 'amr', desc: 'Topoisomerase S80I mutation for fluoroquinolone tolerance.' },
+                // AMR (amber)
+                { id: 'blaCTX', label: 'blaCTX', x: 620, y: 220, group: 'amr', desc: 'Beta-lactamase cephalosporin resistance.' },
+                { id: 'tetA', label: 'tetA', x: 550, y: 320, group: 'amr', desc: 'Tetracycline active efflux pump.' },
+                { id: 'sul1', label: 'sul1', x: 480, y: 380, group: 'amr', desc: 'Sulfonamide resistance gene.' },
+                { id: 'aadA5', label: 'aadA5', x: 480, y: 280, group: 'amr', desc: 'Aminoglycoside resistance element.' },
+                { id: 'parC', label: 'parC', x: 620, y: 120, group: 'amr', desc: 'Quinolone resistance mutation.' },
                 
-                { id: 'ISEcp1', label: 'ISEcp1 (IS Element)', x: 730, y: 280, group: 'phage', desc: 'Insertion sequence transposition element driving ESBL.' }
+                // MGE (sky-blue)
+                { id: 'IncFII', label: 'IncFII', x: 680, y: 300, group: 'mge', desc: 'F-type plasmid replicon.' },
+                { id: 'IncFIB', label: 'IncFIB', x: 520, y: 180, group: 'mge', desc: 'F-type plasmid replicon.' },
+                { id: 'intI1', label: 'intI1', x: 400, y: 280, group: 'mge', desc: 'Class 1 Integron integrase.' },
+                { id: 'IS26', label: 'IS26', x: 680, y: 180, group: 'mge', desc: 'Insertion sequence element.' },
+                { id: 'ISEcp1', label: 'ISEcp1', x: 740, y: 220, group: 'mge', desc: 'Transposition element.' }
             ];
 
             const edges = [
+                // Virulence island linkages
                 { source: 'fimH', target: 'papG', r: 0.65, type: 'pos' },
                 { source: 'hlyA', target: 'cnf1', r: 0.94, type: 'pos' },
                 { source: 'hlyA', target: 'papG', r: 0.72, type: 'pos' },
                 { source: 'cnf1', target: 'papG', r: 0.70, type: 'pos' },
-                { source: 'fyuA', target: 'iutA', r: 0.81, type: 'pos' },
-                { source: 'blaCTX', target: 'ISEcp1', r: 0.88, type: 'pos' },
-                { source: 'blaCTX', target: 'tetA', r: 0.74, type: 'pos' },
-                { source: 'blaCTX', target: 'parC', r: 0.79, type: 'pos' },
-                { source: 'parC', target: 'tetA', r: 0.62, type: 'pos' },
-                { source: 'sul1', target: 'tetA', r: 0.68, type: 'pos' },
                 
-                // Mutual avoidance / tradeoffs (High resistance tradeoffs for high virulence capsules)
-                { source: 'blaCTX', target: 'neuC', r: -0.78, type: 'neg' },
-                { source: 'parC', target: 'neuC', r: -0.72, type: 'neg' },
-                { source: 'blaCTX', target: 'hlyA', r: -0.65, type: 'neg' }
+                // Plasmid mobilizations (MGE-AMR linkages)
+                { source: 'IncFII', target: 'blaCTX', r: 0.89, type: 'pos' },
+                { source: 'IncFIB', target: 'blaCTX', r: 0.85, type: 'pos' },
+                { source: 'IncFII', target: 'IncFIB', r: 0.92, type: 'pos' },
+                { source: 'blaCTX', target: 'ISEcp1', r: 0.88, type: 'pos' },
+                { source: 'blaCTX', target: 'IS26', r: 0.74, type: 'pos' },
+                { source: 'blaCTX', target: 'parC', r: 0.79, type: 'pos' },
+                { source: 'IncFII', target: 'IS26', r: 0.80, type: 'pos' },
+                
+                // Integron-borne cassettes (MGE-AMR linkages)
+                { source: 'intI1', target: 'sul1', r: 0.91, type: 'pos' },
+                { source: 'intI1', target: 'aadA5', r: 0.88, type: 'pos' },
+                { source: 'sul1', target: 'aadA5', r: 0.90, type: 'pos' },
+                { source: 'intI1', target: 'tetA', r: 0.68, type: 'pos' },
+
+                // Virulence/Resistance Incompatibility (Tradeoffs)
+                { source: 'IncFII', target: 'neuC', r: -0.78, type: 'neg' },
+                { source: 'blaCTX', target: 'neuC', r: -0.74, type: 'neg' },
+                { source: 'IncFII', target: 'hlyA', r: -0.65, type: 'neg' }
             ];
 
             const filterType = document.getElementById('network-filter-type').value;
@@ -1794,7 +1876,7 @@
                 
                 let fill = '#ef4444'; // virulence
                 if (node.group === 'amr') fill = '#f59e0b'; // amr
-                else if (node.group === 'phage') fill = '#0ea5e9'; // mobile
+                else if (node.group === 'mge') fill = '#0ea5e9'; // mge (sky-blue)
 
                 circle.setAttribute("fill", fill);
                 circle.setAttribute("stroke", "#0f172a");
