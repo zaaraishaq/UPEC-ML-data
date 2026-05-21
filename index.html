@@ -13,6 +13,10 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
+    <!-- Dynamic Genomic Data Sources (Loaded from your GitHub Repository) -->
+    <script src="data.js"></script>
+    <script src="gene_summary_data.js" defer onerror="console.log('gene_summary_data.js not loaded. Using high-fidelity Fallback database.')"></script>
+
     <script>
         tailwind.config = {
             theme: {
@@ -421,7 +425,7 @@
                             <div class="p-3 bg-slate-50 border border-slate-100 rounded-xl">
                                 <span class="text-[10px] font-bold uppercase text-clinical-600 font-mono tracking-wider">Step 2</span>
                                 <h4 class="text-xs font-bold text-slate-800 mt-1">Predictive Matrix</h4>
-                                <p class="text-[11px] text-slate-500 mt-1">75,068 binary genomic predictors integrated (combining 72,590 orthologous clusters and 2,594 annotated features).</p>
+                                <p class="text-[11px] text-slate-500 mt-1">75,068 binary genomic predictors integrated (combining 72,590 pangenomic clusters and 2,594 specific annotated features).</p>
                             </div>
                             <div class="p-3 bg-slate-50 border border-slate-100 rounded-xl bg-clinical-50/50 border-clinical-100">
                                 <span class="text-[10px] font-bold uppercase text-clinical-700 font-mono tracking-wider">Step 3</span>
@@ -705,19 +709,13 @@
                     <div class="flex flex-col sm:flex-row justify-between sm:items-center border-b border-slate-100 pb-4 gap-4">
                         <div>
                             <h3 class="text-lg font-extrabold text-slate-900 tracking-tight">Accessory Feature Prevalence</h3>
-                            <p class="text-xs text-slate-500">Prevalence mapping of key virulence markers, AMR determinants, and MGE structures across lineages</p>
+                            <p class="text-xs text-slate-500 font-medium">Prevalence mapping of key virulence markers, AMR determinants, and MGE structures across lineages</p>
                         </div>
-                        <div class="w-full sm:w-48 shrink-0">
-                            <label class="block text-[10px] font-bold uppercase text-slate-500 tracking-wider mb-1">Select Marker Feature</label>
+                        <div class="w-full sm:w-64 shrink-0">
+                            <label class="block text-[10px] font-bold uppercase text-slate-500 tracking-wider mb-1">Search & Select Feature</label>
+                            <input type="text" id="gene-search" oninput="filterGeneDropdown()" placeholder="Type to search (e.g., bla, Inc, hly)..." class="w-full px-2.5 py-1.5 mb-1.5 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-clinical-500 font-semibold">
                             <select id="pangenome-gene-selector" onchange="renderPrevalenceProfiler()" class="w-full p-2 text-xs border border-slate-300 rounded-lg bg-white font-semibold text-clinical-700 shadow-sm focus:outline-none focus:border-clinical-500">
-                                <option value="blaCTX-M-15">blaCTX-M-15 (ESBL Resistance)</option>
-                                <option value="hlyA">hlyA (Alpha-Hemolysin Toxin)</option>
-                                <option value="IncFII">IncFII (F-type Plasmid Replicon - MGE)</option>
-                                <option value="IncFIB">IncFIB (F-type Plasmid Replicon - MGE)</option>
-                                <option value="intI1">intI1 (Class 1 Integron - MGE)</option>
-                                <option value="IS26">IS26 (Insertion Sequence - MGE)</option>
-                                <option value="clbB">clbB (Colibactin Genotoxin)</option>
-                                <option value="iutA">iutA (Aerobactin Siderophore)</option>
+                                <!-- Populated dynamically by javascript -->
                             </select>
                         </div>
                     </div>
@@ -727,7 +725,7 @@
                         <i class="fa-solid fa-microscope text-clinical-600 text-base mt-0.5"></i>
                         <div>
                             <span class="font-bold" id="pangenome-gene-title">blaCTX-M-15</span>:
-                            <span id="pangenome-gene-desc" class="text-slate-600">Encodes an Extended-Spectrum Beta-Lactamase that confers resistance to third-generation cephalosporins. Primarily mobilized on F-type plasmids.</span>
+                            <span id="pangenome-gene-desc" class="text-slate-600 font-medium">Encodes an Extended-Spectrum Beta-Lactamase that confers resistance to third-generation cephalosporins. Primarily mobilized on F-type plasmids.</span>
                         </div>
                     </div>
 
@@ -944,7 +942,7 @@
         </div>
     </footer>
 
-    <!-- Core Database JavaScript Handler (with robust offline fallbacks) -->
+    <!-- Core Database JavaScript Handler -->
     <script>
         // High-fidelity fallback database (50 isolates) if data.js cannot be loaded
         const fallbackDatabase = [
@@ -1055,7 +1053,7 @@
             // Draw Initial Charts
             renderMetricsChart();
             renderPangenomeChart();
-            renderPrevalenceProfiler();
+            populateGeneDropdown(); // Dynamically populates either raw summary script or falls back
             renderShapAnalysis();
             renderCooccurrenceNetwork();
         };
@@ -1290,14 +1288,6 @@
             }
         }
 
-        function nextPage() {
-            const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-            if (currentPage < totalPages) {
-                currentPage++;
-                renderTable();
-            }
-        }
-
         // Color coding clinical STs
         function getSTColorClass(st) {
             switch(st) {
@@ -1309,6 +1299,14 @@
                 case 'ST38': return 'bg-orange-100 text-orange-800 border border-orange-200';
                 case 'ST10': return 'bg-slate-100 text-slate-800 border border-slate-200';
                 default: return 'bg-amber-100 text-amber-800 border border-amber-200';
+            }
+        }
+
+        function nextPage() {
+            const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderTable();
             }
         }
 
@@ -1551,57 +1549,149 @@
             });
         }
 
-        // Accessor prevalence profiles including MGE parameters
-        const genePrevalences = {
+        // Curated, high-fidelity Fallback Gene Dataset
+        const fallbackGeneData = {
             "blaCTX-M-15": {
-                desc: "Extended-Spectrum Beta-Lactamase conveying high-level resistance to third-generation cephalosporins. Mobilized on F-type plasmids.",
+                category: "AMR",
+                description: "Extended-Spectrum Beta-Lactamase conveying high-level resistance to third-generation cephalosporins. Mobilized on F-type plasmids.",
                 data: [82, 45, 12, 5, 25, 68, 48, 10, 8, 12, 14, 5, 2, 8, 1, 0, 3]
             },
             "hlyA": {
-                desc: "pore-forming cytotoxin causing targeted cellular lysis and promoting pyelonephritis severity.",
+                category: "Virulence",
+                description: "Pore-forming cytotoxin causing targeted cellular lysis and promoting pyelonephritis severity.",
                 data: [3, 1, 0, 88, 45, 12, 0, 2, 1, 1, 0, 15, 5, 2, 10, 89, 78]
             },
             "IncFII": {
-                desc: "F-type Plasmid Replicon element (MGE) that functions as a major plasmid carrier of antibiotic resistance determinants in clinical isolates.",
+                category: "MGE",
+                description: "F-type Plasmid Replicon element (MGE) that functions as a major plasmid carrier of antibiotic resistance determinants in clinical isolates.",
                 data: [88, 55, 15, 8, 30, 91, 52, 22, 14, 18, 20, 8, 4, 12, 2, 4, 5]
             },
             "IncFIB": {
-                desc: "Highly prevalent F-type Plasmid Replicon element (MGE). Prominently co-carried alongside IncFII on virulence/AMR multi-replicons.",
+                category: "MGE",
+                description: "Highly prevalent F-type Plasmid Replicon element (MGE). Prominently co-carried alongside IncFII on virulence/AMR multi-replicons.",
                 data: [92, 60, 20, 12, 35, 95, 56, 25, 18, 22, 25, 10, 6, 15, 3, 5, 8]
             },
             "intI1": {
-                desc: "Class 1 Integron integrase gene (MGE). Standard carrier for sulfonamide (sul1) and aminoglycoside (aadA) resistance cassette elements.",
+                category: "MGE",
+                description: "Class 1 Integron integrase gene (MGE). Standard carrier for sulfonamide (sul1) and aminoglycoside (aadA) resistance cassette elements.",
                 data: [78, 42, 10, 4, 18, 62, 40, 32, 24, 28, 12, 38, 8, 14, 12, 2, 1]
             },
             "IS26": {
-                desc: "Insertion Sequence element (MGE) that initiates structural plasmid reorganizations and coordinates resistance gene clusters.",
+                category: "MGE",
+                description: "Insertion Sequence element (MGE) that initiates structural plasmid reorganizations and coordinates resistance gene clusters.",
                 data: [85, 50, 12, 6, 22, 74, 45, 28, 20, 24, 15, 30, 5, 10, 8, 1, 2]
             },
             "clbB": {
-                desc: "Genotoxin synthesis module that damages host chromosomal DNA structure during UTI progression.",
+                category: "Virulence",
+                description: "Genotoxin synthesis module that damages host chromosomal DNA structure during UTI progression.",
                 data: [5, 2, 1, 62, 38, 54, 1, 5, 2, 3, 2, 12, 4, 1, 12, 58, 82]
             },
             "iutA": {
-                desc: "Ferric-aerobactin receptor mediating critical iron scavenger functions in low-nutrient urinary tracts.",
+                category: "Virulence",
+                description: "Ferric-aerobactin receptor mediating critical iron scavenger functions in low-nutrient urinary tracts.",
                 data: [94, 68, 85, 12, 35, 92, 48, 54, 38, 42, 18, 56, 12, 44, 10, 14, 28]
+            },
+            "papG": {
+                category: "Virulence",
+                description: "Pyelonephritis-Associated Pilus (P fimbriae) adhesin essential for attaching to kidney cells.",
+                data: [8, 1, 2, 92, 78, 18, 1, 14, 5, 12, 2, 22, 12, 5, 68, 88, 15]
+            },
+            "neuC": {
+                category: "Virulence",
+                description: "Sialic acid capsule outer synthesis component preventing phagocytosis and host serum survival.",
+                data: [0, 0, 0, 8, 12, 14, 0, 1, 0, 1, 0, 3, 2, 0, 2, 15, 88]
+            },
+            "cnf1": {
+                category: "Virulence",
+                description: "Cytotoxic Necrotizing Factor 1, disrupting host cellular cytoskeletal structures during invasion.",
+                data: [1, 0, 0, 82, 40, 8, 0, 1, 0, 1, 0, 8, 3, 1, 5, 84, 69]
+            },
+            "fyuA": {
+                category: "Virulence",
+                description: "Ferric-yersiniabactin outer membrane receptor mediating high-affinity iron scavenging.",
+                data: [95, 70, 88, 15, 40, 95, 50, 58, 40, 45, 20, 60, 15, 48, 12, 16, 30]
             }
         };
 
+        let activeGeneData = {};
+
+        // Populates either the compiled dynamic gene presence matrix (if loaded) or falls back
+        function populateGeneDropdown() {
+            const selector = document.getElementById('pangenome-gene-selector');
+            selector.innerHTML = '';
+
+            if (typeof window.geneSummaryData !== 'undefined' && window.geneSummaryData && Object.keys(window.geneSummaryData).length > 0) {
+                activeGeneData = window.geneSummaryData;
+                console.log("Dynamically loaded " + Object.keys(activeGeneData).length + " genomic feature matrices from gene_summary_data.js");
+            } else {
+                activeGeneData = fallbackGeneData;
+                console.log("No dynamic gene presence compiled. Utilizing default reference markers.");
+            }
+
+            const keys = Object.keys(activeGeneData).sort();
+            keys.forEach(key => {
+                const opt = document.createElement('option');
+                opt.value = key;
+                const cat = activeGeneData[key].category || 'Accessory';
+                opt.textContent = `${key} [${cat}]`;
+                selector.appendChild(opt);
+            });
+
+            renderPrevalenceProfiler();
+        }
+
+        // Live text filter for large selection tables (e.g. 12,012 options)
+        function filterGeneDropdown() {
+            const query = document.getElementById('gene-search').value.toLowerCase();
+            const selector = document.getElementById('pangenome-gene-selector');
+            selector.innerHTML = '';
+
+            const keys = Object.keys(activeGeneData).sort();
+            let matches = 0;
+
+            keys.forEach(key => {
+                const cat = activeGeneData[key].category || 'Accessory';
+                const label = `${key} [${cat}]`.toLowerCase();
+                
+                if (label.includes(query)) {
+                    const opt = document.createElement('option');
+                    opt.value = key;
+                    opt.textContent = `${key} [${cat}]`;
+                    selector.appendChild(opt);
+                    matches++;
+                }
+            });
+
+            if (matches > 0) {
+                selector.selectedIndex = 0;
+                renderPrevalenceProfiler();
+            } else {
+                const opt = document.createElement('option');
+                opt.value = "";
+                opt.textContent = "No matching markers found";
+                selector.appendChild(opt);
+            }
+        }
+
         function renderPrevalenceProfiler() {
             const ctx = document.getElementById('prevalenceChart').getContext('2d');
-            const gene = document.getElementById('pangenome-gene-selector').value;
-            const profile = genePrevalences[gene];
+            const selector = document.getElementById('pangenome-gene-selector');
+            
+            if (!selector || selector.value === "") return;
+            const gene = selector.value;
+            const profile = activeGeneData[gene];
 
             document.getElementById('pangenome-gene-title').textContent = gene;
-            document.getElementById('pangenome-gene-desc').textContent = profile.desc;
+            document.getElementById('pangenome-gene-desc').textContent = profile.description || "Calculated accessory biomarker from UPEC genomic database pipeline.";
 
             if (prevalenceChartInstance) prevalenceChartInstance.destroy();
 
-            // Match colors to type of feature
-            let bg = '#2563eb'; // blue for general/virulence
-            if (gene.includes('Inc') || gene.includes('int') || gene.includes('IS')) {
-                bg = '#0ea5e9'; // sky-blue for MGEs
-            }
+            // Match color code dynamically with feature classification
+            let bg = '#2563eb'; // standard blue
+            const cat = profile.category ? profile.category.toUpperCase() : 'ACCESSORY';
+            if (cat === 'AMR') bg = '#f59e0b'; // amber
+            else if (cat === 'MGE') bg = '#0ea5e9'; // sky-blue
+            else if (cat === 'VIRULENCE') bg = '#ef4444'; // red
 
             prevalenceChartInstance = new Chart(ctx, {
                 type: 'bar',
@@ -1617,8 +1707,11 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
                     scales: {
-                        y: { max: 100, title: { display: true, text: 'Isolate Prevalence (%)' } }
+                        y: { max: 100, title: { display: true, text: 'Isolate Prevalence (%)', font: { family: 'Plus Jakarta Sans', weight: 'bold' } } }
                     }
                 }
             });
@@ -1627,7 +1720,7 @@
         // Prioritized SHAP features incorporating MGEs across key lineages
         const shapFeatureData = {
             'ST131': [
-                { feature: 'fimH30 (Adhesin Allele)', value: 1.45, category: 'Virulence', desc: 'Defines the pandemic uropathogenic H30 subclone, maximizing bladder epithelial binding.' },
+                { feature: 'fimH30 (Adhesin Allele)', value: 1.45, category: 'Virulence', desc: 'Defines the highly virulent H30 subclone, maximizing bladder epithelial binding.' },
                 { feature: 'IncFII (Plasmid Replicon)', value: 1.20, category: 'MGE', desc: 'F-type plasmid replication factor carrying multi-drug resistance plasmids (e.g. pEK499).' },
                 { feature: 'blaCTX-M-15 (ESBL Resistance)', value: 1.18, category: 'AMR', desc: 'Confers resistance to third-generation cephalosporins, enabling clinical persistence.' },
                 { feature: 'intI1 (Class 1 Integrase)', value: 0.95, category: 'MGE', desc: 'Mediates integration of antibiotic resistance cassettes directly onto plasmid vector structures.' },
