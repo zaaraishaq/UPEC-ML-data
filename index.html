@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&family=JetBrains+Mono:wght=400;500;700&display=swap" rel="stylesheet">
 
     <script src="https://zaaraishaq.github.io/UPEC-ML-data/data.js"></script>
     <script src="https://zaaraishaq.github.io/UPEC-ML-data/gene_summary_data.js" defer onerror="console.log('gene_summary_data.js fallback loaded.')"></script>
@@ -259,7 +259,7 @@
                             <div class="flex items-center gap-1.5 select-none">
                                 <button onclick="prevPage()" class="p-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-100 transition-colors text-xs font-medium"><i class="fa-solid fa-chevron-left mr-1"></i> Prev</button>
                                 <span class="text-xs font-bold px-3 py-1 bg-clinical-50 text-clinical-700 rounded-lg border border-clinical-100 whitespace-nowrap" id="pagination-current">Page 1</span>
-                                <button onclick="nextPage()" class="p-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-100 transition-colors text-xs font-medium">Next <i class="fa-solid fa-chevron-right mr-1"></i></button>
+                                <button onclick="nextPage()" class="p-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-100 transition-colors text-xs font-medium">Next <i class="fa-solid fa-chevron-right ml-1"></i></button>
                             </div>
                         </div>
                     </div>
@@ -604,6 +604,7 @@
             filteredData = [...mainDb];
             applyFilters();
             
+            // Asynchronous streams initialized safely to prevent rendering blockage
             fetchCSVResults();
             fetchSHAPCSVResults();
             fetchAccessoryPrevalenceCSV();
@@ -749,17 +750,15 @@
             document.body.appendChild(link); link.click(); document.body.removeChild(link);
         }
 
-        // Fixed Active Highlighting Tab Switch Engine
+        // Active Highlights Switch Engine Fix
         function switchTab(id) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.getElementById(`tab-${id}`).classList.remove('hidden');
             
-            // Reset configurations across all tags
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.className = "tab-btn px-3.5 py-2 text-xs md:text-sm font-semibold rounded-lg transition-all duration-200 text-slate-600 hover:text-slate-900 flex items-center gap-1.5 whitespace-nowrap";
             });
             
-            // Style selected element explicitly
             const targetBtn = document.querySelector(`[data-tab="${id}"]`);
             if (targetBtn) {
                 targetBtn.className = "tab-btn px-3.5 py-2 text-xs md:text-sm font-semibold rounded-lg transition-all duration-200 bg-white text-clinical-700 shadow-xs flex items-center gap-1.5 whitespace-nowrap";
@@ -770,7 +769,6 @@
             else if (id === 'pangenome') setTimeout(renderPangenomeChart, 50);
         }
 
-        // High-fidelity cluster projections mapping
         function renderPCAPlot() {
             const ctx = document.getElementById('pcaChart').getContext('2d'); if (pcaChartInstance) pcaChartInstance.destroy();
             const clusterColors = ['#2563eb', '#10b981', '#f43f5e', '#8b5cf6', '#f97316', '#64748b'];
@@ -794,8 +792,7 @@
                 type: 'scatter',
                 data: { datasets: datasets.length > 0 ? datasets : [{ label: 'Assemblies projection coordinates', data: filteredData.map((d, i) => ({ x: (i % 5) - 2, y: (i % 3) - 1, id: d.id, sero: d.serotypeNorm })), backgroundColor: '#2563eb' }] },
                 options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
+                    responsive: true, maintainAspectRatio: false,
                     plugins: {
                         tooltip: {
                             callbacks: {
