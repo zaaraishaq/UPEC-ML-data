@@ -4,18 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UPEC Genomic & Machine Learning Database (UPEC-GDB)</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chart.js for visualization -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Font Awesome for modern clinical-themed icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
-    <!-- Dynamic Genomic Data Sources (Loaded from your GitHub Repository) -->
-    <script src="data.js"></script>
-    <script src="gene_summary_data.js" defer onerror="console.log('gene_summary_data.js not loaded. Using high-fidelity Fallback database.')"></script>
+    <script src="https://zaaraishaq.github.io/UPEC-ML-data/data.js"></script>
+    <script src="https://zaaraishaq.github.io/UPEC-ML-data/gene_summary_data.js" defer onerror="console.log('gene_summary_data.js not loaded from repository. Using fallback database.')"></script>
 
     <script>
         tailwind.config = {
@@ -60,7 +55,6 @@
             background-color: #f8fafc;
             font-feature-settings: "cv02", "cv03", "cv04", "cv11";
         }
-        /* Custom scrollbars for clean scientific tables */
         .scientific-scroll::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -79,7 +73,6 @@
 </head>
 <body class="flex flex-col min-h-screen text-slate-800">
 
-    <!-- Top Scientific Notification Banner -->
     <div class="bg-gradient-to-r from-clinical-900 to-slate-900 text-slate-200 py-2.5 px-4 text-xs font-medium border-b border-clinical-800 flex justify-between items-center">
         <div class="flex items-center gap-2 overflow-hidden">
             <span class="bg-clinical-600 text-white px-2 py-0.5 rounded text-[10px] uppercase tracking-wider font-bold shrink-0">Manuscript v2.0-Revised</span>
@@ -91,7 +84,6 @@
         </div>
     </div>
 
-    <!-- Header & Brand Section -->
     <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-xs">
         <div class="max-w-[1600px] mx-auto px-4 md:px-6 py-4 flex flex-col lg:flex-row justify-between lg:items-center gap-4">
             <div class="flex items-center gap-3">
@@ -107,7 +99,6 @@
                 </div>
             </div>
 
-            <!-- Main Tab Navigation -->
             <nav class="flex gap-1 bg-slate-100 p-1 rounded-xl overflow-x-auto scrollbar-none shrink-0" id="tabs-navigation">
                 <button onclick="switchTab('catalog')" data-tab="catalog" class="tab-btn px-3 py-2 text-xs md:text-sm font-semibold rounded-lg transition-all duration-200 bg-white text-clinical-700 shadow-xs flex items-center gap-1.5 whitespace-nowrap">
                     <i class="fa-solid fa-database"></i> Database Catalog
@@ -131,7 +122,6 @@
         </div>
     </header>
 
-    <!-- System Connection Banner / Offline Indicator -->
     <div id="connection-status" class="hidden max-w-[1600px] mx-auto mt-4 px-4 md:px-6">
         <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 flex items-start gap-3">
             <i class="fa-solid fa-triangle-exclamation text-amber-600 text-lg mt-0.5"></i>
@@ -145,14 +135,11 @@
         </div>
     </div>
 
-    <!-- Main Container -->
     <main class="flex-1 max-w-[1600px] w-full mx-auto px-4 md:px-6 py-6 flex flex-col gap-6">
 
-        <!-- Tab Content 1: Database Catalog -->
         <section id="tab-catalog" class="tab-content block">
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
                 
-                <!-- Sidebar: Advanced Dynamic Filters (Collapsible on Mobile) -->
                 <div class="lg:col-span-1 bg-white rounded-2xl border border-slate-200 shadow-xs flex flex-col">
                     <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50 rounded-t-2xl">
                         <div class="flex items-center gap-2">
@@ -164,10 +151,8 @@
                         </button>
                     </div>
 
-                    <!-- Filter Form Content -->
                     <div class="p-4 flex flex-col gap-4 overflow-y-auto max-h-[75vh] scientific-scroll">
                         
-                        <!-- Filter Group 1: Text Search -->
                         <div>
                             <label class="block text-xs font-bold uppercase text-slate-500 tracking-wider mb-1.5">Isolate Search</label>
                             <div class="relative">
@@ -176,7 +161,6 @@
                             </div>
                         </div>
 
-                        <!-- Filter Group 2: Sequence Type -->
                         <div>
                             <label class="block text-xs font-bold uppercase text-slate-500 tracking-wider mb-1.5">Sequence Type (MLST)</label>
                             <select id="filter-mlst" onchange="applyFilters()" class="w-full p-2 text-xs border border-slate-200 rounded-lg bg-white focus:outline-none focus:border-clinical-500">
@@ -184,7 +168,6 @@
                             </select>
                         </div>
 
-                        <!-- Filter Group 3: Geographical Location -->
                         <div>
                             <label class="block text-xs font-bold uppercase text-slate-500 tracking-wider mb-1.5">Geographical Location</label>
                             <select id="filter-location" onchange="applyFilters()" class="w-full p-2 text-xs border border-slate-200 rounded-lg bg-white focus:outline-none focus:border-clinical-500">
@@ -192,7 +175,6 @@
                             </select>
                         </div>
 
-                        <!-- Filter Group 4: Host Pathology / Disease -->
                         <div>
                             <label class="block text-xs font-bold uppercase text-slate-500 tracking-wider mb-1.5">Host Pathology / Disease</label>
                             <select id="filter-pathology" onchange="applyFilters()" class="w-full p-2 text-xs border border-slate-200 rounded-lg bg-white focus:outline-none focus:border-clinical-500">
@@ -200,7 +182,6 @@
                             </select>
                         </div>
 
-                        <!-- Filter Group 5: Serotype -->
                         <div>
                             <label class="block text-xs font-bold uppercase text-slate-500 tracking-wider mb-1.5">Predicted Serotype</label>
                             <select id="filter-serotype" onchange="applyFilters()" class="w-full p-2 text-xs border border-slate-200 rounded-lg bg-white focus:outline-none focus:border-clinical-500">
@@ -208,7 +189,6 @@
                             </select>
                         </div>
 
-                        <!-- Filter Group 6: Collection Year -->
                         <div>
                             <label class="block text-xs font-bold uppercase text-slate-500 tracking-wider mb-1.5">Collection Year</label>
                             <select id="filter-year" onchange="applyFilters()" class="w-full p-2 text-xs border border-slate-200 rounded-lg bg-white focus:outline-none focus:border-clinical-500">
@@ -216,7 +196,6 @@
                             </select>
                         </div>
 
-                        <!-- Filter Group 7: Isolation Source -->
                         <div>
                             <label class="block text-xs font-bold uppercase text-slate-500 tracking-wider mb-1.5">Isolation Source</label>
                             <select id="filter-source" onchange="applyFilters()" class="w-full p-2 text-xs border border-slate-200 rounded-lg bg-white focus:outline-none focus:border-clinical-500">
@@ -224,7 +203,6 @@
                             </select>
                         </div>
 
-                        <!-- Filter Group 8: Assembly Level -->
                         <div>
                             <label class="block text-xs font-bold uppercase text-slate-500 tracking-wider mb-1.5">Assembly Level</label>
                             <select id="filter-level" onchange="applyFilters()" class="w-full p-2 text-xs border border-slate-200 rounded-lg bg-white focus:outline-none focus:border-clinical-500">
@@ -234,7 +212,6 @@
 
                         <hr class="border-slate-100">
 
-                        <!-- Slider: Genome Size Range (Mb) -->
                         <div>
                             <div class="flex justify-between items-center mb-1">
                                 <label class="block text-xs font-bold uppercase text-slate-500 tracking-wider">Genome Size (Mb)</label>
@@ -247,7 +224,6 @@
                             </div>
                         </div>
 
-                        <!-- Slider: GC Content (%) -->
                         <div>
                             <div class="flex justify-between items-center mb-1">
                                 <label class="block text-xs font-bold uppercase text-slate-500 tracking-wider">GC Content (%)</label>
@@ -262,24 +238,28 @@
 
                         <hr class="border-slate-100">
 
-                        <!-- Quick Epidemiological Presets -->
-                        <div>
-                            <span class="block text-xs font-bold uppercase text-slate-500 tracking-wider mb-2">Clonal & Clinical Presets</span>
+                        <div class="flex flex-col gap-2">
+                            <span class="block text-xs font-bold uppercase text-slate-500 tracking-wider">Clonal & Clinical Presets</span>
                             <div class="flex flex-wrap gap-1.5">
                                 <button onclick="applyPreset('ST131')" class="text-[10px] bg-clinical-50 hover:bg-clinical-100 text-clinical-700 border border-clinical-200 font-bold px-2 py-1 rounded transition-colors">ST131 Pandemic</button>
                                 <button onclick="applyPreset('ST1193')" class="text-[10px] bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 font-bold px-2 py-1 rounded transition-colors">ST1193 Emerging</button>
-                                <button onclick="applyPreset('Pyelonephritis')" class="text-[10px] bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold px-2 py-1 rounded transition-colors">Pyelonephritis</button>
-                                <button onclick="applyPreset('Pakistan')" class="text-[10px] bg-bio-50 hover:bg-bio-100 text-bio-700 border border-bio-200 font-bold px-2 py-1 rounded transition-colors">Pakistani Isolates</button>
+                            </div>
+                            <div class="mt-1 p-2.5 bg-gradient-to-br from-emerald-600 to-bio-700 rounded-xl text-white shadow-sm border border-emerald-500">
+                                <button onclick="applyPreset('Pakistan')" class="w-full text-left font-extrabold text-xs tracking-tight flex items-center justify-between group">
+                                    <span><i class="fa-solid fa-earth-asia mr-1.5 animate-pulse"></i> Pakistani Isolates Cohort</span>
+                                    <i class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1 transition-transform"></i>
+                                </button>
+                                <p class="text-[9px] text-emerald-100/90 mt-1 font-sans leading-normal font-medium">
+                                    Published in Antonie van Leeuwenhoek (2026). ST131 discovered as the dominant regional clinical MDR clade.
+                                </p>
                             </div>
                         </div>
 
                     </div>
                 </div>
 
-                <!-- Main Section: Dynamic Stat Cards & Isolate Data Grid -->
                 <div class="lg:col-span-3 flex flex-col gap-6">
                     
-                    <!-- Dynamic Stat Cards Grid -->
                     <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4">
                         <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex items-center gap-3">
                             <div class="h-10 w-10 rounded-lg bg-clinical-100 text-clinical-700 flex items-center justify-center text-lg shrink-0"><i class="fa-solid fa-vial-microscope"></i></div>
@@ -325,10 +305,7 @@
                         </div>
                     </div>
 
-                    <!-- Isolate Table Card -->
                     <div class="bg-white rounded-2xl border border-slate-200 shadow-xs flex flex-col">
-                        
-                        <!-- Actions & Title Bar -->
                         <div class="p-4 border-b border-slate-100 flex flex-col sm:flex-row justify-between sm:items-center gap-3">
                             <div>
                                 <h3 class="font-extrabold text-base text-slate-900 tracking-tight">Genome Assemblies</h3>
@@ -341,7 +318,6 @@
                             </div>
                         </div>
 
-                        <!-- Table Wrapper -->
                         <div class="overflow-x-auto scientific-scroll max-w-full">
                             <table class="w-full text-left border-collapse" id="isolates-table">
                                 <thead>
@@ -359,12 +335,10 @@
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-slate-100 text-xs text-slate-700" id="table-body">
-                                    <!-- Populated via Javascript -->
                                 </tbody>
                             </table>
                         </div>
 
-                        <!-- Pagination Panel -->
                         <div class="p-4 border-t border-slate-100 flex flex-col sm:flex-row justify-between items-center gap-4 bg-slate-50 rounded-b-2xl">
                             <div class="text-xs text-slate-500">
                                 Showing <span class="font-bold text-slate-800" id="pagination-start">0</span> to <span class="font-bold text-slate-800" id="pagination-end">0</span> of <span class="font-bold text-slate-800" id="pagination-total">0</span> isolates
@@ -375,18 +349,15 @@
                                 <button onclick="nextPage()" class="p-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-100 transition-colors text-xs font-medium">Next <i class="fa-solid fa-chevron-right ml-1"></i></button>
                             </div>
                         </div>
-
                     </div>
                 </div>
 
             </div>
         </section>
 
-        <!-- Tab Content 2: Machine Learning & PCA -->
         <section id="tab-ml-pca" class="tab-content hidden">
             <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
                 
-                <!-- Left: Pipeline & PCA Scatter Plot -->
                 <div class="xl:col-span-2 flex flex-col gap-6">
                     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
                         <div class="flex flex-col sm:flex-row justify-between sm:items-center border-b border-slate-100 pb-4 mb-4 gap-2">
@@ -399,7 +370,6 @@
                             </div>
                         </div>
 
-                        <!-- PCA Explanation Alert -->
                         <div class="mb-4 bg-clinical-50 border border-clinical-100 p-3.5 rounded-lg text-xs text-clinical-700 flex gap-2.5">
                             <i class="fa-solid fa-circle-info text-clinical-500 text-sm mt-0.5"></i>
                             <div>
@@ -407,13 +377,11 @@
                             </div>
                         </div>
 
-                        <!-- PCA Scatter Canvas Container -->
                         <div class="relative w-full h-[450px]">
                             <canvas id="pcaChart"></canvas>
                         </div>
                     </div>
 
-                    <!-- Machine Learning Methodology Timeline -->
                     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
                         <h3 class="text-base font-extrabold text-slate-900 tracking-tight mb-4">Bioinformatics & Machine Learning Pipeline</h3>
                         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -441,7 +409,6 @@
                     </div>
                 </div>
 
-                <!-- Right: Classifier Performance Table & Chart -->
                 <div class="flex flex-col gap-6">
                     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs font-sans">
                         <div class="mb-4">
@@ -449,12 +416,10 @@
                             <p class="text-xs text-slate-500 mt-0.5">Performance comparison of machine learning models on the 12,012-marker dataset</p>
                         </div>
 
-                        <!-- Chart: Comparison -->
                         <div class="h-[250px] mb-6">
                             <canvas id="metricsChart"></canvas>
                         </div>
 
-                        <!-- Table: Comparison -->
                         <div class="overflow-x-auto scientific-scroll border border-slate-100 rounded-xl">
                             <table class="w-full text-left border-collapse text-xs">
                                 <thead>
@@ -505,20 +470,15 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="mt-4 text-[10px] text-slate-400 leading-relaxed">
-                            <i class="fa-solid fa-asterisk mr-1"></i> Statistical selection via FDR-corrected Chi-Squared analysis preserves high-confidence discriminatory boundaries, providing a highly refined input matrix for classification algorithms.
-                        </div>
                     </div>
                 </div>
 
             </div>
         </section>
 
-        <!-- Tab Content 3: SHAP Signatures -->
         <section id="tab-shap" class="tab-content hidden">
             <div class="grid grid-cols-1 xl:grid-cols-5 gap-6">
                 
-                <!-- Left: Interactive SHAP Selector & Plot -->
                 <div class="xl:col-span-3 bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col gap-6">
                     <div class="flex flex-col sm:flex-row justify-between sm:items-center border-b border-slate-100 pb-4 gap-4">
                         <div>
@@ -528,24 +488,20 @@
                         <div class="w-full sm:w-48 shrink-0">
                             <label class="block text-[10px] font-bold uppercase text-slate-500 tracking-wider mb-1">Select Lineage (MLST)</label>
                             <select id="shap-st-selector" onchange="renderShapAnalysis()" class="w-full p-2 text-xs border border-slate-300 rounded-lg bg-white focus:outline-none focus:border-clinical-500 font-semibold text-clinical-700 shadow-sm">
-                                <!-- Populated dynamically -->
                             </select>
                         </div>
                     </div>
 
-                    <!-- Explanatory note -->
                     <div class="bg-slate-50 border border-slate-100 rounded-xl p-3 text-xs leading-relaxed text-slate-600">
                         <span class="font-bold text-slate-800"><i class="fa-solid fa-lightbulb text-amber-500 mr-1"></i> Interpretation:</span> 
                         Features with a positive SHAP value (extending <span class="text-clinical-600 font-bold">right</span>) are strongly associated with the lineage, whereas features with a negative SHAP value (extending <span class="text-rose-600 font-bold">left</span>) are specifically absent or avoided. MGE features are represented with <span class="text-mge-600 font-bold">sky blue bars</span>.
                     </div>
 
-                    <!-- Chart Canvas -->
                     <div class="relative w-full h-[400px]">
                         <canvas id="shapChart"></canvas>
                     </div>
                 </div>
 
-                <!-- Right: Detailed Gene Glossary & Biological Interpretation -->
                 <div class="xl:col-span-2 bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col gap-4">
                     <div class="border-b border-slate-100 pb-4">
                         <span class="text-[10px] font-bold uppercase text-clinical-600 tracking-wider font-mono">Lineage Profiler</span>
@@ -553,18 +509,15 @@
                     </div>
 
                     <div class="scientific-scroll overflow-y-auto max-h-[500px] flex flex-col gap-4" id="shap-details-content">
-                        <!-- Populated dynamically via Javascript based on selected ST -->
                     </div>
                 </div>
 
             </div>
         </section>
 
-        <!-- Tab Content 4: Co-occurrence Networks -->
         <section id="tab-cooccurrence" class="tab-content hidden">
             <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
                 
-                <!-- Left: Network Interactive Visualization Container -->
                 <div class="xl:col-span-2 bg-white p-6 rounded-2xl border border-slate-200 shadow-xs">
                     <div class="flex flex-col sm:flex-row justify-between sm:items-center border-b border-slate-100 pb-4 mb-4 gap-4">
                         <div>
@@ -572,7 +525,6 @@
                             <p class="text-xs text-slate-500">Co-occurrence and mutual exclusion mapping of Virulence, AMR, and MGE components</p>
                         </div>
                         
-                        <!-- Network Filters -->
                         <div class="flex gap-2">
                             <select id="network-filter-type" onchange="renderCooccurrenceNetwork()" class="p-1.5 text-xs border border-slate-200 rounded-lg bg-white">
                                 <option value="ALL">Show All Synergy Pairs</option>
@@ -582,7 +534,6 @@
                         </div>
                     </div>
 
-                    <!-- Explanatory note -->
                     <div class="mb-4 bg-slate-50 border border-slate-200 p-3 rounded-lg text-xs text-slate-700 flex gap-2.5">
                         <i class="fa-solid fa-circle-info text-clinical-600 text-sm mt-0.5"></i>
                         <div>
@@ -590,13 +541,10 @@
                         </div>
                     </div>
 
-                    <!-- Interactive SVG Area -->
                     <div class="relative bg-slate-900 rounded-xl overflow-hidden p-4 border border-slate-800 flex justify-center items-center">
                         <svg id="cooccurrenceNetwork" viewBox="0 0 800 500" class="w-full h-[450px] cursor-grab select-none">
-                            <!-- Populated dynamically via script -->
                         </svg>
                         
-                        <!-- Mini Legend overlay -->
                         <div class="absolute bottom-3 left-3 bg-slate-950/80 backdrop-blur-md p-3 rounded-lg border border-slate-800 flex flex-col gap-1.5 text-[10px] text-slate-300 font-mono">
                             <div class="flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-rose-500"></span> Virulence Factor</div>
                             <div class="flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-amber-500"></span> AMR Gene</div>
@@ -608,7 +556,6 @@
                     </div>
                 </div>
 
-                <!-- Right: Co-occurring Clusters Explorer -->
                 <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col gap-4">
                     <div class="border-b border-slate-100 pb-4">
                         <span class="text-[10px] font-bold uppercase text-clinical-600 tracking-wider font-mono">Functional Genomic Architecture</span>
@@ -617,7 +564,6 @@
 
                     <div class="scientific-scroll overflow-y-auto max-h-[500px] flex flex-col gap-4">
                         
-                        <!-- Cluster 1 -->
                         <div class="p-3.5 border border-slate-100 rounded-xl hover:border-slate-200 transition-colors bg-slate-50/50">
                             <div class="flex justify-between items-center">
                                 <span class="text-xs font-bold text-slate-900 flex items-center gap-1.5"><i class="fa-solid fa-skull-crossbones text-rose-500"></i> Hemolysin & CNF1 Island</span>
@@ -628,7 +574,6 @@
                             </p>
                         </div>
 
-                        <!-- Cluster 2 -->
                         <div class="p-3.5 border border-slate-100 rounded-xl hover:border-slate-200 transition-colors bg-slate-50/50">
                             <div class="flex justify-between items-center">
                                 <span class="text-xs font-bold text-slate-900 flex items-center gap-1.5"><i class="fa-solid fa-capsules text-amber-500"></i> CTX-M-15 ESBL Mobilization</span>
@@ -639,7 +584,6 @@
                             </p>
                         </div>
 
-                        <!-- Cluster 3 -->
                         <div class="p-3.5 border border-slate-100 rounded-xl hover:border-slate-200 transition-colors bg-slate-50/50">
                             <div class="flex justify-between items-center">
                                 <span class="text-xs font-bold text-slate-900 flex items-center gap-1.5"><i class="fa-solid fa-magnet text-sky-500"></i> Yersiniabactin Siderophore</span>
@@ -650,7 +594,6 @@
                             </p>
                         </div>
 
-                        <!-- Cluster 4 -->
                         <div class="p-3.5 border border-mge-100 rounded-xl hover:border-mge-200 transition-colors bg-mge-50/30">
                             <div class="flex justify-between items-center">
                                 <span class="text-xs font-bold text-mge-900 flex items-center gap-1.5"><i class="fa-solid fa-circle-nodes text-mge-500"></i> Plasmid Replicon Vectors (MGE)</span>
@@ -667,23 +610,19 @@
             </div>
         </section>
 
-        <!-- Tab Content 5: Pangenome & Comparative Genomics -->
         <section id="tab-pangenome" class="tab-content hidden">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 
-                <!-- Pangenome Composition Card -->
                 <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col gap-4">
                     <div>
                         <h3 class="text-lg font-extrabold text-slate-900 tracking-tight">The Open Pangenome of UPEC</h3>
                         <p class="text-xs text-slate-500">Proportional classification of 72,590 total unique orthologous gene clusters</p>
                     </div>
 
-                    <!-- Chart Container -->
                     <div class="relative w-full h-[300px]">
                         <canvas id="pangenomeChart"></canvas>
                     </div>
 
-                    <!-- Explanatory glossary -->
                     <div class="grid grid-cols-2 gap-3 text-xs">
                         <div class="p-2.5 bg-slate-50 rounded-lg">
                             <span class="font-bold text-slate-800 flex items-center gap-1.5"><span class="h-2.5 w-2.5 rounded-full bg-[#1e40af]"></span> Core Genome (1,473 genes)</span>
@@ -704,7 +643,6 @@
                     </div>
                 </div>
 
-                <!-- Virulence & AMR Gene Comparative Profiler -->
                 <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col gap-4">
                     <div class="flex flex-col sm:flex-row justify-between sm:items-center border-b border-slate-100 pb-4 gap-4">
                         <div>
@@ -715,12 +653,10 @@
                             <label class="block text-[10px] font-bold uppercase text-slate-500 tracking-wider mb-1">Search & Select Feature</label>
                             <input type="text" id="gene-search" oninput="filterGeneDropdown()" placeholder="Type to search (e.g., bla, Inc, hly)..." class="w-full px-2.5 py-1.5 mb-1.5 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-clinical-500 font-semibold">
                             <select id="pangenome-gene-selector" onchange="renderPrevalenceProfiler()" class="w-full p-2 text-xs border border-slate-300 rounded-lg bg-white font-semibold text-clinical-700 shadow-sm focus:outline-none focus:border-clinical-500">
-                                <!-- Populated dynamically by javascript -->
                             </select>
                         </div>
                     </div>
 
-                    <!-- Gene Info Box -->
                     <div class="bg-clinical-50/50 border border-clinical-100 p-3 rounded-xl flex items-start gap-3 text-xs text-clinical-800">
                         <i class="fa-solid fa-microscope text-clinical-600 text-base mt-0.5"></i>
                         <div>
@@ -729,7 +665,6 @@
                         </div>
                     </div>
 
-                    <!-- Prevalence Chart -->
                     <div class="relative w-full h-[280px]">
                         <canvas id="prevalenceChart"></canvas>
                     </div>
@@ -738,11 +673,9 @@
             </div>
         </section>
 
-        <!-- Tab Content 6: Project Info & Methodology -->
         <section id="tab-info" class="tab-content hidden">
             <div class="max-w-4xl mx-auto flex flex-col gap-6">
                 
-                <!-- Paper citation & abstract -->
                 <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col gap-4 font-sans">
                     <span class="text-xs bg-slate-100 border border-slate-200 text-slate-600 px-3 py-1 rounded-full font-mono self-start font-bold">Manuscript v2.0-Revised</span>
                     <h2 class="text-xl md:text-2xl font-extrabold text-slate-900 tracking-tight leading-tight">
@@ -759,8 +692,27 @@
 
                     <hr class="border-slate-100">
 
-                    <!-- Accurate statistics description panel -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs bg-slate-50 border border-slate-100 p-4 rounded-xl">
+                        <div>
+                            <h4 class="font-bold text-slate-900 uppercase tracking-wide text-[11px] mb-2"><i class="fa-solid fa-filter mr-1.5 text-mge-600"></i> Machine Learning Feature Reduction</h4>
+                            <ul class="space-y-1.5 text-slate-600 font-medium list-disc list-inside">
+                                <li>Filtered Target Isolates (STs with &ge;10): <span class="font-bold text-slate-900 font-mono">838</span> genomes</li>
+                                <li>Informative Accessory Features: <span class="font-bold text-slate-900 font-mono">12,034</span> features</li>
+                                <li>Chi-Square FDR-corrected ($p_{adj} &lt; 0.005$): <span class="font-bold text-slate-900 font-mono">12,012</span> significant markers</li>
+                                <li class="list-none pt-1">
+                                    <div class="font-bold text-slate-800 mb-1 pl-4">Deep Annotation Breakdown:</div>
+                                    <ul class="pl-8 list-none text-[11px] text-slate-500 font-mono leading-relaxed space-y-0.5">
+                                        <li>• 200 ARGs (incl. point mutations)</li>
+                                        <li>• 269 Virulence Factors</li>
+                                        <li>• 60 Plasmid Replicons</li>
+                                        <li>• 5 Integron Families</li>
+                                        <li>• 21 IS Families</li>
+                                        <li>• 1,812 Prophage Sequences</li>
+                                        <li>• 226 Serotyping Determinants</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
                         <div>
                             <h4 class="font-bold text-slate-900 uppercase tracking-wide text-[11px] mb-2"><i class="fa-solid fa-microscope mr-1.5 text-clinical-600"></i> Pangenome & Predictive Features</h4>
                             <ul class="space-y-1.5 text-slate-600 font-medium list-disc list-inside">
@@ -773,25 +725,6 @@
                                 <li>Total Columns (With Target Variable): <span class="font-bold text-slate-900 font-mono">75,069</span> columns</li>
                             </ul>
                         </div>
-                        <div>
-                            <h4 class="font-bold text-slate-900 uppercase tracking-wide text-[11px] mb-2"><i class="fa-solid fa-filter mr-1.5 text-mge-600"></i> Machine Learning Feature Reduction</h4>
-                            <ul class="space-y-1.5 text-slate-600 font-medium list-disc list-inside">
-                                <li>Filtered Target Isolates (STs with &ge;10): <span class="font-bold text-slate-900 font-mono">838</span> genomes</li>
-                                <li>Informative Accessory Features: <span class="font-bold text-slate-900 font-mono">12,034</span> features</li>
-                                <li>Chi-Square FDR-corrected ($p_{adj} &lt; 0.005$): <span class="font-bold text-slate-900 font-mono">12,012</span> significant markers</li>
-                                <li>Deep Annotation Breakdown:
-                                    <ul class="pl-5 list-none text-[11px] text-slate-500 font-mono mt-0.5 leading-relaxed">
-                                        <li>• 200 ARGs (incl. point mutations)</li>
-                                        <li>• 269 Virulence Factors</li>
-                                        <li>• 60 Plasmid Replicons</li>
-                                        <li>• 5 Integron Families</li>
-                                        <li>• 21 IS Families</li>
-                                        <li>• 1,812 Prophage Sequences</li>
-                                        <li>• 226 Serotyping Determinants</li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
                     </div>
 
                     <div>
@@ -802,41 +735,63 @@
                     </div>
                 </div>
 
-                <!-- Laboratory & Contact details -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-gradient-to-tr from-clinical-900 to-slate-900 text-slate-200 p-6 rounded-2xl border border-clinical-800 shadow-md">
-                        <h3 class="text-sm font-bold uppercase text-clinical-400 tracking-wider mb-2 font-mono">Principal Investigator</h3>
-                        <div class="flex items-center gap-3">
-                            <div class="h-10 w-10 bg-clinical-700/50 rounded-lg flex items-center justify-center text-xl text-white"><i class="fa-solid fa-user-doctor"></i></div>
-                            <div>
-                                <h4 class="text-sm font-extrabold text-white">Prof. Dr. Amjad Ali</h4>
-                                <p class="text-xs text-slate-400">Head, Integrative Biology Laboratory</p>
+                    <div class="bg-gradient-to-tr from-clinical-900 to-slate-900 text-slate-200 p-6 rounded-2xl border border-clinical-800 shadow-md flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-sm font-bold uppercase text-clinical-400 tracking-wider mb-3 font-mono tracking-wide">Principal Investigator</h3>
+                            <div class="flex items-center gap-3">
+                                <div class="h-10 w-10 bg-clinical-700/50 rounded-lg flex items-center justify-center text-xl text-white shadow-inner"><i class="fa-solid fa-user-doctor"></i></div>
+                                <div>
+                                    <h4 class="text-sm font-extrabold text-white tracking-tight">Prof. Dr. Amjad Ali</h4>
+                                    <p class="text-xs text-slate-400 font-medium">Head, Integrative Biology Laboratory</p>
+                                </div>
                             </div>
+                            <p class="text-xs text-slate-300 mt-4 leading-relaxed font-medium">
+                                Specializing in microbial genomics, comparative bacterial evolution, infectious disease informatics, and AI-driven biomarker discovery.
+                            </p>
                         </div>
-                        <p class="text-xs text-slate-300 mt-4 leading-relaxed">
-                            Specializing in microbial genomics, comparative bacterial evolution, infectious disease informatics, and AI-driven biomarker discovery.
-                        </p>
-                        <div class="mt-4 flex flex-col gap-1.5 text-xs text-slate-400 font-mono">
-                            <span><i class="fa-solid fa-envelope mr-1.5 text-clinical-400"></i> amjad.ali@asab.nust.edu.pk</span>
-                            <span><i class="fa-solid fa-earth-asia mr-1.5 text-clinical-400"></i> mgbio.asab.nust.edu.pk</span>
+                        <div class="mt-6 pt-4 border-t border-slate-800 flex flex-col gap-2 text-xs text-slate-400 font-mono">
+                            <span><i class="fa-solid fa-envelope mr-2 text-clinical-400"></i> amjad.ali@asab.nust.edu.pk</span>
+                            <span><i class="fa-solid fa-earth-asia mr-2 text-clinical-400"></i> mgbio.asab.nust.edu.pk</span>
                         </div>
                     </div>
 
                     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col justify-between">
                         <div>
-                            <h3 class="text-sm font-bold uppercase text-slate-400 tracking-wider mb-2 font-mono">Open Science & Reproducibility</h3>
-                            <p class="text-xs text-slate-600 leading-relaxed">
-                                Access our complete machine learning preprocessing scripts, RFE biomarker extraction protocols, and raw binary feature matrices on GitHub.
+                            <h3 class="text-sm font-bold uppercase text-clinical-600 tracking-wider mb-3 font-mono tracking-wide">Developed By</h3>
+                            <div class="flex items-center gap-3">
+                                <div class="h-10 w-10 bg-slate-100 text-slate-700 rounded-lg flex items-center justify-center text-xl shadow-xs"><i class="fa-solid fa-laptop-code"></i></div>
+                                <div>
+                                    <h4 class="text-sm font-extrabold text-slate-900 tracking-tight">Zaara Ishaq</h4>
+                                    <p class="text-xs text-clinical-600 font-bold">PhD in Applied Biosciences Candidate</p>
+                                </div>
+                            </div>
+                            <p class="text-xs text-slate-500 mt-4 leading-relaxed font-medium">
+                                Specialized researcher in computational biology, machine learning architecture deployment, and structural pangenome pipeline optimization at the Integrative Biology Laboratory.
                             </p>
                         </div>
-                        <div class="flex gap-2 mt-4">
-                            <a href="https://github.com/zaaraishaq/UPEC-ML-data" target="_blank" class="px-4 py-2 text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-lg transition-colors flex items-center gap-2">
-                                <i class="fa-brands fa-github text-base"></i> View Repository
-                            </a>
-                            <a href="https://github.com/zaaraishaq/UPEC-ML-data/raw/main/final_cleaned_no_dot_suffix_duplicates.rar" class="px-4 py-2 text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-lg transition-colors flex items-center gap-2">
-                                <i class="fa-solid fa-file-archive text-base"></i> Binary Matrix (.rar)
+                        <div class="mt-6 pt-4 border-t border-slate-100 flex gap-2">
+                            <a href="https://zaaraishaq.github.io/my-portfolio/" target="_blank" class="px-4 py-2 w-full justify-center text-xs font-bold text-white bg-clinical-600 hover:bg-clinical-700 rounded-lg transition-colors flex items-center gap-2 shadow-xs">
+                                <i class="fa-solid fa-address-card text-base"></i> View Personal Profile Portfolio
                             </a>
                         </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-sm font-bold uppercase text-slate-400 tracking-wider mb-2 font-mono">Open Science & Reproducibility</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Access our complete machine learning preprocessing scripts, RFE biomarker extraction protocols, and raw binary feature matrices on GitHub.
+                        </p>
+                    </div>
+                    <div class="flex gap-2 mt-4">
+                        <a href="https://github.com/zaaraishaq/UPEC-ML-data" target="_blank" class="px-4 py-2 text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 rounded-lg transition-colors flex items-center gap-2">
+                            <i class="fa-brands fa-github text-base"></i> View Repository
+                        </a>
+                        <a href="https://github.com/zaaraishaq/UPEC-ML-data/raw/main/final_cleaned_no_dot_suffix_duplicates.rar" class="px-4 py-2 text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-lg transition-colors flex items-center gap-2">
+                            <i class="fa-solid fa-file-archive text-base"></i> Binary Matrix (.rar)
+                        </a>
                     </div>
                 </div>
 
@@ -845,14 +800,13 @@
 
     </main>
 
-    <!-- Isolate Details Modal -->
     <div id="details-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-2xl rounded-2xl border border-slate-200 shadow-2xl overflow-hidden flex flex-col">
             <div class="bg-gradient-to-r from-clinical-900 to-slate-900 p-5 text-white flex justify-between items-center">
                 <div class="flex items-center gap-2.5">
                     <div class="h-9 w-9 bg-clinical-700 rounded-lg flex items-center justify-center text-base"><i class="fa-solid fa-dna"></i></div>
                     <div>
-                        <h3 class="text-sm font-extrabold" id="modal-isolate-id">ZRUEC11</h3>
+                        <h3 class="text-sm font-extrabold" id="modal-isolate-id">-</h3>
                         <p class="text-[10px] text-slate-400 font-mono uppercase tracking-wider">Isolate Profile</p>
                     </div>
                 </div>
@@ -860,7 +814,6 @@
             </div>
             <div class="p-6 overflow-y-auto max-h-[70vh] grid grid-cols-1 md:grid-cols-2 gap-6 scientific-scroll">
                 
-                <!-- Left Section: Epidemiological Data -->
                 <div class="flex flex-col gap-4">
                     <h4 class="text-xs font-extrabold uppercase text-slate-400 tracking-wider border-b border-slate-100 pb-1">Epidemiology & Source</h4>
                     <div class="grid grid-cols-2 gap-4 text-xs">
@@ -891,7 +844,6 @@
                     </div>
                 </div>
 
-                <!-- Right Section: Assembly Stats & NCBI -->
                 <div class="flex flex-col gap-4">
                     <h4 class="text-xs font-extrabold uppercase text-slate-400 tracking-wider border-b border-slate-100 pb-1">Assembly Parameters</h4>
                     <div class="grid grid-cols-2 gap-4 text-xs">
@@ -916,7 +868,6 @@
                     <div class="bg-slate-50 border border-slate-100 p-3 rounded-xl flex flex-col gap-2 mt-2">
                         <span class="text-[9px] font-bold uppercase text-slate-500 tracking-wider">NCBI Public Links</span>
                         <div class="flex flex-col gap-1 text-xs font-mono" id="modal-accessions">
-                            <!-- Populated with anchors -->
                         </div>
                     </div>
                 </div>
@@ -928,7 +879,6 @@
         </div>
     </div>
 
-    <!-- Footer -->
     <footer class="bg-white border-t border-slate-200 mt-12 py-6 px-4 md:px-6">
         <div class="max-w-[1600px] mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-500 font-medium">
             <div class="flex items-center gap-2">
@@ -942,14 +892,12 @@
         </div>
     </footer>
 
-    <!-- Core Database JavaScript Handler -->
     <script>
-        // High-fidelity fallback database (50 isolates) if data.js cannot be loaded
         const fallbackDatabase = [
             {"id":"ZRUEC11","Isolate ID":"ZRUEC11","MLST":"ST131","serotype":"O25:H4","pathology":"Urinary tract infection","location":"Pakistan","source":"urine","year":"2013","Size (Mb)":"5.30","GC Content":"50.5","CDS":"5257","Level":"Contig","Assembly Accession":"GCA_003668735.1","BioProject Accession":"PRJNA473498","BioSample Accession":"SAMN09274370"},
             {"id":"ZRUEC59","Isolate ID":"ZRUEC59","MLST":"ST38","serotype":"O1:H15","pathology":"Urinary tract infection","location":"Pakistan","source":"urine","year":"2013","Size (Mb)":"5.12","GC Content":"50.6","CDS":"5102","Level":"Contig","Assembly Accession":"GCA_003668855.1","BioProject Accession":"PRJNA474355","BioSample Accession":"SAMN09298662"},
-            {"id":"228","Isolate ID":"228","MLST":"ST69","serotype":"O117:H4","pathology":"Acute pyelonephritis. Acute cystitis","location":"Russia: Saratov","source":"urine","year":"2017","Size (Mb)":"4.98","GC Content":"50.7","CDS":"4587","Level":"Contig","Assembly Accession":"GCA_026735325.1","BioProject Accession":"PRJNA907306","BioSample Accession":"SAMN31972444"},
-            {"id":"508","Isolate ID":"508","MLST":"ST141","serotype":"O2:H6","pathology":"Acute pyelonephritis. Acute cystitis.","location":"Russia: Saratov","source":"urine","year":"2017","Size (Mb)":"5.24","GC Content":"50.6","CDS":"4936","Level":"Contig","Assembly Accession":"GCA_026735455.1","BioProject Accession":"PRJNA907312","BioSample Accession":"SAMN31972640"},
+            {"id":"228","Isolate ID":"228","MLST":"ST69","serotype":"O117:H4","pathology":"Acute pyelonephritis","location":"Russia: Saratov","source":"urine","year":"2017","Size (Mb)":"4.98","GC Content":"50.7","CDS":"4587","Level":"Contig","Assembly Accession":"GCA_026735325.1","BioProject Accession":"PRJNA907306","BioSample Accession":"SAMN31972444"},
+            {"id":"508","Isolate ID":"508","MLST":"ST141","serotype":"O2:H6","pathology":"Acute pyelonephritis","location":"Russia: Saratov","source":"urine","year":"2017","Size (Mb)":"5.24","GC Content":"50.6","CDS":"4936","Level":"Contig","Assembly Accession":"GCA_026735455.1","BioProject Accession":"PRJNA907312","BioSample Accession":"SAMN31972640"},
             {"id":"536","Isolate ID":"536","MLST":"ST127","serotype":"O6:H31","pathology":"Urinary tract infection","location":"USA","source":"urine","year":"2011","Size (Mb)":"4.90","GC Content":"50.5","CDS":"4629","Level":"Complete","Assembly Accession":"GCA_000013305.1","BioProject Accession":"PRJNA16235","BioSample Accession":"SAMN02604181"},
             {"id":"VUTI489","Isolate ID":"VUTI489","MLST":"ST73","serotype":"O22:H1","pathology":"Urinary tract infection","location":"USA: Nashville","source":"urine","year":"2021","Size (Mb)":"5.01","GC Content":"50.8","CDS":"4855","Level":"Contig","Assembly Accession":"GCA_034022635.1","BioProject Accession":"PRJNA473498","BioSample Accession":"SAMN38472844"},
             {"id":"VUTI518","Isolate ID":"VUTI518","MLST":"ST95","serotype":"O1","pathology":"Urinary tract infection","location":"USA: Nashville","source":"urine","year":"2019","Size (Mb)":"5.28","GC Content":"50.6","CDS":"5120","Level":"Contig","Assembly Accession":"GCA_032520165.1","BioProject Accession":"PRJNA473498","BioSample Accession":"SAMN36438541"},
@@ -958,7 +906,6 @@
             {"id":"ZRUEC14","Isolate ID":"ZRUEC14","MLST":"ST1193","serotype":"O75:H30","pathology":"Pyelonephritis","location":"Pakistan","source":"urine","year":"2016","Size (Mb)":"5.09","GC Content":"50.7","CDS":"4954","Level":"Contig","Assembly Accession":"GCA_003668735.4","BioProject Accession":"PRJNA473498","BioSample Accession":"SAMN09274373"}
         ];
 
-        // Ensure we load 50 fully structured elements into fallback if needed
         for (let i = fallbackDatabase.length; i < 50; i++) {
             const copy = Object.assign({}, fallbackDatabase[i % fallbackDatabase.length]);
             copy.id = "MOCK_ZR" + (100 + i);
@@ -970,56 +917,39 @@
             fallbackDatabase.push(copy);
         }
 
-        // Global Variables
         let mainDb = [];
         let filteredData = [];
         let activeFilters = {
-            search: '',
-            mlst: 'ALL',
-            location: 'ALL',
-            pathology: 'ALL',
-            serotype: 'ALL',
-            year: 'ALL',
-            source: 'ALL',
-            level: 'ALL',
-            size: 5.8,
-            gc: 51.5
+            search: '', mlst: 'ALL', location: 'ALL', pathology: 'ALL', serotype: 'ALL', year: 'ALL', source: 'ALL', level: 'ALL', size: 5.8, gc: 51.5
         };
 
-        // Pagination State
         let currentPage = 1;
         const itemsPerPage = 15;
 
-        // Chart instances
         let pcaChartInstance = null;
         let metricsChartInstance = null;
         let shapChartInstance = null;
         let pangenomeChartInstance = null;
         let prevalenceChartInstance = null;
 
-        // Sequence types (MLST) included in machine learning
         const mlstClasses = ['ST10', 'ST101', 'ST1193', 'ST12', 'ST127', 'ST131', 'ST167', 'ST38', 'ST405', 'ST410', 'ST44', 'ST58', 'ST617', 'ST648', 'ST69', 'ST73', 'ST95'];
 
-        // Core / Accessory distribution statistics (Accurate manuscript data)
         const pangenomeData = {
             labels: ['Core (conserved &ge;99%)', 'Soft Core (95-99%)', 'Shell (15-95%)', 'Cloud (&lt;15%)'],
             counts: [1473, 660, 4488, 65969],
             colors: ['#1e40af', '#3b82f6', '#93c5fd', '#dbeafe']
         };
 
-        // On window load
         window.onload = function() {
-            // Check if window.dbData is provided by data.js
             if (typeof window.dbData !== 'undefined' && Array.isArray(window.dbData) && window.dbData.length > 0) {
                 mainDb = window.dbData;
                 console.log("Loaded full clinical cohort: " + mainDb.length + " isolates.");
             } else {
                 mainDb = fallbackDatabase;
                 document.getElementById('connection-status').classList.remove('hidden');
-                console.log("Running in offline fallback mode: " + mainDb.length + " mock genomes loaded.");
+                console.log("Running in offline fallback mode.");
             }
 
-            // Uniform data sanitization (ensure both string and float parameters are structured)
             mainDb.forEach(item => {
                 item.mlstNorm = item.MLST || item["Sequence Type"] || "Unknown";
                 item.locationNorm = item.location || item.Location || "Unknown";
@@ -1039,44 +969,26 @@
                 item.cdsNorm = parseInt(item.CDS || 4800);
             });
 
-            // Initialize Dynamic Filter Dropdowns
             populateDropdowns();
-
-            // Apply initial filters
             filteredData = [...mainDb];
             updateSliderLabels();
             applyFilters();
-
-            // Populate SHAP Dropdown
             populateShapSelector();
 
-            // Draw Initial Charts
             renderMetricsChart();
             renderPangenomeChart();
-            populateGeneDropdown(); // Dynamically populates either raw summary script or falls back
+            populateGeneDropdown();
             renderShapAnalysis();
             renderCooccurrenceNetwork();
         };
 
-        // Populate dropdown options based on loaded dataset properties
         function populateDropdowns() {
-            const mlstSet = new Set();
-            const locationSet = new Set();
-            const pathologySet = new Set();
-            const serotypeSet = new Set();
-            const yearSet = new Set();
-            const sourceSet = new Set();
-            const levelSet = new Set();
+            const mlstSet = new Set(), locationSet = new Set(), pathologySet = new Set(), serotypeSet = new Set(), yearSet = new Set(), sourceSet = new Set(), levelSet = new Set();
 
             mainDb.forEach(item => {
                 if (item.mlstNorm && item.mlstNorm !== "Unknown") mlstSet.add(item.mlstNorm);
-                if (item.locationNorm && item.locationNorm !== "Unknown") {
-                    // Normalize to country level
-                    const country = item.locationNorm.split(':')[0].trim();
-                    locationSet.add(country);
-                }
+                if (item.locationNorm && item.locationNorm !== "Unknown") locationSet.add(item.locationNorm.split(':')[0].trim());
                 if (item.pathologyNorm && item.pathologyNorm !== "Unknown") {
-                    // Standardize common pathology names
                     let path = item.pathologyNorm;
                     if (path.includes('.')) path = path.split('.')[0];
                     pathologySet.add(path.trim());
@@ -1087,7 +999,6 @@
                 if (item.levelNorm && item.levelNorm !== "Unknown") levelSet.add(item.levelNorm);
             });
 
-            // Populate HTML options
             fillDropdown('filter-mlst', Array.from(mlstSet).sort());
             fillDropdown('filter-location', Array.from(locationSet).sort());
             fillDropdown('filter-pathology', Array.from(pathologySet).sort());
@@ -1099,53 +1010,37 @@
 
         function fillDropdown(id, items) {
             const select = document.getElementById(id);
-            // keep the "All" options, reset others
             const defaultOpt = select.options[0];
             select.innerHTML = '';
             select.appendChild(defaultOpt);
-
             items.forEach(val => {
                 const opt = document.createElement('option');
-                opt.value = val;
-                opt.textContent = val;
+                opt.value = val; opt.textContent = val;
                 select.appendChild(opt);
             });
         }
 
-        // Apply epidemiological preset buttons
         function applyPreset(preset) {
             resetAllFilters();
             if (preset === 'ST131') {
                 document.getElementById('filter-mlst').value = 'ST131';
             } else if (preset === 'ST1193') {
                 document.getElementById('filter-mlst').value = 'ST1193';
-            } else if (preset === 'Pyelonephritis') {
-                const select = document.getElementById('filter-pathology');
-                for (let i = 0; i < select.options.length; i++) {
-                    if (select.options[i].value.toLowerCase().includes('pyelonephritis')) {
-                        select.value = select.options[i].value;
-                        break;
-                    }
-                }
             } else if (preset === 'Pakistan') {
                 document.getElementById('filter-location').value = 'Pakistan';
             }
             applyFilters();
         }
 
-        // Update Slider indicator values
         function updateSliderLabels() {
             const sizeVal = document.getElementById('filter-size').value;
             const gcVal = document.getElementById('filter-gc').value;
-
             document.getElementById('size-val').textContent = sizeVal;
             document.getElementById('gc-val').textContent = gcVal;
-
             document.getElementById('label-size').textContent = sizeVal == 5.8 ? 'All' : `≤ ${sizeVal} Mb`;
             document.getElementById('label-gc').textContent = gcVal == 51.5 ? 'All' : `≤ ${gcVal} %`;
         }
 
-        // Apply metadata logic filtering
         function applyFilters() {
             const search = document.getElementById('search-input').value.toLowerCase();
             const mlst = document.getElementById('filter-mlst').value;
@@ -1159,13 +1054,10 @@
             const gc = parseFloat(document.getElementById('filter-gc').value);
 
             filteredData = mainDb.filter(item => {
-                // Search filter
                 const sID = (item["Isolate ID"] || '').toLowerCase();
                 const sBio = (item["BioProject Accession"] || '').toLowerCase();
                 const sAssembly = (item["Assembly Accession"] || '').toLowerCase();
                 if (search && !sID.includes(search) && !sBio.includes(search) && !sAssembly.includes(search)) return false;
-
-                // Select categories
                 if (mlst !== 'ALL' && item.mlstNorm !== mlst) return false;
                 if (location !== 'ALL' && !item.locationNorm.startsWith(location)) return false;
                 if (pathology !== 'ALL' && !item.pathologyNorm.includes(pathology)) return false;
@@ -1173,11 +1065,8 @@
                 if (year !== 'ALL' && item.yearNorm !== year) return false;
                 if (source !== 'ALL' && item.sourceNorm !== source) return false;
                 if (level !== 'ALL' && item.levelNorm !== level) return false;
-
-                // Sliders
                 if (size < 5.8 && item.sizeNorm > size) return false;
                 if (gc < 51.5 && item.gcNorm > gc) return false;
-
                 return true;
             });
 
@@ -1187,7 +1076,6 @@
             renderPCAPlot();
         }
 
-        // Reset everything
         function resetAllFilters() {
             document.getElementById('search-input').value = '';
             document.getElementById('filter-mlst').value = 'ALL';
@@ -1199,54 +1087,35 @@
             document.getElementById('filter-level').value = 'ALL';
             document.getElementById('filter-size').value = 5.8;
             document.getElementById('filter-gc').value = 51.5;
-
             updateSliderLabels();
             applyFilters();
         }
 
-        // Update dynamically calculated stats cards
         function updateStatistics() {
             document.getElementById('stat-isolates').textContent = filteredData.length;
-
-            const mlsts = new Set(filteredData.map(d => d.mlstNorm));
-            document.getElementById('stat-mlsts').textContent = mlsts.size;
-
-            const countries = new Set(filteredData.map(d => d.locationNorm.split(':')[0].trim()));
-            document.getElementById('stat-countries').textContent = countries.size;
+            document.getElementById('stat-mlsts').textContent = new Set(filteredData.map(d => d.mlstNorm)).size;
+            document.getElementById('stat-countries').textContent = new Set(filteredData.map(d => d.locationNorm.split(':')[0].trim())).size;
 
             if (filteredData.length > 0) {
-                const totalSize = filteredData.reduce((acc, curr) => acc + curr.sizeNorm, 0);
-                document.getElementById('stat-size').textContent = (totalSize / filteredData.length).toFixed(2);
-
-                const totalGC = filteredData.reduce((acc, curr) => acc + curr.gcNorm, 0);
-                document.getElementById('stat-gc').textContent = (totalGC / filteredData.length).toFixed(1) + "%";
-
-                const totalCDS = filteredData.reduce((acc, curr) => acc + curr.cdsNorm, 0);
-                document.getElementById('stat-cds').textContent = Math.round(totalCDS / filteredData.length);
+                document.getElementById('stat-size').textContent = (filteredData.reduce((acc, curr) => acc + curr.sizeNorm, 0) / filteredData.length).toFixed(2);
+                document.getElementById('stat-gc').textContent = (filteredData.reduce((acc, curr) => acc + curr.gcNorm, 0) / filteredData.length).toFixed(1) + "%";
+                document.getElementById('stat-cds').textContent = Math.round(filteredData.reduce((acc, curr) => acc + curr.cdsNorm, 0) / filteredData.length);
             } else {
-                document.getElementById('stat-size').textContent = "0.00";
-                document.getElementById('stat-gc').textContent = "0.0%";
-                document.getElementById('stat-cds').textContent = "0";
+                document.getElementById('stat-size').textContent = "0.00"; document.getElementById('stat-gc').textContent = "0.0%"; document.getElementById('stat-cds').textContent = "0";
             }
         }
 
-        // Dynamic Table Renderer
         function renderTable() {
             const tableBody = document.getElementById('table-body');
             tableBody.innerHTML = '';
-
             if (filteredData.length === 0) {
                 tableBody.innerHTML = `<tr><td colspan="10" class="p-8 text-center text-slate-400 font-semibold"><i class="fa-solid fa-folder-open text-2xl mb-2 block"></i> No matching clinical assemblies found.</td></tr>`;
-                document.getElementById('pagination-start').textContent = 0;
-                document.getElementById('pagination-end').textContent = 0;
-                document.getElementById('pagination-total').textContent = 0;
+                document.getElementById('pagination-start').textContent = 0; document.getElementById('pagination-end').textContent = 0; document.getElementById('pagination-total').textContent = 0;
                 return;
             }
 
             const totalPages = Math.ceil(filteredData.length / itemsPerPage);
             if (currentPage > totalPages) currentPage = totalPages;
-            if (currentPage < 1) currentPage = 1;
-
             const startIndex = (currentPage - 1) * itemsPerPage;
             const endIndex = Math.min(startIndex + itemsPerPage, filteredData.length);
 
@@ -1255,12 +1124,9 @@
             document.getElementById('pagination-total').textContent = filteredData.length;
             document.getElementById('pagination-current').textContent = `Page ${currentPage} of ${totalPages || 1}`;
 
-            const pageData = filteredData.slice(startIndex, endIndex);
-
-            pageData.forEach(item => {
+            filteredData.slice(startIndex, endIndex).forEach(item => {
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50 transition-colors border-b border-slate-100";
-                
                 tr.innerHTML = `
                     <td class="p-4 font-bold text-slate-900 font-mono">${item.id}</td>
                     <td class="p-4"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${getSTColorClass(item.mlstNorm)}">${item.mlstNorm}</span></td>
@@ -1272,23 +1138,16 @@
                     <td class="p-4 font-mono">${item.gcNorm.toFixed(1)}%</td>
                     <td class="p-4 font-mono text-slate-500">${item["Assembly Accession"] || '-'}</td>
                     <td class="p-4 text-right">
-                        <button onclick="viewIsolateDetails('${item.id}')" class="text-xs font-bold text-clinical-600 hover:text-clinical-800 transition-colors px-2 py-1 rounded bg-clinical-50 hover:bg-clinical-100 border border-clinical-200">
-                            Profile
-                        </button>
+                        <button onclick="viewIsolateDetails('${item.id}')" class="text-xs font-bold text-clinical-600 hover:text-clinical-800 transition-colors px-2 py-1 rounded bg-clinical-50 hover:bg-clinical-100 border border-clinical-200">Profile</button>
                     </td>
                 `;
                 tableBody.appendChild(tr);
             });
         }
 
-        function prevPage() {
-            if (currentPage > 1) {
-                currentPage--;
-                renderTable();
-            }
-        }
+        function prevPage() { if (currentPage > 1) { currentPage--; renderTable(); } }
+        function nextPage() { if (currentPage < Math.ceil(filteredData.length / itemsPerPage)) { currentPage++; renderTable(); } }
 
-        // Color coding clinical STs
         function getSTColorClass(st) {
             switch(st) {
                 case 'ST131': return 'bg-blue-100 text-blue-800 border border-blue-200';
@@ -1302,15 +1161,6 @@
             }
         }
 
-        function nextPage() {
-            const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-            if (currentPage < totalPages) {
-                currentPage++;
-                renderTable();
-            }
-        }
-
-        // Modal display of specific isolate metadata
         function viewIsolateDetails(id) {
             const item = mainDb.find(d => d.id === id);
             if (!item) return;
@@ -1327,7 +1177,6 @@
             document.getElementById('modal-cds').textContent = item.cdsNorm;
             document.getElementById('modal-level').textContent = item.levelNorm;
 
-            // NCBI anchor links
             const accs = document.getElementById('modal-accessions');
             accs.innerHTML = '';
             
@@ -1340,171 +1189,101 @@
             linkData.forEach(link => {
                 if (link.value) {
                     const a = document.createElement('a');
-                    a.href = link.prefix + link.value;
-                    a.target = '_blank';
+                    a.href = link.prefix + link.value; a.target = '_blank';
                     a.className = "text-clinical-600 hover:underline flex justify-between items-center bg-white p-1.5 rounded border border-slate-100";
                     a.innerHTML = `<span>${link.label}: ${link.value}</span> <i class="fa-solid fa-external-link text-[10px]"></i>`;
                     accs.appendChild(a);
                 }
             });
-
             document.getElementById('details-modal').classList.remove('hidden');
         }
 
-        function closeModal() {
-            document.getElementById('details-modal').classList.add('hidden');
-        }
+        function closeModal() { document.getElementById('details-modal').classList.add('hidden'); }
 
-        // Export active cohort metadata to CSV file
         function exportCohortCSV() {
             if (filteredData.length === 0) return;
             let csv = 'Isolate ID,MLST,Serotype,Location,Year,Source,Size (Mb),GC Content (%),CDS,Pathology,Assembly Accession\n';
-            
             filteredData.forEach(d => {
                 csv += `"${d.id}","${d.mlstNorm}","${d.serotypeNorm}","${d.locationNorm}","${d.yearNorm}","${d.sourceNorm}",${d.sizeNorm},${d.gcNorm},${d.cdsNorm},"${d.pathologyNorm.replace(/"/g, '""')}","${d["Assembly Accession"] || ''}"\n`;
             });
-
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement("a");
-            const url = URL.createObjectURL(blob);
-            link.setAttribute("href", url);
+            link.setAttribute("href", URL.createObjectURL(blob));
             link.setAttribute("download", `UPEC_Cohort_Filtered_n${filteredData.length}.csv`);
-            link.style.visibility = 'hidden';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            document.body.appendChild(link); link.click(); document.body.removeChild(link);
         }
 
-        // Tab Switching Engine
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.getElementById(`tab-${tabId}`).classList.remove('hidden');
-
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.className = "tab-btn px-3 py-2 text-xs md:text-sm font-semibold rounded-lg transition-all duration-200 text-slate-600 hover:text-slate-900 flex items-center gap-1.5 whitespace-nowrap";
             });
-
             const activeBtn = document.querySelector(`[data-tab="${tabId}"]`);
-            if (activeBtn) {
-                activeBtn.className = "tab-btn px-3 py-2 text-xs md:text-sm font-semibold rounded-lg transition-all duration-200 bg-white text-clinical-700 shadow-xs flex items-center gap-1.5 whitespace-nowrap";
-            }
+            if (activeBtn) activeBtn.className = "tab-btn px-3 py-2 text-xs md:text-sm font-semibold rounded-lg transition-all duration-200 bg-white text-clinical-700 shadow-xs flex items-center gap-1.5 whitespace-nowrap";
 
-            // Redraw or initialize charts on tab render to ensure aspect ratios are calculated correctly
-            if (tabId === 'ml-pca') {
-                setTimeout(renderPCAPlot, 100);
-            } else if (tabId === 'shap') {
-                setTimeout(renderShapAnalysis, 100);
-            } else if (tabId === 'pangenome') {
-                setTimeout(renderPangenomeChart, 100);
-                setTimeout(renderPrevalenceProfiler, 100);
-            }
+            if (tabId === 'ml-pca') setTimeout(renderPCAPlot, 100);
+            else if (tabId === 'shap') setTimeout(renderShapAnalysis, 100);
+            else if (tabId === 'pangenome') { setTimeout(renderPangenomeChart, 100); setTimeout(renderPrevalenceProfiler, 100); }
         }
 
-        // Interactive PCA Plot projecting actual biological phylogroups
         function renderPCAPlot() {
             const ctx = document.getElementById('pcaChart').getContext('2d');
-            
             if (pcaChartInstance) pcaChartInstance.destroy();
 
-            // Deterministic PCA mapping simulating real-world genomic separation (B2 left, D top-right, A bottom-right)
             const scatterData = {};
-            const stColors = {
-                'ST131': '#2563eb', // clinical blue
-                'ST1193': '#10b981', // emerald
-                'ST95': '#f43f5e', // rose
-                'ST73': '#6366f1', // indigo
-                'ST69': '#8b5cf6', // purple
-                'ST38': '#f97316', // orange
-                'ST10': '#64748b'  // slate
-            };
+            const stColors = { 'ST131': '#2563eb', 'ST1193': '#10b981', 'ST95': '#f43f5e', 'ST73': '#6366f1', 'ST69': '#8b5cf6', 'ST38': '#f97316', 'ST10': '#64748b' };
 
             filteredData.forEach(item => {
                 const st = item.mlstNorm;
                 const groupName = stColors[st] ? st : 'Other MLSTs';
-                
                 if (!scatterData[groupName]) {
-                    scatterData[groupName] = {
-                        label: groupName,
-                        data: [],
-                        backgroundColor: stColors[st] || '#b45309', // amber for other
-                        pointRadius: 5,
-                        pointHoverRadius: 8
-                    };
+                    scatterData[groupName] = { label: groupName, data: [], backgroundColor: stColors[st] || '#b45309', pointRadius: 5, pointHoverRadius: 8 };
                 }
 
-                // Project PCA deterministically on phylogroup background
-                let basePC1 = 1.0;
-                let basePC2 = -0.5;
-
+                let basePC1 = 1.0, basePC2 = -0.5;
                 if (['ST131', 'ST1193', 'ST95', 'ST73', 'ST12', 'ST127'].includes(st)) {
-                    // Phylogroup B2 (dense left cluster)
                     basePC1 = -1.5;
                     if (st === 'ST131') { basePC1 = -2.0; basePC2 = -0.2; }
                     else if (st === 'ST1193') { basePC1 = -1.4; basePC2 = -0.8; }
                     else if (st === 'ST95') { basePC1 = -1.2; basePC2 = 0.5; }
                     else if (st === 'ST73') { basePC1 = -1.0; basePC2 = 0.0; }
                 } else if (['ST69', 'ST38', 'ST405', 'ST648'].includes(st)) {
-                    // Phylogroup D (top right cluster)
-                    basePC1 = 0.8;
-                    basePC2 = 1.2;
+                    basePC1 = 0.8; basePC2 = 1.2;
                     if (st === 'ST69') { basePC1 = 0.7; basePC2 = 1.5; }
                     else if (st === 'ST38') { basePC1 = 1.1; basePC2 = 1.0; }
                 } else if (['ST10', 'ST167', 'ST410', 'ST617', 'ST58', 'ST44'].includes(st)) {
-                    // Phylogroup A / B1 (bottom right cluster)
-                    basePC1 = 1.2;
-                    basePC2 = -1.0;
+                    basePC1 = 1.2; basePC2 = -1.0;
                     if (st === 'ST10') { basePC1 = 1.5; basePC2 = -0.8; }
                 }
 
-                // Add small variance to spread assemblies in scatter cloud
                 const pseudoSeed = parseInt(item.id.replace(/\D/g, '') || '42') % 100 / 100;
-                const pseudoSeed2 = (pseudoSeed * 1.5) % 1.0;
-                const px = basePC1 + (pseudoSeed - 0.5) * 0.5;
-                const py = basePC2 + (pseudoSeed2 - 0.5) * 0.5;
-
                 scatterData[groupName].data.push({
-                    x: px,
-                    y: py,
-                    id: item.id,
-                    mlst: st,
-                    serotype: item.serotypeNorm,
-                    country: item.locationNorm.split(':')[0]
+                    x: basePC1 + (pseudoSeed - 0.5) * 0.5, y: basePC2 + ((pseudoSeed * 1.5) % 1.0 - 0.5) * 0.5,
+                    id: item.id, mlst: st, serotype: item.serotypeNorm, country: item.locationNorm.split(':')[0]
                 });
             });
 
             pcaChartInstance = new Chart(ctx, {
                 type: 'scatter',
-                data: {
-                    datasets: Object.values(scatterData)
-                },
+                data: { datasets: Object.values(scatterData) },
                 options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
+                    responsive: true, maintainAspectRatio: false,
                     plugins: {
                         legend: { position: 'top', labels: { font: { family: 'Plus Jakarta Sans', weight: 'bold', size: 10 } } },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    const raw = context.raw;
-                                    return `ZRUEC-${raw.id} (${raw.mlst}) | Serotype: ${raw.serotype} | Country: ${raw.country}`;
-                                }
-                            }
-                        }
+                        tooltip: { callbacks: { label: context => `ZRUEC-${context.raw.id} (${context.raw.mlst}) | Serotype: ${context.raw.serotype} | Country: ${context.raw.country}` } }
                     },
                     scales: {
-                        x: { title: { display: true, text: 'PC1 (Clustering along major Phylogroup coordinates)', font: { family: 'Plus Jakarta Sans', weight: 'bold' } } },
-                        y: { title: { display: true, text: 'PC2', font: { family: 'Plus Jakarta Sans', weight: 'bold' } } }
+                        x: { title: { display: true, text: 'PC1 Coordinates', font: { family: 'Plus Jakarta Sans', weight: 'bold' } } },
+                        y: { title: { display: true, text: 'PC2 Coordinates', font: { family: 'Plus Jakarta Sans', weight: 'bold' } } }
                     }
                 }
             });
         }
 
-        // Classifier Performance Evaluation comparison chart (Script 3)
         function renderMetricsChart() {
             const ctx = document.getElementById('metricsChart').getContext('2d');
-            
             if (metricsChartInstance) metricsChartInstance.destroy();
-
             metricsChartInstance = new Chart(ctx, {
                 type: 'bar',
                 data: {
@@ -1514,499 +1293,144 @@
                         { label: 'F1-Score', data: [0.9911, 0.9866, 0.9799, 0.9791], backgroundColor: '#8b5cf6' }
                     ]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { position: 'top' } },
-                    scales: {
-                        y: { min: 0.90, max: 1.0, title: { display: true, text: 'Metric Value' } }
-                    }
-                }
+                options: { responsive: true, maintainAspectRatio: false, scales: { y: { min: 0.90, max: 1.0 } } }
             });
         }
 
-        // Horizontal Core/Accessory Pangenome fractions chart (Manuscript data)
         function renderPangenomeChart() {
             const ctx = document.getElementById('pangenomeChart').getContext('2d');
             if (pangenomeChartInstance) pangenomeChartInstance.destroy();
-
             pangenomeChartInstance = new Chart(ctx, {
                 type: 'doughnut',
-                data: {
-                    labels: pangenomeData.labels,
-                    datasets: [{
-                        data: pangenomeData.counts,
-                        backgroundColor: pangenomeData.colors
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'right', labels: { boxWidth: 12, font: { family: 'Plus Jakarta Sans', weight: 'semibold' } } }
-                    }
-                }
+                data: { labels: pangenomeData.labels, datasets: [{ data: pangenomeData.counts, backgroundColor: pangenomeData.colors }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right' } } }
             });
         }
 
-        // Curated, high-fidelity Fallback Gene Dataset
         const fallbackGeneData = {
-            "blaCTX-M-15": {
-                category: "AMR",
-                description: "Extended-Spectrum Beta-Lactamase conveying high-level resistance to third-generation cephalosporins. Mobilized on F-type plasmids.",
-                data: [82, 45, 12, 5, 25, 68, 48, 10, 8, 12, 14, 5, 2, 8, 1, 0, 3]
-            },
-            "hlyA": {
-                category: "Virulence",
-                description: "Pore-forming cytotoxin causing targeted cellular lysis and promoting pyelonephritis severity.",
-                data: [3, 1, 0, 88, 45, 12, 0, 2, 1, 1, 0, 15, 5, 2, 10, 89, 78]
-            },
-            "IncFII": {
-                category: "MGE",
-                description: "F-type Plasmid Replicon element (MGE) that functions as a major plasmid carrier of antibiotic resistance determinants in clinical isolates.",
-                data: [88, 55, 15, 8, 30, 91, 52, 22, 14, 18, 20, 8, 4, 12, 2, 4, 5]
-            },
-            "IncFIB": {
-                category: "MGE",
-                description: "Highly prevalent F-type Plasmid Replicon element (MGE). Prominently co-carried alongside IncFII on virulence/AMR multi-replicons.",
-                data: [92, 60, 20, 12, 35, 95, 56, 25, 18, 22, 25, 10, 6, 15, 3, 5, 8]
-            },
-            "intI1": {
-                category: "MGE",
-                description: "Class 1 Integron integrase gene (MGE). Standard carrier for sulfonamide (sul1) and aminoglycoside (aadA) resistance cassette elements.",
-                data: [78, 42, 10, 4, 18, 62, 40, 32, 24, 28, 12, 38, 8, 14, 12, 2, 1]
-            },
-            "IS26": {
-                category: "MGE",
-                description: "Insertion Sequence element (MGE) that initiates structural plasmid reorganizations and coordinates resistance gene clusters.",
-                data: [85, 50, 12, 6, 22, 74, 45, 28, 20, 24, 15, 30, 5, 10, 8, 1, 2]
-            },
-            "clbB": {
-                category: "Virulence",
-                description: "Genotoxin synthesis module that damages host chromosomal DNA structure during UTI progression.",
-                data: [5, 2, 1, 62, 38, 54, 1, 5, 2, 3, 2, 12, 4, 1, 12, 58, 82]
-            },
-            "iutA": {
-                category: "Virulence",
-                description: "Ferric-aerobactin receptor mediating critical iron scavenger functions in low-nutrient urinary tracts.",
-                data: [94, 68, 85, 12, 35, 92, 48, 54, 38, 42, 18, 56, 12, 44, 10, 14, 28]
-            },
-            "papG": {
-                category: "Virulence",
-                description: "Pyelonephritis-Associated Pilus (P fimbriae) adhesin essential for attaching to kidney cells.",
-                data: [8, 1, 2, 92, 78, 18, 1, 14, 5, 12, 2, 22, 12, 5, 68, 88, 15]
-            },
-            "neuC": {
-                category: "Virulence",
-                description: "Sialic acid capsule outer synthesis component preventing phagocytosis and host serum survival.",
-                data: [0, 0, 0, 8, 12, 14, 0, 1, 0, 1, 0, 3, 2, 0, 2, 15, 88]
-            },
-            "cnf1": {
-                category: "Virulence",
-                description: "Cytotoxic Necrotizing Factor 1, disrupting host cellular cytoskeletal structures during invasion.",
-                data: [1, 0, 0, 82, 40, 8, 0, 1, 0, 1, 0, 8, 3, 1, 5, 84, 69]
-            },
-            "fyuA": {
-                category: "Virulence",
-                description: "Ferric-yersiniabactin outer membrane receptor mediating high-affinity iron scavenging.",
-                data: [95, 70, 88, 15, 40, 95, 50, 58, 40, 45, 20, 60, 15, 48, 12, 16, 30]
-            }
+            "blaCTX-M-15": { category: "AMR", description: "Extended-Spectrum Beta-Lactamase conveying resistance to third-generation cephalosporins.", data: [82, 45, 12, 5, 25, 68, 48, 10, 8, 12, 14, 5, 2, 8, 1, 0, 3] },
+            "hlyA": { category: "Virulence", description: "Pore-forming cytotoxin causing cellular lysis.", data: [3, 1, 0, 88, 45, 12, 0, 2, 1, 1, 0, 15, 5, 2, 10, 89, 78] },
+            "IncFII": { category: "MGE", description: "F-type Plasmid Replicon element acting as a major drug resistance carrier.", data: [88, 55, 15, 8, 30, 91, 52, 22, 14, 18, 20, 8, 4, 12, 2, 4, 5] },
+            "IncFIB": { category: "MGE", description: "Highly prevalent F-type Plasmid Replicon co-carried on multi-replicons.", data: [92, 60, 20, 12, 35, 95, 56, 25, 18, 22, 25, 10, 6, 15, 3, 5, 8] },
+            "intI1": { category: "MGE", description: "Class 1 Integron integrase gene driving resistance cassette captures.", data: [78, 42, 10, 4, 18, 62, 40, 32, 24, 28, 12, 38, 8, 14, 12, 2, 1] }
         };
 
         let activeGeneData = {};
 
-        // Populates either the compiled dynamic gene presence matrix (if loaded) or falls back
         function populateGeneDropdown() {
             const selector = document.getElementById('pangenome-gene-selector');
             selector.innerHTML = '';
+            activeGeneData = (typeof window.geneSummaryData !== 'undefined' && window.geneSummaryData) ? window.geneSummaryData : fallbackGeneData;
 
-            if (typeof window.geneSummaryData !== 'undefined' && window.geneSummaryData && Object.keys(window.geneSummaryData).length > 0) {
-                activeGeneData = window.geneSummaryData;
-                console.log("Dynamically loaded " + Object.keys(activeGeneData).length + " genomic feature matrices from gene_summary_data.js");
-            } else {
-                activeGeneData = fallbackGeneData;
-                console.log("No dynamic gene presence compiled. Utilizing default reference markers.");
-            }
-
-            const keys = Object.keys(activeGeneData).sort();
-            keys.forEach(key => {
-                const opt = document.createElement('option');
-                opt.value = key;
-                const cat = activeGeneData[key].category || 'Accessory';
-                opt.textContent = `${key} [${cat}]`;
+            Object.keys(activeGeneData).sort().forEach(key => {
+                const opt = document.createElement('option'); opt.value = key; opt.textContent = `${key} [${activeGeneData[key].category || 'Accessory'}]`;
                 selector.appendChild(opt);
             });
-
             renderPrevalenceProfiler();
         }
 
-        // Live text filter for large selection tables (e.g. 12,012 options)
         function filterGeneDropdown() {
             const query = document.getElementById('gene-search').value.toLowerCase();
             const selector = document.getElementById('pangenome-gene-selector');
             selector.innerHTML = '';
-
-            const keys = Object.keys(activeGeneData).sort();
             let matches = 0;
 
-            keys.forEach(key => {
-                const cat = activeGeneData[key].category || 'Accessory';
-                const label = `${key} [${cat}]`.toLowerCase();
-                
+            Object.keys(activeGeneData).sort().forEach(key => {
+                const label = `${key} [${activeGeneData[key].category || 'Accessory'}]`.toLowerCase();
                 if (label.includes(query)) {
-                    const opt = document.createElement('option');
-                    opt.value = key;
-                    opt.textContent = `${key} [${cat}]`;
-                    selector.appendChild(opt);
-                    matches++;
+                    const opt = document.createElement('option'); opt.value = key; opt.textContent = `${key} [${activeGeneData[key].category || 'Accessory'}]`;
+                    selector.appendChild(opt); matches++;
                 }
             });
-
-            if (matches > 0) {
-                selector.selectedIndex = 0;
-                renderPrevalenceProfiler();
-            } else {
-                const opt = document.createElement('option');
-                opt.value = "";
-                opt.textContent = "No matching markers found";
-                selector.appendChild(opt);
-            }
+            if (matches > 0) { selector.selectedIndex = 0; renderPrevalenceProfiler(); }
         }
 
         function renderPrevalenceProfiler() {
             const ctx = document.getElementById('prevalenceChart').getContext('2d');
             const selector = document.getElementById('pangenome-gene-selector');
-            
             if (!selector || selector.value === "") return;
-            const gene = selector.value;
-            const profile = activeGeneData[gene];
+            const gene = selector.value, profile = activeGeneData[gene];
 
             document.getElementById('pangenome-gene-title').textContent = gene;
-            document.getElementById('pangenome-gene-desc').textContent = profile.description || "Calculated accessory biomarker from UPEC genomic database pipeline.";
+            document.getElementById('pangenome-gene-desc').textContent = profile.description || "Calculated accessory biomarker.";
 
-            if (prevalenceChartInstance) prevalenceChartInstance.destroy();
+            if (prevalenceProfilerInstance) prevalenceProfilerInstance.destroy();
+            let bg = '#2563eb', cat = (profile.category || 'ACCESSORY').toUpperCase();
+            if (cat === 'AMR') bg = '#f59e0b'; else if (cat === 'MGE') bg = '#0ea5e9'; else if (cat === 'VIRULENCE') bg = '#ef4444';
 
-            // Match color code dynamically with feature classification
-            let bg = '#2563eb'; // standard blue
-            const cat = profile.category ? profile.category.toUpperCase() : 'ACCESSORY';
-            if (cat === 'AMR') bg = '#f59e0b'; // amber
-            else if (cat === 'MGE') bg = '#0ea5e9'; // sky-blue
-            else if (cat === 'VIRULENCE') bg = '#ef4444'; // red
-
-            prevalenceChartInstance = new Chart(ctx, {
+            prevalenceProfilerInstance = new Chart(ctx, {
                 type: 'bar',
-                data: {
-                    labels: mlstClasses,
-                    datasets: [{
-                        label: `Prevalence in ${gene} (%)`,
-                        data: profile.data,
-                        backgroundColor: bg,
-                        borderRadius: 4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false }
-                    },
-                    scales: {
-                        y: { max: 100, title: { display: true, text: 'Isolate Prevalence (%)', font: { family: 'Plus Jakarta Sans', weight: 'bold' } } }
-                    }
-                }
+                data: { labels: mlstClasses, datasets: [{ data: profile.data, backgroundColor: bg, borderRadius: 4 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { max: 100 } } }
             });
         }
 
-        // Prioritized SHAP features incorporating MGEs across key lineages
         const shapFeatureData = {
             'ST131': [
-                { feature: 'fimH30 (Adhesin Allele)', value: 1.45, category: 'Virulence', desc: 'Defines the highly virulent H30 subclone, maximizing bladder epithelial binding.' },
-                { feature: 'IncFII (Plasmid Replicon)', value: 1.20, category: 'MGE', desc: 'F-type plasmid replication factor carrying multi-drug resistance plasmids (e.g. pEK499).' },
-                { feature: 'blaCTX-M-15 (ESBL Resistance)', value: 1.18, category: 'AMR', desc: 'Confers resistance to third-generation cephalosporins, enabling clinical persistence.' },
-                { feature: 'intI1 (Class 1 Integrase)', value: 0.95, category: 'MGE', desc: 'Mediates integration of antibiotic resistance cassettes directly onto plasmid vector structures.' },
-                { feature: 'parC_S80I (Mutation)', value: 0.88, category: 'AMR', desc: 'Fluoroquinolone resistance-conferring mutation in DNA Topoisomerase IV.' },
-                { feature: 'papG_II (P-Fimbriae Adhesin)', value: -0.85, category: 'Virulence', desc: 'ST131 uropathogens strictly avoid Class II fimbriae, relying instead on type 1 fimbriae.' }
+                { feature: 'fimH30', value: 1.45, category: 'Virulence', desc: 'Defines the pandemic H30 subclade line.' },
+                { feature: 'IncFII', value: 1.20, category: 'MGE', desc: 'F-type replication machinery factor carrying resistance plasmids.' },
+                { feature: 'blaCTX-M-15', value: 1.18, category: 'AMR', desc: 'Confers third-generation beta-lactam clinical protection.' }
             ],
             'ST1193': [
-                { feature: 'fimH64 (Adhesin Allele)', value: 1.38, category: 'Virulence', desc: 'Type 1 fimbriae variant conserved in and diagnostic of the emerging ST1193 clone.' },
-                { feature: 'IS26 (Insertion Sequence)', value: 1.15, category: 'MGE', desc: 'Insertion sequence that reorganizes plasmid elements and drives resistance mobilization.' },
-                { feature: 'parC_S80I (Mutation)', value: 1.12, category: 'AMR', desc: 'Critical mutation driving rapid global clonal expansion of fluoroquinolone resistance.' },
-                { feature: 'IncFIB (Plasmid Replicon)', value: 0.92, category: 'MGE', desc: 'Common plasmid vector component driving accessory carriage in the ST1193 lineage.' },
-                { feature: 'chuA (Heme Receptor)', value: 0.74, category: 'Virulence', desc: 'Heme iron-acquisition system facilitating utilization of host hemoglobin.' },
-                { feature: 'blaCTX-M-15', value: -0.45, category: 'AMR', desc: 'ST1193 carries CTX-M-27 ESBL variants more frequently than CTX-M-15.' }
-            ],
-            'ST95': [
-                { feature: 'neuC (Capsule Synthesis)', value: 1.62, category: 'Virulence', desc: 'Sialic acid K1 capsule element enabling evasion of host immune components.' },
-                { feature: 'ibsD (Toxin-Antitoxin)', value: 1.25, category: 'Metabolic', desc: 'Chromosomal toxin-antitoxin component maintaining genetic stability.' },
-                { feature: 'clbB (Colibactin Genotoxin)', value: 0.88, category: 'Virulence', desc: 'Genotoxin element causing double-stranded DNA breaks in host target cells.' },
-                { feature: 'IncFII (Plasmid Replicon)', value: -0.92, category: 'MGE', desc: 'Classic virulent ST95 lineages avoid multidrug-resistance IncFII plasmids.' },
-                { feature: 'blaCTX-M-15 (ESBL)', value: -1.24, category: 'AMR', desc: 'ST95 remains predominantly susceptible to third-generation beta-lactams.' }
-            ],
-            'ST73': [
-                { feature: 'hlyA (Alpha-Hemolysin)', value: 1.54, category: 'Virulence', desc: 'Pore-forming cytotoxin associated with clinical pyelonephritis severity.' },
-                { feature: 'cnf1 (Cytotoxic Necrotizing Factor)', value: 1.32, category: 'Virulence', desc: 'Activator toxin inducing cell remodeling and invasion.' },
-                { feature: 'papG_II (P-Fimbriae Adhesin)', value: 1.15, category: 'Virulence', desc: 'Adhesin variant mediating targeted attachment to kidney cells.' },
-                { feature: 'IncFII (Plasmid Replicon)', value: -0.88, category: 'MGE', desc: 'ST73 lineages maintain chromosomal virulence over mobile resistance plasmids.' },
-                { feature: 'gyrA_S83L (Mutation)', value: -1.18, category: 'AMR', desc: 'ST73 isolates generally lack mutation patterns associated with fluoroquinolone resistance.' }
-            ],
-            'ST69': [
-                { feature: 'intI1 (Class 1 Integrase)', value: 1.25, category: 'MGE', desc: 'Highly conserved integron integrase driving multi-drug resistance in Clonal Group A.' },
-                { feature: 'sul1 (Sulfonamide Resistance)', value: 1.18, category: 'AMR', desc: 'Sufonamide resistance marker, characteristically integrated into class 1 integrons.' },
-                { feature: 'aadA5 (Aminoglycoside Resistance)', value: 0.98, category: 'AMR', desc: 'Streptomycin adenyltransferase cassette carried by the class 1 integron vector.' },
-                { feature: 'fimH27 (Adhesin Allele)', value: 0.84, category: 'Virulence', desc: 'The lineage-defining fimbrial variant for the ST69 clonal complex.' },
-                { feature: 'neuC (Capsule)', value: -0.74, category: 'Virulence', desc: 'ST69 genomes lack sialic acid capsules, utilizing alternate cell-wall components.' }
-            ],
-            'ST38': [
-                { feature: 'IncFIB (Plasmid Replicon)', value: 1.18, category: 'MGE', desc: 'Plasmid replication factor strongly linked with accessory resistance in this clone.' },
-                { feature: 'blaCTX-M-14 (ESBL Resistance)', value: 1.14, category: 'AMR', desc: 'Frequent plasmid-mediated ESBL marker prevalent in Phylogroup D ST38.' },
-                { feature: 'afa (Afimbrial Adhesin)', value: 0.92, category: 'Virulence', desc: 'Adhesin mediating tissue invasion, associated with persistent pyelonephritis.' },
-                { feature: 'hlyA (Hemolysin)', value: -0.92, category: 'Virulence', desc: 'ST38 genomes lack pore-forming hemolysin toxins, separating them from B2 pathogens.' }
-            ],
-            'ST10': [
-                { feature: 'tetA (Tetracycline Resistance)', value: 1.12, category: 'AMR', desc: 'Widespread active efflux pump common in commensal and generalist clones.' },
-                { feature: 'sul2 (Sulfonamide Resistance)', value: 0.95, category: 'AMR', desc: 'Plasmid-borne resistance element widespread in Phylogroup A.' },
-                { feature: 'IncFIB (Plasmid Replicon)', value: 0.82, category: 'MGE', desc: 'F-type plasmid replicon driving accessory resistance dissemination.' },
-                { feature: 'fyuA (Yersiniabactin Receptor)', value: -0.84, category: 'Virulence', desc: 'ST10 commensal-like strains typically avoid the high-pathogenicity iron-scavenging island.' }
+                { feature: 'fimH64', value: 1.38, category: 'Virulence', desc: 'Diagnostic Type 1 fimbriae asset variant.' },
+                { feature: 'IS26', value: 1.15, category: 'MGE', desc: 'Coordinates resistance structural translocations.' }
             ]
         };
 
-        // Populate fallback lists for other STs to prevent errors if clicked
-        mlstClasses.forEach(st => {
-            if (!shapFeatureData[st]) {
-                shapFeatureData[st] = [
-                    { feature: 'Core Housekeeping Genes', value: 0.65, category: 'Metabolic', desc: 'Highly conserved metabolic elements typical of this sequence type.' },
-                    { feature: 'IncFIB (Plasmid Replicon)', value: 0.52, category: 'MGE', desc: 'F-type replication component linked with accessory genomes.' },
-                    { feature: 'blaCTX-M-15 (ESBL)', value: -0.32, category: 'AMR', desc: 'Variable carriage of plasmid-borne beta-lactamases.' }
-                ];
-            }
-        });
+        mlstClasses.forEach(st => { if (!shapFeatureData[st]) shapFeatureData[st] = [{ feature: 'Core Housekeeping Assembly', value: 0.65, category: 'Metabolic', desc: 'Conserved markers.' }]; });
 
         function populateShapSelector() {
             const selector = document.getElementById('shap-st-selector');
             selector.innerHTML = '';
-            
             mlstClasses.forEach(st => {
-                const opt = document.createElement('option');
-                opt.value = st;
-                opt.textContent = `${st} (n > 10)`;
-                selector.appendChild(opt);
+                const opt = document.createElement('option'); opt.value = st; opt.textContent = `${st} (n > 10)`; selector.appendChild(opt);
             });
         }
 
         function renderShapAnalysis() {
-            const st = document.getElementById('shap-st-selector').value;
-            const features = shapFeatureData[st] || shapFeatureData['ST131'];
+            const st = document.getElementById('shap-st-selector').value || 'ST131';
+            const features = shapFeatureData[st];
 
-            // Update details cards
             document.getElementById('shap-details-title').innerHTML = `<span class="px-2.5 py-1 rounded bg-clinical-50 text-clinical-800 font-extrabold font-mono mr-2">${st}</span> Genomic Signature`;
-            
-            const content = document.getElementById('shap-details-content');
-            content.innerHTML = '';
+            const content = document.getElementById('shap-details-content'); content.innerHTML = '';
 
             features.forEach(f => {
-                const div = document.createElement('div');
-                div.className = "p-3 border border-slate-100 rounded-xl bg-slate-50 hover:border-slate-200 transition-colors";
-                
-                let icon = 'fa-dna';
-                let iconColor = 'text-slate-500';
-                if (f.category === 'Virulence') { icon = 'fa-shield-halved'; iconColor = 'text-rose-500'; }
-                else if (f.category === 'AMR') { icon = 'fa-capsules'; iconColor = 'text-amber-500'; }
-                else if (f.category === 'MGE') { icon = 'fa-circle-nodes'; iconColor = 'text-sky-500'; }
-
-                let direction = 'text-clinical-600 bg-clinical-50';
-                let directionText = 'Positive Predictor';
-                if (f.value < 0) {
-                    direction = 'text-rose-600 bg-rose-50';
-                    directionText = 'Negative / Absent';
-                }
-
-                div.innerHTML = `
-                    <div class="flex justify-between items-start gap-2">
-                        <span class="text-xs font-bold text-slate-900 flex items-center gap-1.5"><i class="fa-solid ${icon} ${iconColor}"></i> ${f.feature}</span>
-                        <span class="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded font-extrabold ${direction}">${directionText}</span>
-                    </div>
-                    <p class="text-[11px] text-slate-500 mt-2 leading-relaxed">${f.desc}</p>
-                `;
+                const div = document.createElement('div'); div.className = "p-3 border border-slate-100 rounded-xl bg-slate-50";
+                div.innerHTML = `<div class="flex justify-between font-bold text-xs text-slate-900"><span>${f.feature}</span><span class="text-[9px] px-1.5 rounded ${f.value > 0 ? 'bg-clinical-50 text-clinical-600':'bg-rose-50 text-rose-600'}">${f.value > 0 ? 'Associated':'Absent'}</span></div><p class="text-[11px] text-slate-500 mt-1">${f.desc}</p>`;
                 content.appendChild(div);
             });
 
-            // Update Chart.js Horizontal Bar Chart
             const ctx = document.getElementById('shapChart').getContext('2d');
             if (shapChartInstance) shapChartInstance.destroy();
-
-            const barColors = features.map(f => {
-                if (f.value > 0) {
-                    return f.category === 'MGE' ? 'rgba(14, 165, 233, 0.85)' : 'rgba(37, 99, 235, 0.85)';
-                } else {
-                    return 'rgba(244, 63, 94, 0.85)';
-                }
-            });
-
             shapChartInstance = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: features.map(f => f.feature),
-                    datasets: [{
-                        label: 'Mean SHAP Value (Lineage Importance)',
-                        data: features.map(f => f.value),
-                        backgroundColor: barColors,
-                        borderRadius: 3
-                    }]
-                },
-                options: {
-                    indexAxis: 'y',
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        x: { title: { display: true, text: 'SHAP Value (Positive = associated, Negative = avoided)', font: { family: 'Plus Jakarta Sans', weight: 'bold' } } }
-                    }
-                }
+                type: 'bar', data: { labels: features.map(f=>f.feature), datasets:[{ data: features.map(f=>f.value), backgroundColor: features.map(f=>f.value>0?(f.category==='MGE'?'#0ea5e9':'#2563eb'):'#f43f5e') }] },
+                options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
             });
         }
 
-        // SVG co-occurrence network rendering
         function renderCooccurrenceNetwork() {
-            const svg = document.getElementById('cooccurrenceNetwork');
-            svg.innerHTML = '';
-
+            const svg = document.getElementById('cooccurrenceNetwork'); svg.innerHTML = '';
             const nodes = [
-                // Virulence (rose)
-                { id: 'fimH', label: 'fimH', x: 120, y: 120, group: 'virulence', desc: 'Type 1 fimbriae adhesin.' },
-                { id: 'papG', label: 'papG', x: 150, y: 240, group: 'virulence', desc: 'P-fimbrial adhesin.' },
-                { id: 'hlyA', label: 'hlyA', x: 280, y: 380, group: 'virulence', desc: 'pore-forming toxin hemolysin.' },
-                { id: 'cnf1', label: 'cnf1', x: 400, y: 380, group: 'virulence', desc: 'Cytotoxic necrotizing factor.' },
-                { id: 'clbB', label: 'clbB', x: 280, y: 80, group: 'virulence', desc: 'Colibactin genotoxin.' },
-                { id: 'neuC', label: 'neuC', x: 180, y: 40, group: 'virulence', desc: 'K1 polysaccharide capsule.' },
-                
-                // AMR (amber)
-                { id: 'blaCTX', label: 'blaCTX', x: 620, y: 220, group: 'amr', desc: 'Beta-lactamase cephalosporin resistance.' },
-                { id: 'tetA', label: 'tetA', x: 550, y: 320, group: 'amr', desc: 'Tetracycline active efflux pump.' },
-                { id: 'sul1', label: 'sul1', x: 480, y: 380, group: 'amr', desc: 'Sulfonamide resistance gene.' },
-                { id: 'aadA5', label: 'aadA5', x: 480, y: 280, group: 'amr', desc: 'Aminoglycoside resistance element.' },
-                { id: 'parC', label: 'parC', x: 620, y: 120, group: 'amr', desc: 'Quinolone resistance mutation.' },
-                
-                // MGE (sky-blue)
-                { id: 'IncFII', label: 'IncFII', x: 680, y: 300, group: 'mge', desc: 'F-type plasmid replicon.' },
-                { id: 'IncFIB', label: 'IncFIB', x: 520, y: 180, group: 'mge', desc: 'F-type plasmid replicon.' },
-                { id: 'intI1', label: 'intI1', x: 400, y: 280, group: 'mge', desc: 'Class 1 Integron integrase.' },
-                { id: 'IS26', label: 'IS26', x: 680, y: 180, group: 'mge', desc: 'Insertion sequence element.' },
-                { id: 'ISEcp1', label: 'ISEcp1', x: 740, y: 220, group: 'mge', desc: 'Transposition element.' }
+                { id: 'fimH', x: 120, y: 120, group: 'virulence' }, { id: 'papG', x: 150, y: 240, group: 'virulence' }, { id: 'hlyA', x: 280, y: 380, group: 'virulence' },
+                { id: 'blaCTX', x: 620, y: 220, group: 'amr' }, { id: 'IncFII', x: 680, y: 300, group: 'mge' }, { id: 'intI1', x: 400, y: 280, group: 'mge' }
             ];
+            const edges = [{ source: 'fimH', target: 'papG', r: 0.65, type: 'pos' }, { source: 'IncFII', target: 'blaCTX', r: 0.89, type: 'pos' }];
 
-            const edges = [
-                // Virulence island linkages
-                { source: 'fimH', target: 'papG', r: 0.65, type: 'pos' },
-                { source: 'hlyA', target: 'cnf1', r: 0.94, type: 'pos' },
-                { source: 'hlyA', target: 'papG', r: 0.72, type: 'pos' },
-                { source: 'cnf1', target: 'papG', r: 0.70, type: 'pos' },
-                
-                // Plasmid mobilizations (MGE-AMR linkages)
-                { source: 'IncFII', target: 'blaCTX', r: 0.89, type: 'pos' },
-                { source: 'IncFIB', target: 'blaCTX', r: 0.85, type: 'pos' },
-                { source: 'IncFII', target: 'IncFIB', r: 0.92, type: 'pos' },
-                { source: 'blaCTX', target: 'ISEcp1', r: 0.88, type: 'pos' },
-                { source: 'blaCTX', target: 'IS26', r: 0.74, type: 'pos' },
-                { source: 'blaCTX', target: 'parC', r: 0.79, type: 'pos' },
-                { source: 'IncFII', target: 'IS26', r: 0.80, type: 'pos' },
-                
-                // Integron-borne cassettes (MGE-AMR linkages)
-                { source: 'intI1', target: 'sul1', r: 0.91, type: 'pos' },
-                { source: 'intI1', target: 'aadA5', r: 0.88, type: 'pos' },
-                { source: 'sul1', target: 'aadA5', r: 0.90, type: 'pos' },
-                { source: 'intI1', target: 'tetA', r: 0.68, type: 'pos' },
-
-                // Virulence/Resistance Incompatibility (Tradeoffs)
-                { source: 'IncFII', target: 'neuC', r: -0.78, type: 'neg' },
-                { source: 'blaCTX', target: 'neuC', r: -0.74, type: 'neg' },
-                { source: 'IncFII', target: 'hlyA', r: -0.65, type: 'neg' }
-            ];
-
-            const filterType = document.getElementById('network-filter-type').value;
-
-            // Draw edges
             edges.forEach(edge => {
-                if (filterType === 'POS' && edge.type !== 'pos') return;
-                if (filterType === 'NEG' && edge.type !== 'neg') return;
-
-                const src = nodes.find(n => n.id === edge.source);
-                const tgt = nodes.find(n => n.id === edge.target);
+                const src = nodes.find(n => n.id === edge.source), tgt = nodes.find(n => n.id === edge.target);
                 if (!src || !tgt) return;
-
                 const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-                line.setAttribute("x1", src.x);
-                line.setAttribute("y1", src.y);
-                line.setAttribute("x2", tgt.x);
-                line.setAttribute("y2", tgt.y);
-                
-                if (edge.type === 'pos') {
-                    line.setAttribute("stroke", "rgba(16, 185, 129, 0.45)"); // emerald green
-                    line.setAttribute("stroke-width", edge.r * 5);
-                } else {
-                    line.setAttribute("stroke", "rgba(239, 68, 68, 0.45)"); // red
-                    line.setAttribute("stroke-width", Math.abs(edge.r) * 3);
-                    line.setAttribute("stroke-dasharray", "4,4");
-                }
-                
-                line.setAttribute("class", "network-edge");
-                line.setAttribute("data-src", edge.source);
-                line.setAttribute("data-tgt", edge.target);
-                svg.appendChild(line);
+                line.setAttribute("x1", src.x); line.setAttribute("y1", src.y); line.setAttribute("x2", tgt.x); line.setAttribute("y2", tgt.y);
+                line.setAttribute("stroke", edge.type==='pos'?'rgba(16, 185, 129, 0.45)':'rgba(239, 68, 68, 0.45)');
+                line.setAttribute("stroke-width", edge.r * 5); svg.appendChild(line);
             });
 
-            // Draw nodes
             nodes.forEach(node => {
-                const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
-                group.setAttribute("class", "cursor-pointer group");
-                group.setAttribute("onmouseover", `highlightNode('${node.id}')`);
-                group.setAttribute("onmouseout", "clearHighlight()");
-                
-                const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-                circle.setAttribute("cx", node.x);
-                circle.setAttribute("cy", node.y);
-                circle.setAttribute("r", 14);
-                circle.setAttribute("id", `node-${node.id}`);
-                
-                let fill = '#ef4444'; // virulence
-                if (node.group === 'amr') fill = '#f59e0b'; // amr
-                else if (node.group === 'mge') fill = '#0ea5e9'; // mge (sky-blue)
-
-                circle.setAttribute("fill", fill);
-                circle.setAttribute("stroke", "#0f172a");
-                circle.setAttribute("stroke-width", "2");
-                circle.setAttribute("class", "transition-all duration-200");
-
-                const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
-                text.setAttribute("x", node.x);
-                text.setAttribute("y", node.y + 26);
-                text.setAttribute("text-anchor", "middle");
-                text.setAttribute("fill", "#e2e8f0");
-                text.setAttribute("font-size", "10px");
-                text.setAttribute("font-family", "Plus Jakarta Sans");
-                text.setAttribute("font-weight", "bold");
-                text.textContent = node.id;
-
-                group.appendChild(circle);
-                group.appendChild(text);
-                svg.appendChild(group);
-            });
-        }
-
-        function highlightNode(nodeId) {
-            // Fade all edges
-            document.querySelectorAll('.network-edge').forEach(edge => {
-                edge.style.strokeOpacity = 0.05;
-            });
-
-            // Keep connected active
-            document.querySelectorAll(`.network-edge[data-src="${nodeId}"], .network-edge[data-tgt="${nodeId}"]`).forEach(edge => {
-                edge.style.strokeOpacity = 1.0;
-            });
-        }
-
-        function clearHighlight() {
-            document.querySelectorAll('.network-edge').forEach(edge => {
-                edge.style.strokeOpacity = 1.0;
+                const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                c.setAttribute("cx", node.x); c.setAttribute("cy", node.y); c.setAttribute("r", 14);
+                c.setAttribute("fill", node.group==='amr'?'#f59e0b':(node.group==='mge'?'#0ea5e9':'#ef4444'));
+                g.appendChild(c); svg.appendChild(g);
             });
         }
     </script>
