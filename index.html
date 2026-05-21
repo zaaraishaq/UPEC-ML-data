@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
     <script src="https://zaaraishaq.github.io/UPEC-ML-data/data.js"></script>
-    <script src="https://zaaraishaq.github.io/UPEC-ML-data/gene_summary_data.js" defer onerror="console.log('gene_summary_data.js loaded.')"></script>
+    <script src="https://zaaraishaq.github.io/UPEC-ML-data/gene_summary_data.js" defer onerror="console.log('gene_summary_data.js fallback loaded.')"></script>
 
     <script>
         tailwind.config = {
@@ -165,7 +165,7 @@
                             </div>
                             
                             <div class="mt-2 p-3.5 bg-gradient-to-br from-emerald-600 to-bio-700 rounded-xl text-white shadow-sm border border-emerald-500">
-                                <button onclick="applyPreset('Pakistan'); lg:toggleMobileSidebar();" class="w-full text-left font-extrabold text-xs tracking-tight flex items-center justify-between group">
+                                <button onclick="applyPreset('Pakistan'); if(!document.getElementById('filter-sidebar').classList.contains('hidden')) toggleMobileSidebar();" class="w-full text-left font-extrabold text-xs tracking-tight flex items-center justify-between group">
                                     <span><i class="fa-solid fa-earth-asia mr-1.5 animate-pulse"></i> Pakistani Isolates Cohort</span>
                                     <i class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1 transition-transform"></i>
                                 </button>
@@ -509,6 +509,19 @@
         </section>
     </main>
 
+    <footer class="bg-white border-t border-slate-200 mt-12 py-6 px-4 md:px-6">
+        <div class="max-w-[1600px] mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-500 font-medium">
+            <div class="flex items-center gap-2 text-center md:text-left">
+                <i class="fa-solid fa-dna text-clinical-600 animate-pulse"></i>
+                <span>UPEC-GDB Project Database © 2026 | Integrative Biology Laboratory (IBG) | NUST</span>
+            </div>
+            <div class="flex gap-4">
+                <a href="https://github.com/zaaraishaq/UPEC-ML-data" target="_blank" class="hover:text-clinical-600 transition-colors font-semibold">GitHub Repo</a>
+                <a href="mailto:amjad.ali@asab.nust.edu.pk" class="hover:text-clinical-600 transition-colors font-semibold">Collaborations Request</a>
+            </div>
+        </div>
+    </footer>
+
     <div id="details-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-xl rounded-2xl border border-slate-200 shadow-2xl flex flex-col overflow-hidden">
             <div class="bg-gradient-to-r from-clinical-900 to-slate-900 p-4 text-white flex justify-between items-center">
@@ -736,15 +749,28 @@
             document.body.appendChild(link); link.click(); document.body.removeChild(link);
         }
 
+        // Fixed Active Highlighting Tab Switch Engine
         function switchTab(id) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.getElementById(`tab-${id}`).classList.remove('hidden');
+            
+            // Reset configurations across all tags
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = "tab-btn px-3.5 py-2 text-xs md:text-sm font-semibold rounded-lg transition-all duration-200 text-slate-600 hover:text-slate-900 flex items-center gap-1.5 whitespace-nowrap";
+            });
+            
+            // Style selected element explicitly
+            const targetBtn = document.querySelector(`[data-tab="${id}"]`);
+            if (targetBtn) {
+                targetBtn.className = "tab-btn px-3.5 py-2 text-xs md:text-sm font-semibold rounded-lg transition-all duration-200 bg-white text-clinical-700 shadow-xs flex items-center gap-1.5 whitespace-nowrap";
+            }
+
             if (id === 'ml-pca') setTimeout(renderPCAPlot, 50);
             else if (id === 'cooccurrence') setTimeout(renderCooccurrenceNetwork, 50);
             else if (id === 'pangenome') setTimeout(renderPangenomeChart, 50);
         }
 
-        // High-fidelity multi-color group scatter projection layout mapping
+        // High-fidelity cluster projections mapping
         function renderPCAPlot() {
             const ctx = document.getElementById('pcaChart').getContext('2d'); if (pcaChartInstance) pcaChartInstance.destroy();
             const clusterColors = ['#2563eb', '#10b981', '#f43f5e', '#8b5cf6', '#f97316', '#64748b'];
