@@ -1,4 +1,3 @@
-// Auto-generated from MLST.csv
 window.MLST = [
   {
     "Isolate ID": 228,
