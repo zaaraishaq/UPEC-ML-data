@@ -3,6 +3,7 @@
 **🧬 Overview**
 
 This repository provides a curated genomic dataset and high-dimensional machine learning feature matrices for 1,184 human-specific Uropathogenic Escherichia coli (UPEC) isolates. By integrating pangenomic profiling with supervised machine learning, this framework enables the identification of lineage-specific genomic signatures, mobile genetic architecture, and metabolic markers driving UPEC pathoadaptation.
+🔗 Access the Interactive Database https://zaaraishaq.github.io/UPEC-ML-data/
 
 **📂 Dataset Contents**
 **1. Metadata**
