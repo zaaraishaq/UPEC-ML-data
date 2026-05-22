@@ -1,4 +1,3 @@
-// Auto-generated from Table_Feature_Prevalence_Percentages.csv
 window.Table_Feature_Prevalence_Percentages = [
   {
     "": "Escherichia_coli_ampC1_beta-lactamase",
