@@ -1,4 +1,3 @@
-// Auto-generated from UPEC_Metadata_Complete.csv
 window.UPEC_Metadata_Complete = [
   {
     "Isolate ID": 228,
