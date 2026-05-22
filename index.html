@@ -10,7 +10,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&family=JetBrains+Mono:wght=400;500;700&display=swap" rel="stylesheet">
 
     <!-- Primary Metadata Database from GitHub -->
-    <script src="https://zaaraishaq.github.io/UPEC-ML-data/UPEC_Metadata_Complete.js"></script>
+    <!-- Added defer so the browser waits for the download to finish before executing -->
+    <script src="https://zaaraishaq.github.io/UPEC-ML-data/UPEC_Metadata_Complete.js" defer></script>
     
     <!-- Secondary Assets -->
     <script src="https://zaaraishaq.github.io/UPEC-ML-data/Pakistani_Isolates.js" defer></script>
@@ -579,38 +580,80 @@
         
         let accessoryGeneData = {};
 
+        // Utility to recursively replace all spaces in object keys with underscores
+        function standardizeDataKeys(data) {
+            if (!data) return data;
+            if (Array.isArray(data)) {
+                return data.map(standardizeDataKeys);
+            } else if (typeof data === 'object' && data !== null) {
+                const newObj = {};
+                for (const key in data) {
+                    const cleanKey = key.replace(/\s+/g, '_');
+                    newObj[cleanKey] = standardizeDataKeys(data[key]);
+                }
+                return newObj;
+            }
+            return data;
+        }
+
         window.onload = function() {
-            // Check for the primary metadata object hosted on GitHub
-            if (typeof window.UPEC_Metadata_Complete !== 'undefined' && Array.isArray(window.UPEC_Metadata_Complete) && window.UPEC_Metadata_Complete.length > 0) {
-                mainDb = window.UPEC_Metadata_Complete;
-            } else if (typeof window.Pakistani_Isolates !== 'undefined' && Array.isArray(window.Pakistani_Isolates) && window.Pakistani_Isolates.length > 0) {
+            // DEBUGGING LOGS: Helps us see what was actually downloaded
+            console.log("Checking and standardizing data variables...");
+
+            // 1. Standardize ALL keys in external files to use underscores instead of spaces
+            if (window.UPEC_Metadata_Complete) window.UPEC_Metadata_Complete = standardizeDataKeys(window.UPEC_Metadata_Complete);
+            if (window.PEC_Metadata_Complete) window.PEC_Metadata_Complete = standardizeDataKeys(window.PEC_Metadata_Complete);
+            if (window.Pakistani_Isolates) window.Pakistani_Isolates = standardizeDataKeys(window.Pakistani_Isolates);
+            if (window.model_performance_results) window.model_performance_results = standardizeDataKeys(window.model_performance_results);
+            if (window.Table_SHAP_Mean_Absolute_Values) window.Table_SHAP_Mean_Absolute_Values = standardizeDataKeys(window.Table_SHAP_Mean_Absolute_Values);
+            if (window.Table_Feature_Prevalence_Percentages) window.Table_Feature_Prevalence_Percentages = standardizeDataKeys(window.Table_Feature_Prevalence_Percentages);
+
+            // 2. Select the primary database
+            const loadedDb = window.UPEC_Metadata_Complete || window.PEC_Metadata_Complete;
+
+            if (typeof loadedDb !== 'undefined' && Array.isArray(loadedDb) && loadedDb.length > 0) {
+                console.log("Loaded data from primary metadata object.");
+                mainDb = loadedDb;
+            } 
+            else if (typeof window.Pakistani_Isolates !== 'undefined' && Array.isArray(window.Pakistani_Isolates) && window.Pakistani_Isolates.length > 0) {
+                console.log("Loaded data from window.Pakistani_Isolates");
                 mainDb = window.Pakistani_Isolates;
-            } else {
+            } 
+            else {
+                console.warn("External data failed to load! Using the hardcoded fallback cohort.");
                 mainDb = publicationPakistaniCohort;
             }
 
             // Normalization engine: maps diverse CSV header keys to standard properties used by the UI
             mainDb.forEach(item => {
-                // Primary keys 
-                item.id = item.id || item['Isolate ID'] || item.Accession || "Unknown_ID";
+                // Primary keys
+                item.id = item.Isolate_ID || item.id || item.Accession || "Unknown_ID";
                 
-                // Mapped variables from GitHub Raw Data arrays
-                item.mlstNorm = item.MLST || item.mlst || item['Sequence Type'] || "Unknown";
-                item.serotypeNorm = item.serotype || item.Serotype || item['Serotype'] || item['Serotype(O:H)'] || "Unknown";
-                item.pathologyNorm = item.pathology || item.Pathology || item['Host disease'] || item['Host_Disease'] || "Unknown";
-                item.locationNorm = item.location || item.Location || "Unknown";
-                item.sourceNorm = item.source || item.Source || item['Isolation source'] || "Unknown";
-                item.yearNorm = item.year || item.Year || item['Collection date'] || "Unknown";
+                // Mapped variables handling exact string keys with underscores (spaces converted)
+                item.mlstNorm = item.Sequence_Type || item.MLST || item.mlst || "Unknown";
+                item.serotypeNorm = item.Serotype || item.serotype || "Unknown";
+                item.pathologyNorm = item.Host_disease || item.pathology || "Unknown";
+                item.locationNorm = item.Location || item.location || "Unknown";
+                item.sourceNorm = item.Isolation_source || item.source || "Unknown";
+                
+                // Extract 4-digit Year from 'Collection_date' (e.g. "2017-12-19" -> "2017")
+                let rawDate = item.Collection_date || item.year || item.Year || "Unknown";
+                if (rawDate !== "Unknown" && typeof rawDate === 'string') {
+                    let match = rawDate.match(/\d{4}/);
+                    item.yearNorm = match ? match[0] : rawDate;
+                } else {
+                    item.yearNorm = rawDate;
+                }
                 
                 // Numerical parameters
-                item.sizeNorm = parseFloat(item["Size (Mb)"] || item.size || 5.1);
-                item.gcNorm = parseFloat(item["GC Content"] || item.gc || 50.6);
+                item.sizeNorm = parseFloat(item.Size_Mb || item['Size_(Mb)'] || item.size || 5.1);
+                item.gcNorm = parseFloat(item.GC_Content || item.gc || 50.6);
                 item.cdsNorm = parseInt(item.CDS || item.cds || 4900);
                 
                 // NCBI Accessions mapped specifically for the Modal popup
-                item.bioprojectNorm = item.bioproject || item['BioProject Accession'] || null;
-                item.biosampleNorm = item.biosample || item['BioSample Accession'] || null;
-                item.assemblyNorm = item['Assembly Accession'] || item.assembly || null;
+                item.bioprojectNorm = item.BioProject_Accession || item.bioproject || null;
+                item.biosampleNorm = item.BioSample_Accession || item.biosample || null;
+                item.assemblyNorm = item.Assembly_Accession || item.assembly || null;
             });
 
             populateDropdowns();
@@ -838,10 +881,10 @@
             data.forEach(row => {
                 const tr = document.createElement('tr'); tr.className = "hover:bg-slate-50 border-b border-slate-100";
                 tr.innerHTML = `
-                    <td class="p-2 font-medium flex items-center gap-1 font-sans text-slate-900"><span class="h-1.5 w-1.5 rounded-full bg-clinical-600"></span> ${row.algorithm || row["Model Algorithm"]}</td>
+                    <td class="p-2 font-medium flex items-center gap-1 font-sans text-slate-900"><span class="h-1.5 w-1.5 rounded-full bg-clinical-600"></span> ${row.algorithm || row.Model_Algorithm || row["Model Algorithm"]}</td>
                     <td class="p-2 text-center font-mono font-bold text-clinical-700">${parseFloat(row.accuracy || row.Accuracy || 0.0).toFixed(4)}</td>
-                    <td class="p-2 text-center font-mono">${parseFloat(row.f1 || row["F1-Score"] || 0.0).toFixed(4)}</td>
-                    <td class="p-2 text-center font-mono text-slate-400">${parseFloat(row.auc || row["ROC-AUC"] || 0.0).toFixed(4)}</td>
+                    <td class="p-2 text-center font-mono">${parseFloat(row.f1 || row["F1-Score"] || row.F1_Score || 0.0).toFixed(4)}</td>
+                    <td class="p-2 text-center font-mono text-slate-400">${parseFloat(row.auc || row["ROC-AUC"] || row.ROC_AUC || 0.0).toFixed(4)}</td>
                     <td class="p-2 text-right font-mono text-slate-500 text-[11px]">${row.time || row.Time || 'N/A'}</td>
                 `;
                 tbody.appendChild(tr);
@@ -852,10 +895,10 @@
             metricsChartInstance = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: topModels.map(m => m.algorithm || m["Model Algorithm"]),
+                    labels: topModels.map(m => m.algorithm || m.Model_Algorithm || m["Model Algorithm"]),
                     datasets: [
                         { label: 'Accuracy', data: topModels.map(m => parseFloat(m.accuracy || m.Accuracy || 0.0)), backgroundColor: '#1d4ed8' },
-                        { label: 'F1-Score', data: topModels.map(m => parseFloat(m.f1 || m["F1-Score"] || 0.0)), backgroundColor: '#8b5cf6' }
+                        { label: 'F1-Score', data: topModels.map(m => parseFloat(m.f1 || m["F1-Score"] || m.F1_Score || 0.0)), backgroundColor: '#8b5cf6' }
                     ]
                 },
                 options: { responsive: true, maintainAspectRatio: false, scales: { y: { min: 0.9, max: 1.0 } } }
