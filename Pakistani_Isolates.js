@@ -1,4 +1,3 @@
-// Auto-generated from Pakistani Isolates.csv
 window.Pakistani_Isolates = [
   {
     "Strain": 22.0322,
