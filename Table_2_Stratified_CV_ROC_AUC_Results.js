@@ -1,4 +1,3 @@
-// Auto-generated from Table_2_Stratified_CV_ROC_AUC_Results.csv
 window.Table_2_Stratified_CV_ROC_AUC_Results = [
   {
     "No.": 1,
