@@ -1,4 +1,3 @@
-// Auto-generated from Table_SHAP_Mean_Absolute_Values.csv
 window.Table_SHAP_Mean_Absolute_Values = [
   {
     "Genomic Feature": "group_40319",
