@@ -426,11 +426,6 @@
                         ${item.bioproject ? `<a href="https://www.ncbi.nlm.nih.gov/bioproject/${item.bioproject}" target="_blank" class="text-blue-600 underline">BioProject: ${item.bioproject}</a>` : ''}
                         ${item.biosample ? `<a href="https://www.ncbi.nlm.nih.gov/biosample/${item.biosample}" target="_blank" class="text-blue-600 underline">BioSample: ${item.biosample}</a>` : ''}
                     </div>
-                </div>
-                <div class="mt-4 p-3 bg-yellow-50 rounded text-xs text-yellow-700">
-                    <i class="fa-solid fa-triangle-exclamation mr-1"></i> 
-                    Detailed binary feature data (ARGs, Virulence Factors, etc.) is available in the "Full Binary Matrix" download.
-                </div>
             `;
             document.getElementById('detailsModal').classList.remove('hidden');
         }
