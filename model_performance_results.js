@@ -1,4 +1,3 @@
-// Auto-generated from model_performance_results.csv
 window.model_performance_results = [
   {
     "Model": "Random Forest",
